@@ -21,20 +21,20 @@
       ></line>
     </g>
 
-    <CubicSpline
+    <FlowConnection
       :show="true"
       :show-points="false"
-      :spline="spline1"
+      :connection="spline1"
       :start-point-color="connectionPointColor"
       :end-point-color="connectionPointColor"
       @mousedown="(m) => controlPointMouseDown(m.e, m.p)"
       @mouseup="(m) => controlPointMouseUp(m.e, m.p)"
       @mousemove="(m) => controlPointMouseMove(m.e, m.p)"
     />
-    <CubicSpline
+    <FlowConnection
       :show="true"
       :show-points="false"
-      :spline="spline2"
+      :connection="spline2"
       :start-point-color="connectionPointColor"
       :end-point-color="connectionPointColor"
       @mousedown="(m) => controlPointMouseDown(m.e, m.p)"
@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import CubicSpline from './CubicSpline.vue';
+import FlowConnection from './FlowConnection.vue';
 import type { Connection, Line, Offset } from '@/models/ui/types';
 import { computed, ref } from 'vue';
 import { useScreenSize } from 'vue-boosted';

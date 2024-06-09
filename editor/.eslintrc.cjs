@@ -39,7 +39,7 @@ module.exports = {
   rules: {
     'prefer-promise-reject-errors': 'error',
 
-    'max-len': ['error', 200],
+    'max-len': ['error', 150],
 
     // An error not to use single quotes
     quotes: [
