@@ -1,11 +1,8 @@
 <template>
-  <div style="height: 50%">
-    <h1>Heading</h1>
-  </div>
-  <main style="height: 50%">
+  <main>
     <FlowEditor />
-    <BusyOverlay :show="appStore.isBusy" full-screen />
   </main>
+  <BusyOverlay :show="appStore.isBusy" full-screen />
 </template>
 
 <script setup lang="ts">
@@ -18,10 +15,11 @@ const appStore = useAppStore();
 
 appStore.incrementBusy();
 
+// TODO: This is just for development to see delay, remove when really loading from server
 useIntervalTimer(async () => {
   appStore.decrementBusy();
 
   // Return false to stop timer, else true to continue running.
   return false;
-}, 3000);
+}, 500);
 </script>
