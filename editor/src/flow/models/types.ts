@@ -49,36 +49,84 @@ export class FlowElement extends FlowEntity {
   // True if this element is currently selected
   selected: boolean;
 
-  constructor(id: string, label: string, description: string) {
-    super(id, label, description);
-    this.selected = false;
-  }
-}
-
-// A flow block element is a flow element that has a location and size
-// This is the visible component of a function block
-export class FlowBlockElement extends FlowElement {
   // The location of the flow element relative to top / left of the screen in SVG view units.
   location: Offset;
 
   // The size of the flow element relative to top / left of the screen in SVG view units.
   size: Size;
 
-  constructor(id: string, label: string, description: string) {
+  parent: FlowElement | undefined;
+
+  constructor(id: string, label: string, description: string, parent?: FlowElement) {
     super(id, label, description);
+    this.selected = false;
     this.location = { x: 0, y: 0 };
     this.size = { width: 0, height: 0 };
+    this.parent = parent;
+  }
+
+  public getHitElement(offset: Offset): FlowElement | undefined {
+    const hitElement = this.containsOffset(offset) ? this : undefined;
+    return hitElement;
+  }
+
+  public getBoundingRect(): { left: number; top: number; right: number; bottom: number } {
+    // Children offsets are relative to parent, so if this element
+    // has a parent then offset by parent element bounds top left
+    const parentBounds = this.parent?.getBoundingRect() ?? { left: 0, top: 0, right: 0, bottom: 0 };
+    const x = parentBounds.left + this.location.x;
+    const y = parentBounds.top + this.location.y;
+
+    return {
+      left: x, // left
+      top: y, // top
+      right: x + this.size.width, // right
+      bottom: y + this.size.height // bottom
+    };
+  }
+
+  // Default implementation just tests bounding box
+  public containsOffset(offset: Offset): boolean {
+    // Calculate left, right, top and bottom
+    const bounds = this.getBoundingRect();
+
+    // Check if offset within bounds (including boundary itself)
+    return offset.x >= bounds.left && offset.x <= bounds.right && offset.y >= bounds.top && offset.y <= bounds.bottom;
+  }
+}
+
+// A flow block element is a flow element that has a location and size
+// This is the visible component of a function block
+export class FlowBlockElement extends FlowElement {
+  connectors: FlowElement[];
+
+  constructor(id: string, label: string, description: string) {
+    super(id, label, description);
+    this.connectors = []
+  }
+
+  public getHitElement(offset: Offset): FlowElement | undefined {
+    // Are any connectors hit?
+    const hitConnectors = this.connectors.filter((c) => c.getHitElement(offset) != undefined);
+    if (hitConnectors.length > 0) {
+      // Return first
+      return hitConnectors[0];
+    }
+
+    // Call base class method
+    return super.getHitElement(offset);
   }
 }
 
 // A flow connection element is a flow element that has start and end block connectors
 export class FlowConnection extends FlowElement {
   startBlock: FlowBlock;
-  startBlockConnectorId: number;
+  startBlockConnectorId: string;
   private _endBlock: FlowBlock | undefined;
   private _endBlockConnectorId: string | undefined;
 
-  constructor(id: string, startBlock: FlowBlock, startNodeConnectorId: number, endBlock?: FlowBlock | undefined, endBlockConnectorId?: string) {
+  constructor(id: string, label: string, description: string, startBlock: FlowBlock, startNodeConnectorId: string, endBlock?: FlowBlock | undefined, endBlockConnectorId?: string) {
+    super(id, label, description);
     this.id = id;
     this.selected = false;
 
@@ -93,13 +141,13 @@ export class FlowConnection extends FlowElement {
     return this.startBlock;
   }
 
-  public get startNodeConnectorId(): number {
+  public get startNodeConnectorId(): string {
     return this.startBlockConnectorId;
   }
 
   getStartOffset(): Offset {
     const startConnector = this.startBlock.connectors.find((c) => c.id == this.startNodeConnectorId)!;
-    return { x: this.startBlock.location.x + startConnector.x, y: this.startBlock.location.y + startConnector.y + startConnector.height / 2 };
+    return { x: this.startBlock.location.x + startConnector.location.x, y: this.startBlock.location.y + startConnector.location.y + startConnector.size.height / 2 };
   }
 
   getStartSide(): BlockSide {
@@ -113,25 +161,25 @@ export class FlowConnection extends FlowElement {
 
   public getEndConnector(): FlowBlockConnector | undefined {
     // If no end block then no end block offset
-    if (!this.endBlock) {
+    if (!this._endBlock) {
       return undefined;
     }
 
-    return this.endBlock.connectors.find((c) => c.id === this.endBlockConnectorId)!;
+    return this._endBlock.connectors.find((c) => c.id === this.endBlockConnectorId)!;
   }
 
-  public get endBlock(): FlowBlock {
+  public get endBlock(): FlowBlock | undefined {
     // If no end block then no end block offset
-    if (!this.endBlock) {
+    if (!this._endBlock) {
       return undefined;
     }
 
-    return this.endBlock;
+    return this._endBlock;
   }
 
-  public get endBlockConnectorId(): number {
+  public get endBlockConnectorId(): string | undefined {
     // If no end block then no end block offset
-    if (!this.endBlock) {
+    if (!this._endBlock) {
       return undefined;
     }
 
@@ -140,17 +188,17 @@ export class FlowConnection extends FlowElement {
 
   getEndOffset(): Offset | undefined {
     // If no end block then no end block offset
-    if (!this.endBlock) {
+    if (!this._endBlock) {
       return undefined;
     }
 
-    const endConnector = this.endBlock.connectors.find((c) => c.id == this.endBlockConnectorId)!;
-    return { x: this.endBlock.location.x + endConnector.x, y: this.endBlock.location.y + endConnector.y + endConnector.height / 2 };
+    const endConnector = this._endBlock.connectors.find((c) => c.id == this.endBlockConnectorId)!;
+    return { x: this._endBlock.location.x + endConnector.location.x, y: this._endBlock.location.y + endConnector.location.y + endConnector.size.height / 2 };
   }
 
-  getEndSide(): BlockSide {
-    const endConnector = this.endBlock.connectors.find((c) => c.id == this.endBlockConnectorId)!;
-    return endConnector.side;
+  getEndSide(): BlockSide | undefined {
+    const endConnector = this.endBlock?.connectors.find((c) => c.id == this.endBlockConnectorId);
+    return endConnector?.side;
   }
 }
 
@@ -181,6 +229,13 @@ export type FlowBlock = {
 
 export class FlowBlockConnector extends FlowBlockElement {
   io: InputOutput;
+  side: BlockSide;
+
+  constructor(id: string, label: string, description: string, side: BlockSide, io: InputOutput) {
+    super(id, label, description)
+    this.io = io;
+    this.side = side;
+  }
 }
 
 export type Flow = {
@@ -220,9 +275,9 @@ export class FlowDesigner {
     this.dragBlock = ref<FlowBlock | undefined>(undefined);
     this.dragBlockOffset = ref<Offset>({ x: 0, y: 0 });
     this.dragBlockOriginalPosition = ref<Offset>({ x: 0, y: 0 });
-    this.drawingConnection = ref<FlowConnection | undefined>(undefined);
+    this.drawingConnection = ref(undefined);
     this.drawingConnectionEndConnector = ref<FlowBlockConnector | undefined>(undefined);
-    this.selectedConnection = ref<FlowConnection | undefined>(undefined);
+    this.selectedConnection = ref(undefined);
     this.selectedNode = ref<FlowBlock | undefined>(undefined);
   }
 
@@ -230,33 +285,6 @@ export class FlowDesigner {
     if (!this.dragBlock.value) return;
     this.dragBlock.value.location.x = e.offsetX - this.dragBlockOffset.value.x;
     this.dragBlock.value.location.y = e.offsetY - this.dragBlockOffset.value.y;
-  };
-
-  dragConnectionMove = (e: MouseEvent): void => {
-    if (!this.drawingConnection.value) return;
-
-    // Get starting connector
-    const startConnector = this.drawingConnection.value.getStartConnector();
-
-    // Is there an element at the mouse position (that is not the drawing connection)
-    const hitConnectors = this.getHitElements(e).filter(
-      (x) =>
-        // Must be a node connector
-        x.type === FlowElementType.NodeConnector &&
-        // Don't hit test connection being connected
-        x !== flowDesigner.drawingConnection.value &&
-        // Don't hit test the starting connector
-        x != startConnector
-    );
-
-    // Set css extra if is hovering over valid connector (hit connector and connector is a compatible type)
-    const connector = hitConnectors.length > 0 ? (hitConnectors[0] as IFlowNodeConnector) : undefined;
-    this.drawingConnection.value.cssExtra = connector && this.canConnect(connector, startConnector) ? 'valid-end-point' : '';
-    this._drawingConnectionEndConnector.value = connector;
-
-    // Update end offset to mouse offset
-    this.drawingConnection.value.endX = e.offsetX;
-    this.drawingConnection.value.endY = e.offsetY;
   };
 
   public clearSelectedItems(): void {
@@ -297,4 +325,28 @@ export class FlowDesigner {
     // Make sure all are deselected
     this.blocks.value.forEach((b) => (b.selected = false));
   };
+
+  private getHitElements = (e: MouseEvent): FlowElement[] => {
+    const hitElements = [] as FlowElement[];
+    const offset = { x: e.offsetX, y: e.offsetY } as Offset;
+
+    this.blocks.value.forEach((b) => {
+      const hitElement = b.getHitElement(offset);
+
+      if (hitElement) {
+        hitElements.push(hitElement);
+      }
+    });
+
+    this.connections.value.forEach((c) => {
+      const hitElement = c.getHitElement(offset);
+
+      if (hitElement) {
+        hitElements.push(hitElement);
+      }
+    });
+
+    return hitElements;
+  };
+
 }
