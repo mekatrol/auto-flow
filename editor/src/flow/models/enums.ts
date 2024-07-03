@@ -1,5 +1,3 @@
-import type { Entity } from './entity';
-
 // Input output signal type
 export enum IoSignalType {
   Analogue = 'Analogue',
@@ -13,7 +11,7 @@ export enum IoDirection {
   Output = 'Output'
 }
 
-export interface IoDefinition extends Entity {
-  signalType: IoSignalType;
-  signalDirection: IoDirection;
+export enum BlockSide {
+  Left = 'Left',
+  Right = 'Right'
 }

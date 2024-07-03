@@ -1,9 +1,10 @@
-import { BlockSide, type Offset } from '@/models/ui/types';
+import { type Offset } from '../models/types';
+import { BlockSide } from '../models/enums';
 
-/*************************************************************************************************************************************************************************
+/********************************************************************************************************************
  * Parts (control point adjustment) of this code are taken from:
- * https://github.com/node-red/node-red/blob/d57edaa4c102a1bc2ec09f7703c7c8e6cdf04894/packages/node_modules/%40node-red/editor-client/src/js/ui/view.js#L36
- *************************************************************************************************************************************************************************/
+ * https://github.com/node-red/node-red/blob/master/packages/node_modules/%40node-red/editor-client/src/js/ui/view.js
+ ********************************************************************************************************************/
 
 // This algorithm assumes that start point is always the right hand side of the block
 // and the end point is the left hand side of the block. That is, the start

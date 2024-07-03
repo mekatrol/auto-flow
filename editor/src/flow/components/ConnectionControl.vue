@@ -17,15 +17,16 @@
 </template>
 
 <script setup lang="ts">
-import { BlockSide, type Connection } from '@/models/ui/types';
-import { generateCubicBezierPoints } from '@/utils/cubic-spline';
-import { cubicBezierToSvg } from '@/utils/svg';
+import { type Line } from '../models/types';
+import { BlockSide } from '../models/enums';
+import { generateCubicBezierPoints } from '../utils/cubic-spline';
+import { cubicBezierToSvg } from '../utils/svg';
 import { computed } from 'vue';
 
 interface Props {
   show?: boolean;
 
-  connection: Connection;
+  connection: Line;
 
   showPoints?: boolean;
 

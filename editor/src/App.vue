@@ -1,12 +1,15 @@
 <template>
   <main>
-    <FlowEditor />
+    <EditorControl />
   </main>
-  <BusyOverlay :show="appStore.isBusy" full-screen />
+  <BusyOverlay
+    :show="appStore.isBusy"
+    full-screen
+  />
 </template>
 
 <script setup lang="ts">
-import FlowEditor from '@/components/FlowEditor.vue';
+import EditorControl from '@/flow/components/EditorControl.vue';
 import { BusyOverlay } from 'vue-boosted';
 import { useAppStore } from './stores/app';
 import { useIntervalTimer } from 'vue-boosted';

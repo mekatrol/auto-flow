@@ -1,4 +1,4 @@
-import type { Offset } from '@/models/ui/types';
+import type { Offset } from '../models/types';
 
 export const cubicBezierToSvg = (points: Offset[]): string => {
   // 4 points for single bezier and 10 points for chained bezier (4 chained)

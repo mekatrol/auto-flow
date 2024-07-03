@@ -13,15 +13,17 @@
       <line
         v-for="(line, i) in gridLines"
         :key="i"
-        :x1="line.x1"
-        :y1="line.y1"
-        :x2="line.x2"
-        :y2="line.y2"
+        :x1="line.start.x"
+        :y1="line.start.y"
+        :x2="line.end.x"
+        :y2="line.end.y"
         class="grid-line"
       ></line>
     </g>
 
-    <FlowConnection
+    <BlockSvg />
+
+    <ConnectionControl
       :show="true"
       :show-points="false"
       :connection="spline1"
@@ -31,7 +33,7 @@
       @mouseup="(m) => controlPointMouseUp(m.e, m.p)"
       @mousemove="(m) => controlPointMouseMove(m.e, m.p)"
     />
-    <FlowConnection
+    <ConnectionControl
       :show="true"
       :show-points="false"
       :connection="spline2"
@@ -45,13 +47,14 @@
 </template>
 
 <script setup lang="ts">
-import FlowConnection from './FlowConnection.vue';
-import type { Connection, Line, Offset } from '@/models/ui/types';
+import ConnectionControl from './ConnectionControl.vue';
+import BlockSvg from './BlockControl.vue';
+import type { Line, Offset } from '../models/types';
 import { computed, ref } from 'vue';
 import { useScreenSize } from 'vue-boosted';
 
-const spline1 = ref({ start: { x: 300, y: 110 }, end: { x: 410, y: 170 } } as Connection);
-const spline2 = ref({ start: { x: 900, y: 110 }, end: { x: 700, y: 310 } } as Connection);
+const spline1 = ref({ start: { x: 300, y: 110 }, end: { x: 410, y: 170 } } as Line);
+const spline2 = ref({ start: { x: 900, y: 110 }, end: { x: 700, y: 310 } } as Line);
 
 const connectionPointColor = 'magenta';
 
@@ -75,7 +78,7 @@ const controlPointMouseMove = (e: MouseEvent, _p: Offset): void => {
 };
 
 const clearSelectedPoint = (): void => {
-  // Clear selected node
+  // Clear selected block
   mouseControlPoint.value = null;
 };
 
@@ -120,19 +123,15 @@ const gridLines = computed((): Line[] => {
 
   for (let y = 0; y < viewSize.value.height; y += gridSize.value) {
     lines.push({
-      x1: 0,
-      y1: y,
-      x2: viewSize.value.width,
-      y2: y
+      start: { x: 0, y: y },
+      end: { x: viewSize.value.width, y: y }
     });
   }
 
   for (let x = 0; x < viewSize.value.width; x += gridSize.value) {
     lines.push({
-      x1: x,
-      y1: 0,
-      x2: x,
-      y2: viewSize.value.height
+      start: { x: x, y: 0 },
+      end: { x: x, y: viewSize.value.height }
     });
   }
 
