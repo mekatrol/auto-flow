@@ -8,15 +8,15 @@
       :height="model.size.height"
       :rx="`${model.cornerRadius}px`"
       :ry="`${model.cornerRadius}px`"
-      :fill="model.fill"
-      :stroke="model.stroke"
+      :fill="model.fillColor"
+      :stroke="model.strokeColor"
     ></rect>
     <LabelControl
       :x="model.location.x"
       :y="model.location.y + model.size.height + textGap"
       :text="model.block.label"
     />
-    <!-- node markers -->
+    <!-- block markers -->
     <MarkerControl
       v-for="(marker, i) in markers"
       :key="i"
@@ -27,15 +27,27 @@
       :fill-color="marker.fillColor"
       :stroke-color="marker.strokeColor"
     />
+
+    <!-- block connectors -->
+    <ConnectorControl
+      v-for="connector in alignedConnectors"
+      :key="connector.id"
+      :block="model"
+      :connector="connector"
+      :fill-color="connector.fillColor"
+      :stroke-color="connector.strokeColor"
+    />
   </g>
 </template>
 
 <script setup lang="ts">
 import LabelControl from './LabelControl.vue';
 import MarkerControl from './MarkerControl.vue';
-import { FlowBlockElement, MarkerShape } from '../models/types';
+import ConnectorControl from './ConnectorControl.vue';
+import { FlowBlockConnector, FlowBlockElement, MarkerShape, type EnumDictionary } from '../models/types';
 import { computed } from 'vue';
-import { MARKER_OFFSET_X, MARKER_OFFSET_Y, MARKER_SIZE } from '../models/constants';
+import { BLOCK_CONNECTOR_OFFSET, BLOCK_CONNECTOR_SIZE, MARKER_OFFSET_X, MARKER_OFFSET_Y, MARKER_SIZE } from '../models/constants';
+import { BlockSide } from '../models/enums';
 
 const textGap = 5;
 
@@ -51,5 +63,48 @@ const markers = computed(() => {
     new MarkerShape('triangle', model.value.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 2, MARKER_OFFSET_Y, model.value, 'darkred', 'coral'),
     new MarkerShape('square', model.value.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 3, MARKER_OFFSET_Y, model.value, 'green', 'white')
   ];
+});
+
+const getConnectorOffsets = (block: FlowBlockElement, offset: number): EnumDictionary<BlockSide, { x: number; y: number }> => {
+  const connectorOffsets: EnumDictionary<BlockSide, { x: number; y: number }> = {
+    [BlockSide.Left]: { x: -(BLOCK_CONNECTOR_SIZE - BLOCK_CONNECTOR_OFFSET), y: offset },
+    [BlockSide.Top]: { x: offset, y: -BLOCK_CONNECTOR_OFFSET },
+    [BlockSide.Right]: { x: block.size.width - BLOCK_CONNECTOR_OFFSET, y: offset },
+    [BlockSide.Bottom]: { x: offset, y: block.size.height - BLOCK_CONNECTOR_OFFSET }
+  };
+
+  return connectorOffsets;
+};
+
+const transformConnectors = (side: BlockSide): FlowBlockConnector[] => {
+  if (!model.value) {
+    return [];
+  }
+
+  const connectors = model.value.block.connectors.filter((x) => x.side === side);
+
+  let shift = 0;
+  const connectorOffsets = getConnectorOffsets(model.value, 5);
+
+  connectors.forEach((c) => {
+    const shiftHorizontal = c.side === BlockSide.Top || c.side === BlockSide.Bottom;
+    const offset = connectorOffsets[side];
+    c.location.x = offset.x + (shiftHorizontal ? shift : 0);
+    c.location.y = offset.y + (!shiftHorizontal ? shift : 0);
+    shift += BLOCK_CONNECTOR_SIZE + (BLOCK_CONNECTOR_SIZE >> 1);
+  });
+
+  return connectors;
+};
+
+const alignedConnectors = computed((): FlowBlockConnector[] => {
+  const connectors = [];
+
+  connectors.push(...transformConnectors(BlockSide.Left));
+  connectors.push(...transformConnectors(BlockSide.Top));
+  connectors.push(...transformConnectors(BlockSide.Right));
+  connectors.push(...transformConnectors(BlockSide.Bottom));
+
+  return connectors;
 });
 </script>

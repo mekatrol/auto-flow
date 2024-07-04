@@ -183,7 +183,7 @@ const generate2InputBinaryBlock = (type: FunctionBlockType, data: BlockConfigura
 
   return {
     id: data?.attributes['id'] ?? uuidv4(),
-    label: data?.attributes['label'] ?? '',
+    label: data?.attributes['label'] ?? typeUpper,
     description: data?.attributes['description'] ?? '',
     type: type,
     connectors: [
@@ -205,7 +205,7 @@ const generate2InputBinaryBlock = (type: FunctionBlockType, data: BlockConfigura
         uuidv4(),
         'Output',
         `Binary output of ${typeUpper} gate`,
-        BlockSide.Left,
+        BlockSide.Right,
         new InputOutput(IoSignalType.Digital, IoDirection.Output)
       )
     ]

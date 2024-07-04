@@ -13,7 +13,9 @@ export enum IoDirection {
 
 export enum BlockSide {
   Left = 'Left',
-  Right = 'Right'
+  Right = 'Right',
+  Top = 'Top',
+  Bottom = 'Bottom'
 }
 
 export enum FunctionBlockType {

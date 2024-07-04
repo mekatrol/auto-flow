@@ -1,5 +1,10 @@
 import { ref, type Ref } from 'vue';
 import type { BlockSide, FunctionBlockType, IoDirection, IoSignalType } from './enums';
+import { BLOCK_CONNECTOR_SIZE } from './constants';
+
+export type EnumDictionary<T extends string | symbol | number, U> = {
+  [K in T]: U;
+};
 
 export type Shape = 'square' | 'circle' | 'triangle';
 
@@ -46,6 +51,10 @@ export class FlowElement extends FlowEntity {
 
   // The size of the flow element relative to top / left of the screen in SVG view units.
   size: Size;
+
+  // The default colors for an element
+  fillColor: string = '#101010';
+  strokeColor: string = '#f0f0f0';
 
   parent: FlowElement | undefined;
 
@@ -94,8 +103,6 @@ export class FlowBlockElement extends FlowElement {
 
   cornerRadius: number = 3;
   zBoost: number = 0;
-  fill: string = 'purple';
-  stroke: string = 'cyan';
 
   constructor(block: FunctionBlock) {
     super();
@@ -285,6 +292,9 @@ export class FlowBlockConnector extends FlowElement {
     this.description = description;
     this.io = io;
     this.side = side;
+
+    this.size.width = BLOCK_CONNECTOR_SIZE;
+    this.size.height = BLOCK_CONNECTOR_SIZE;
   }
 }
 
