@@ -1,5 +1,7 @@
 import { ref, type Ref } from 'vue';
-import type { BlockSide, IoDirection, IoSignalType } from './enums';
+import type { BlockSide, FunctionBlockType, IoDirection, IoSignalType } from './enums';
+
+export type Shape = 'square' | 'circle' | 'triangle';
 
 // Represents an offset position of an element in the the SVG view coordinates
 export type Offset = {
@@ -20,25 +22,15 @@ export type Line = {
 };
 
 // All flow objects are an entity
-export class FlowEntity {
-  id: string; // A GUID
-  label: string;
-  description: string;
-
-  constructor(id: string, label: string, description: string) {
-    this.id = id;
-    this.label = label;
-    this.description = description;
-  }
-}
+export class FlowEntity {}
 
 // A flow input / output
 export class InputOutput extends FlowEntity {
   signalType: IoSignalType;
   signalDirection: IoDirection;
 
-  constructor(id: string, label: string, description: string, signalType: IoSignalType, signalDirection: IoDirection) {
-    super(id, label, description);
+  constructor(signalType: IoSignalType, signalDirection: IoDirection) {
+    super();
     this.signalType = signalType;
     this.signalDirection = signalDirection;
   }
@@ -57,8 +49,8 @@ export class FlowElement extends FlowEntity {
 
   parent: FlowElement | undefined;
 
-  constructor(id: string, label: string, description: string, parent?: FlowElement) {
-    super(id, label, description);
+  constructor(parent?: FlowElement) {
+    super();
     this.selected = false;
     this.location = { x: 0, y: 0 };
     this.size = { width: 0, height: 0 };
@@ -98,16 +90,21 @@ export class FlowElement extends FlowEntity {
 // A flow block element is a flow element that has a location and size
 // This is the visible component of a function block
 export class FlowBlockElement extends FlowElement {
-  connectors: FlowElement[];
+  block: FunctionBlock;
 
-  constructor(id: string, label: string, description: string) {
-    super(id, label, description);
-    this.connectors = []
+  cornerRadius: number = 3;
+  zBoost: number = 0;
+  fill: string = 'purple';
+  stroke: string = 'cyan';
+
+  constructor(block: FunctionBlock) {
+    super();
+    this.block = block;
   }
 
   public getHitElement(offset: Offset): FlowElement | undefined {
     // Are any connectors hit?
-    const hitConnectors = this.connectors.filter((c) => c.getHitElement(offset) != undefined);
+    const hitConnectors = this.block.connectors.filter((c) => c.getHitElement(offset) != undefined);
     if (hitConnectors.length > 0) {
       // Return first
       return hitConnectors[0];
@@ -118,16 +115,53 @@ export class FlowBlockElement extends FlowElement {
   }
 }
 
+export class MarkerShape extends FlowElement {
+  private _shape: Shape;
+
+  strokeColor: string;
+  fillColor: string;
+
+  constructor(shape: Shape, x: number, y: number, parent: FlowElement, strokeColor: string = 'black', fillColor: string = 'white') {
+    super(parent);
+    this._shape = shape;
+    this.location.x = x;
+    this.location.y = y;
+    this.strokeColor = strokeColor;
+    this.fillColor = fillColor;
+  }
+
+  public get shape(): Shape {
+    return this._shape;
+  }
+
+  public set shape(value: Shape) {
+    this._shape = value;
+  }
+}
+
 // A flow connection element is a flow element that has start and end block connectors
 export class FlowConnection extends FlowElement {
-  startBlock: FlowBlock;
+  id: string; // A GUID
+  label: string;
+  description: string;
+  startBlock: FlowBlockElement;
   startBlockConnectorId: string;
-  private _endBlock: FlowBlock | undefined;
+  private _endBlock: FlowBlockElement | undefined;
   private _endBlockConnectorId: string | undefined;
 
-  constructor(id: string, label: string, description: string, startBlock: FlowBlock, startNodeConnectorId: string, endBlock?: FlowBlock | undefined, endBlockConnectorId?: string) {
-    super(id, label, description);
+  constructor(
+    id: string,
+    label: string,
+    description: string,
+    startBlock: FlowBlockElement,
+    startNodeConnectorId: string,
+    endBlock?: FlowBlockElement | undefined,
+    endBlockConnectorId?: string
+  ) {
+    super();
     this.id = id;
+    this.label = label;
+    this.description = description;
     this.selected = false;
 
     this.startBlock = startBlock;
@@ -137,7 +171,7 @@ export class FlowConnection extends FlowElement {
     this._endBlockConnectorId = endBlockConnectorId;
   }
 
-  public get starBlock(): FlowBlock {
+  public get starBlock(): FlowBlockElement {
     return this.startBlock;
   }
 
@@ -146,17 +180,20 @@ export class FlowConnection extends FlowElement {
   }
 
   getStartOffset(): Offset {
-    const startConnector = this.startBlock.connectors.find((c) => c.id == this.startNodeConnectorId)!;
-    return { x: this.startBlock.location.x + startConnector.location.x, y: this.startBlock.location.y + startConnector.location.y + startConnector.size.height / 2 };
+    const startConnector = this.startBlock.block.connectors.find((c) => c.id == this.startNodeConnectorId)!;
+    return {
+      x: this.startBlock.location.x + startConnector.location.x,
+      y: this.startBlock.location.y + startConnector.location.y + startConnector.size.height / 2
+    };
   }
 
   getStartSide(): BlockSide {
-    const startConnector = this.startBlock.connectors.find((c) => c.id == this.startNodeConnectorId)!;
+    const startConnector = this.startBlock.block.connectors.find((c) => c.id == this.startNodeConnectorId)!;
     return startConnector.side;
   }
 
   public getStartConnector(): FlowBlockConnector {
-    return this.startBlock.connectors.find((c) => c.id === this.startNodeConnectorId)!;
+    return this.startBlock.block.connectors.find((c) => c.id === this.startNodeConnectorId)!;
   }
 
   public getEndConnector(): FlowBlockConnector | undefined {
@@ -165,10 +202,10 @@ export class FlowConnection extends FlowElement {
       return undefined;
     }
 
-    return this._endBlock.connectors.find((c) => c.id === this.endBlockConnectorId)!;
+    return this._endBlock.block.connectors.find((c) => c.id === this.endBlockConnectorId)!;
   }
 
-  public get endBlock(): FlowBlock | undefined {
+  public get endBlock(): FlowBlockElement | undefined {
     // If no end block then no end block offset
     if (!this._endBlock) {
       return undefined;
@@ -192,17 +229,24 @@ export class FlowConnection extends FlowElement {
       return undefined;
     }
 
-    const endConnector = this._endBlock.connectors.find((c) => c.id == this.endBlockConnectorId)!;
-    return { x: this._endBlock.location.x + endConnector.location.x, y: this._endBlock.location.y + endConnector.location.y + endConnector.size.height / 2 };
+    const endConnector = this._endBlock.block.connectors.find((c) => c.id == this.endBlockConnectorId)!;
+    return {
+      x: this._endBlock.location.x + endConnector.location.x,
+      y: this._endBlock.location.y + endConnector.location.y + endConnector.size.height / 2
+    };
   }
 
   getEndSide(): BlockSide | undefined {
-    const endConnector = this.endBlock?.connectors.find((c) => c.id == this.endBlockConnectorId);
+    const endConnector = this.endBlock?.block.connectors.find((c) => c.id == this.endBlockConnectorId);
     return endConnector?.side;
   }
 }
 
 export class FunctionBlock extends FlowEntity {
+  id: string; // A GUID
+  label: string;
+  description: string;
+  type: FunctionBlockType;
   io: InputOutput[];
   connectors: FlowBlockConnector[];
   code: (block: FunctionBlock) => void;
@@ -211,35 +255,41 @@ export class FunctionBlock extends FlowEntity {
     id: string,
     label: string,
     description: string,
+    type: FunctionBlockType,
     io: InputOutput[],
     connectors: FlowBlockConnector[],
     code: (block: FunctionBlock) => void
   ) {
-    super(id, label, description);
+    super();
+    this.id = id;
+    this.label = label;
+    this.description = description;
+    this.type = type;
     this.io = io;
     this.connectors = connectors;
     this.code = code;
   }
 }
 
-export type FlowBlock = {
-  zBoost: number;
-} & FunctionBlock &
-  FlowBlockElement;
-
-export class FlowBlockConnector extends FlowBlockElement {
+export class FlowBlockConnector extends FlowElement {
+  id: string; // A GUID
+  label: string;
+  description: string;
   io: InputOutput;
   side: BlockSide;
 
   constructor(id: string, label: string, description: string, side: BlockSide, io: InputOutput) {
-    super(id, label, description)
+    super();
+    this.id = id;
+    this.label = label;
+    this.description = description;
     this.io = io;
     this.side = side;
   }
 }
 
 export type Flow = {
-  blocks: FlowBlock[];
+  blocks: FlowBlockElement[];
   connections: FlowConnection[];
 } & FlowEntity;
 
@@ -247,38 +297,41 @@ export class FlowDesigner {
   viewSize: Ref<Size>;
   gridSize: Ref<number>;
 
-  blocks: Ref<FlowBlock[]>;
+  blocks: Ref<FlowBlockElement[]>;
   connections: Ref<FlowConnection[]>;
 
   // The block that is currently selected (undefined if no block selected)
-  selectedBlock: Ref<FlowBlock | undefined>;
+  selectedBlock: Ref<FlowBlockElement | undefined>;
 
   // The current block that is being dragged (undefined if no block being dragged)
-  dragBlock: Ref<FlowBlock | undefined>;
+  dragBlock: Ref<FlowBlockElement | undefined>;
   dragBlockOffset: Ref<Offset>;
   dragBlockOriginalPosition: Ref<Offset>;
 
   drawingConnection: Ref<FlowConnection | undefined>;
   drawingConnectionEndConnector: Ref<FlowBlockConnector | undefined>;
   selectedConnection: Ref<FlowConnection | undefined>;
-  selectedNode: Ref<FlowBlock | undefined>;
 
-  constructor(blocks: Ref<FlowBlock[]>, connections: Ref<FlowConnection[]>, viewSize: Ref<{ width: number; height: number }>, gridSize: Ref<number>) {
+  constructor(
+    blocks: Ref<FlowBlockElement[]>,
+    connections: Ref<FlowConnection[]>,
+    viewSize: Ref<{ width: number; height: number }>,
+    gridSize: Ref<number>
+  ) {
     this.viewSize = viewSize;
 
     this.connections = connections;
     this.blocks = blocks;
     this.gridSize = gridSize;
 
-    this.selectedBlock = ref<FlowBlock | undefined>(undefined);
+    this.selectedBlock = ref(undefined);
 
-    this.dragBlock = ref<FlowBlock | undefined>(undefined);
+    this.dragBlock = ref<FlowBlockElement | undefined>(undefined);
     this.dragBlockOffset = ref<Offset>({ x: 0, y: 0 });
     this.dragBlockOriginalPosition = ref<Offset>({ x: 0, y: 0 });
     this.drawingConnection = ref(undefined);
     this.drawingConnectionEndConnector = ref<FlowBlockConnector | undefined>(undefined);
     this.selectedConnection = ref(undefined);
-    this.selectedNode = ref<FlowBlock | undefined>(undefined);
   }
 
   dragNodeMove = (e: MouseEvent): void => {
@@ -348,5 +401,4 @@ export class FlowDesigner {
 
     return hitElements;
   };
-
 }

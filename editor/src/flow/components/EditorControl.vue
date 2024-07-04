@@ -21,7 +21,7 @@
       ></line>
     </g>
 
-    <BlockSvg />
+    <BlockControl v-model="flowBlock" />
 
     <ConnectionControl
       :show="true"
@@ -48,13 +48,26 @@
 
 <script setup lang="ts">
 import ConnectionControl from './ConnectionControl.vue';
-import BlockSvg from './BlockControl.vue';
-import type { Line, Offset } from '../models/types';
+import { FlowBlockElement, type Line, type Offset } from '../models/types';
 import { computed, ref } from 'vue';
 import { useScreenSize } from 'vue-boosted';
+import BlockControl from './BlockControl.vue';
+import { generateFunctionBlock } from '../utils/flow-object-generator';
+import { FunctionBlockType } from '../models/enums';
 
 const spline1 = ref({ start: { x: 300, y: 110 }, end: { x: 410, y: 170 } } as Line);
 const spline2 = ref({ start: { x: 900, y: 110 }, end: { x: 700, y: 310 } } as Line);
+
+const flowBlock = new FlowBlockElement(
+  generateFunctionBlock(FunctionBlockType.And, {
+    attributes: { label: 'DaAND' }
+  })
+);
+
+flowBlock.location.x = 100;
+flowBlock.location.y = 200;
+flowBlock.size.width = 80;
+flowBlock.size.height = 40;
 
 const connectionPointColor = 'magenta';
 

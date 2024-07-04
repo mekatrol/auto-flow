@@ -17,6 +17,7 @@
   "dependencies": {
     "mitt": "^3.0.1",
     "pinia": "^2.1.7",
+    "uuid": "^10.0.0",
     "vue": "^3.4.21"
   },
   "devDependencies": {
