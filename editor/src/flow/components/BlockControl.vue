@@ -18,14 +18,14 @@
     />
     <!-- node markers -->
     <MarkerControl
-      v-for="(m, i) in markers"
+      v-for="(marker, i) in markers"
       :key="i"
-      :x="model.location.x + m.location.x"
-      :y="model?.location.y + m.location.y"
-      :shape="m.shape"
+      :x="model.location.x + marker.location.x"
+      :y="model?.location.y + marker.location.y"
+      :shape="marker.shape"
       :size="MARKER_SIZE"
-      :fill-color="m.fillColor"
-      :stroke-color="m.strokeColor"
+      :fill-color="marker.fillColor"
+      :stroke-color="marker.strokeColor"
     />
   </g>
 </template>
