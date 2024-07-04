@@ -14,6 +14,17 @@ export type Offset = {
   y: number;
 };
 
+export const addOffsets = (offsets: Offset[]): Offset => {
+  const output: Offset = { x: 0, y: 0 };
+
+  for (const i in offsets) {
+    output.x += offsets[i].x;
+    output.y += offsets[i].y;
+  }
+
+  return output;
+};
+
 // Represents the size of an element in the the SVG view coordinates
 export type Size = {
   width: number;
@@ -151,8 +162,8 @@ export class FlowConnection extends FlowElement {
   id: string; // A GUID
   label: string;
   description: string;
-  startBlock: FlowBlockElement;
-  startBlockConnectorId: string;
+  _startBlock: FlowBlockElement;
+  _startBlockConnectorId: string;
   private _endBlock: FlowBlockElement | undefined;
   private _endBlockConnectorId: string | undefined;
 
@@ -161,7 +172,7 @@ export class FlowConnection extends FlowElement {
     label: string,
     description: string,
     startBlock: FlowBlockElement,
-    startNodeConnectorId: string,
+    startBlockConnectorId: string,
     endBlock?: FlowBlockElement | undefined,
     endBlockConnectorId?: string
   ) {
@@ -171,36 +182,36 @@ export class FlowConnection extends FlowElement {
     this.description = description;
     this.selected = false;
 
-    this.startBlock = startBlock;
-    this.startBlockConnectorId = startNodeConnectorId;
+    this._startBlock = startBlock;
+    this._startBlockConnectorId = startBlockConnectorId;
 
     this._endBlock = endBlock;
     this._endBlockConnectorId = endBlockConnectorId;
   }
 
-  public get starBlock(): FlowBlockElement {
-    return this.startBlock;
+  public get startBlock(): FlowBlockElement {
+    return this._startBlock;
   }
 
-  public get startNodeConnectorId(): string {
-    return this.startBlockConnectorId;
+  public get startBlockConnectorId(): string {
+    return this._startBlockConnectorId;
   }
 
   getStartOffset(): Offset {
-    const startConnector = this.startBlock.block.connectors.find((c) => c.id == this.startNodeConnectorId)!;
+    const startConnector = this._startBlock.block.connectors.find((c) => c.id == this.startBlockConnectorId)!;
     return {
-      x: this.startBlock.location.x + startConnector.location.x,
-      y: this.startBlock.location.y + startConnector.location.y + startConnector.size.height / 2
+      x: this._startBlock.location.x + startConnector.location.x,
+      y: this._startBlock.location.y + startConnector.location.y + startConnector.size.height / 2
     };
   }
 
   getStartSide(): BlockSide {
-    const startConnector = this.startBlock.block.connectors.find((c) => c.id == this.startNodeConnectorId)!;
+    const startConnector = this._startBlock.block.connectors.find((c) => c.id == this.startBlockConnectorId)!;
     return startConnector.side;
   }
 
   public getStartConnector(): FlowBlockConnector {
-    return this.startBlock.block.connectors.find((c) => c.id === this.startNodeConnectorId)!;
+    return this._startBlock.block.connectors.find((c) => c.id === this.startBlockConnectorId)!;
   }
 
   public getEndConnector(): FlowBlockConnector | undefined {
@@ -344,7 +355,7 @@ export class FlowDesigner {
     this.selectedConnection = ref(undefined);
   }
 
-  dragNodeMove = (e: MouseEvent): void => {
+  dragBlockMove = (e: MouseEvent): void => {
     if (!this.dragBlock.value) return;
     this.dragBlock.value.location.x = e.offsetX - this.dragBlockOffset.value.x;
     this.dragBlock.value.location.y = e.offsetY - this.dragBlockOffset.value.y;
@@ -378,7 +389,7 @@ export class FlowDesigner {
   };
 
   private clearSelectedBlock = (): void => {
-    // Clear selected node
+    // Clear selected block
     this.selectedBlock.value = undefined;
 
     if (!this.blocks) {

@@ -21,24 +21,15 @@
       ></line>
     </g>
 
-    <BlockControl v-model="flowBlock" />
+    <BlockControl v-model="flowBlock1" />
+    <BlockControl v-model="flowBlock2" />
 
     <ConnectionControl
       :show="true"
       :show-points="false"
-      :connection="spline1"
-      :start-point-color="connectionPointColor"
-      :end-point-color="connectionPointColor"
-      @mousedown="(m) => controlPointMouseDown(m.e, m.p)"
-      @mouseup="(m) => controlPointMouseUp(m.e, m.p)"
-      @mousemove="(m) => controlPointMouseMove(m.e, m.p)"
-    />
-    <ConnectionControl
-      :show="true"
-      :show-points="false"
-      :connection="spline2"
-      :start-point-color="connectionPointColor"
-      :end-point-color="connectionPointColor"
+      :connection="connection1"
+      start-point-color="magenta"
+      end-point-color="orange"
       @mousedown="(m) => controlPointMouseDown(m.e, m.p)"
       @mouseup="(m) => controlPointMouseUp(m.e, m.p)"
       @mousemove="(m) => controlPointMouseMove(m.e, m.p)"
@@ -48,28 +39,39 @@
 
 <script setup lang="ts">
 import ConnectionControl from './ConnectionControl.vue';
-import { FlowBlockElement, type Line, type Offset } from '../models/types';
+import { FlowBlockElement, FlowConnection, type Line, type Offset } from '../models/types';
 import { computed, ref } from 'vue';
 import { useScreenSize } from 'vue-boosted';
 import BlockControl from './BlockControl.vue';
 import { generateFunctionBlock } from '../utils/flow-object-generator';
 import { FunctionBlockType } from '../models/enums';
 
-const spline1 = ref({ start: { x: 300, y: 110 }, end: { x: 410, y: 170 } } as Line);
-const spline2 = ref({ start: { x: 900, y: 110 }, end: { x: 700, y: 310 } } as Line);
-
-const flowBlock = new FlowBlockElement(
+const flowBlock1 = new FlowBlockElement(
   generateFunctionBlock(FunctionBlockType.And, {
-    attributes: { label: 'DaAND' }
+    attributes: { label: 'AND' }
   })
 );
 
-flowBlock.location.x = 100;
-flowBlock.location.y = 200;
-flowBlock.size.width = 80;
-flowBlock.size.height = 40;
+flowBlock1.location.x = 100;
+flowBlock1.location.y = 200;
+flowBlock1.size.width = 80;
+flowBlock1.size.height = 40;
 
-const connectionPointColor = 'magenta';
+const flowBlock2 = new FlowBlockElement(
+  generateFunctionBlock(FunctionBlockType.Or, {
+    attributes: { label: 'OR' }
+  })
+);
+
+flowBlock2.location.x = 600;
+flowBlock2.location.y = 100;
+flowBlock2.size.width = 80;
+flowBlock2.size.height = 40;
+
+const startConnector = flowBlock1.block.connectors[flowBlock1.block.connectors.length - 1];
+const endConnector = flowBlock2.block.connectors[1];
+
+const connection1 = new FlowConnection('', '', '', flowBlock1, startConnector.id, flowBlock2, endConnector.id);
 
 const mouseControlPoint = ref(null as Offset | null);
 let mouseControlPointStart = { x: 0, y: 0 } as Offset;

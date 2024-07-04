@@ -10,6 +10,12 @@
       :ry="`${model.cornerRadius}px`"
       :fill="model.fillColor"
       :stroke="model.strokeColor"
+      @mousemove="(e) => emit(BLOCK_MOUSE_MOVE, e)"
+      @mouseover="(e) => emit(BLOCK_MOUSE_OVER, e)"
+      @mouseenter="(e) => emit(BLOCK_MOUSE_ENTER, e)"
+      @mouseleave="(e) => emit(BLOCK_MOUSE_LEAVE, e)"
+      @mousedown="(e) => emit(BLOCK_MOUSE_DOWN, e)"
+      @mouseup="(e) => emit(BLOCK_MOUSE_UP, e)"
     ></rect>
     <LabelControl
       :x="model.location.x"
@@ -48,10 +54,26 @@ import { FlowBlockConnector, FlowBlockElement, MarkerShape, type EnumDictionary 
 import { computed } from 'vue';
 import { BLOCK_CONNECTOR_OFFSET, BLOCK_CONNECTOR_SIZE, MARKER_OFFSET_X, MARKER_OFFSET_Y, MARKER_SIZE } from '../models/constants';
 import { BlockSide } from '../models/enums';
+import { useEmitter, type FlowEvents } from '../utils/event-emitter';
+import { BLOCK_MOUSE_MOVE, BLOCK_MOUSE_OVER, BLOCK_MOUSE_ENTER, BLOCK_MOUSE_LEAVE, BLOCK_MOUSE_DOWN, BLOCK_MOUSE_UP } from '../models/constants';
 
 const textGap = 5;
 
 var model = defineModel<FlowBlockElement>();
+
+const emitter = useEmitter();
+
+const emit = (event: keyof FlowEvents, e: MouseEvent): boolean => {
+  if (model.value) {
+    emitter.emit(event, {
+      data: model.value,
+      mouseEvent: e
+    });
+  }
+
+  e.preventDefault();
+  return false;
+};
 
 const markers = computed(() => {
   if (!model.value) {

@@ -1,29 +1,26 @@
+import { v4 as uuidv4 } from 'uuid';
 import mitt, { type Emitter } from 'mitt';
-import type { FlowBlock, FlowConnection, FlowBlockConnector, FlowDesigner } from '../models/types';
-
-/*****************************************************************************
- * Flow element event types
- *****************************************************************************/
-export const BLOCK_MOUSE_MOVE = 'blockMouseMove';
-export const BLOCK_MOUSE_OVER = 'blockMouseOver';
-export const BLOCK_MOUSE_ENTER = 'blockMouseEnter';
-export const BLOCK_MOUSE_LEAVE = 'blockMouseLeave';
-export const BLOCK_MOUSE_DOWN = 'blockMouseDown';
-export const BLOCK_MOUSE_UP = 'blockMouseUp';
-
-export const BLOCK_CONNECTOR_MOUSE_MOVE = 'blockConnectorMouseMove';
-export const BLOCK_CONNECTOR_MOUSE_OVER = 'blockConnectorMouseOver';
-export const BLOCK_CONNECTOR_MOUSE_ENTER = 'blockConnectorMouseEnter';
-export const BLOCK_CONNECTOR_MOUSE_LEAVE = 'blockConnectorMouseLeave';
-export const BLOCK_CONNECTOR_MOUSE_DOWN = 'blockConnectorMouseDown';
-export const BLOCK_CONNECTOR_MOUSE_UP = 'blockConnectorMouseUp';
-
-export const CONNECTION_MOUSE_MOVE = 'connectionMouseMove';
-export const CONNECTION_MOUSE_OVER = 'connectionMouseOver';
-export const CONNECTION_MOUSE_ENTER = 'connectionMouseEnter';
-export const CONNECTION_MOUSE_LEAVE = 'connectionMouseLeave';
-export const CONNECTION_MOUSE_DOWN = 'connectionMouseDown';
-export const CONNECTION_MOUSE_UP = 'connectionMouseUp';
+import { type FlowBlockElement, FlowConnection, type FlowBlockConnector, type FlowDesigner } from '../models/types';
+import {
+  BLOCK_CONNECTOR_MOUSE_DOWN,
+  BLOCK_CONNECTOR_MOUSE_ENTER,
+  BLOCK_CONNECTOR_MOUSE_LEAVE,
+  BLOCK_CONNECTOR_MOUSE_MOVE,
+  BLOCK_CONNECTOR_MOUSE_OVER,
+  BLOCK_CONNECTOR_MOUSE_UP,
+  BLOCK_MOUSE_DOWN,
+  BLOCK_MOUSE_ENTER,
+  BLOCK_MOUSE_LEAVE,
+  BLOCK_MOUSE_MOVE,
+  BLOCK_MOUSE_OVER,
+  BLOCK_MOUSE_UP,
+  CONNECTION_MOUSE_DOWN,
+  CONNECTION_MOUSE_ENTER,
+  CONNECTION_MOUSE_LEAVE,
+  CONNECTION_MOUSE_MOVE,
+  CONNECTION_MOUSE_OVER,
+  CONNECTION_MOUSE_UP
+} from '../models/constants';
 
 export interface FlowMouseEvent<T> {
   data: T;
@@ -31,7 +28,7 @@ export interface FlowMouseEvent<T> {
 }
 
 // An event from a flow block
-export interface FlowBlockMouseEvent extends FlowMouseEvent<FlowBlock> {}
+export interface FlowBlockMouseEvent extends FlowMouseEvent<FlowBlockElement> {}
 
 // A mouse event from a flow block connector (includes the block that the connector is attached to)
 export interface FlowNodeConnectorMouseEvent extends FlowBlockMouseEvent {
@@ -137,7 +134,15 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
 
   emitter.on(BLOCK_CONNECTOR_MOUSE_DOWN, (e) => {
     flowDesigner.clearSelectedItems();
-    flowDesigner.drawingConnection.value = new FlowConnecting(-1, 'connecting', e.data, e.connector.id, e.mouseEvent.offsetX, e.mouseEvent.offsetY);
+    // flowDesigner.drawingConnection.value = new FlowConnection(
+    //   uuidv4(),
+    //   'connecting',
+    //   '',
+    //   e.data,
+    //   e.connector.id,
+    //   e.mouseEvent.offsetX,
+    //   e.mouseEvent.offsetY
+    // );
   });
 
   emitter.on(CONNECTION_MOUSE_MOVE, (_e) => {
