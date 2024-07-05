@@ -8,7 +8,7 @@ import { FlowElementType } from './FlowElementType';
 // A flow block element is a flow element that has a location and size
 // This is the visible component of a function block
 
-export class FlowBlockElement extends FlowTaggedElement {
+export class FlowBlock extends FlowTaggedElement {
   function: FlowFunction;
 
   cornerRadius: number = 3;

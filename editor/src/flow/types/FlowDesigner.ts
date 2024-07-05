@@ -3,7 +3,7 @@ import { FlowBlockConnector } from './FlowBlockConnector';
 import { FlowConnection } from './FlowConnection';
 import { FlowElement } from './FlowElement';
 import type { Offset } from './Offset';
-import { FlowBlockElement } from './FlowBlockElement';
+import { FlowBlock } from './FlowBlock';
 import { ZOrder } from './ZOrder';
 import type { Line } from './Line';
 import type { FlowTaggedElement } from './FlowTaggedElement';
@@ -13,24 +13,19 @@ import { FlowElementType } from './FlowElementType';
 
 export class FlowDesigner {
   private _viewSize: Ref<{ width: number; height: number }>;
-  private _blocks: Ref<FlowBlockElement[]>;
+  private _blocks: Ref<FlowBlock[]>;
   private _connections: Ref<FlowConnection[]>;
   private _zOrder: ZOrder;
   private _gridSize: Ref<number>;
   private _drawingConnection = ref<FlowConnection | undefined>(undefined);
   private _drawingConnectionEndConnector = ref<FlowBlockConnector | undefined>(undefined);
   private _selectedConnection = ref<FlowConnection | undefined>(undefined);
-  private _selectedBlock = ref<FlowBlockElement | undefined>(undefined);
-  private _dragBlock = ref<FlowBlockElement | undefined>(undefined);
+  private _selectedBlock = ref<FlowBlock | undefined>(undefined);
+  private _dragBlock = ref<FlowBlock | undefined>(undefined);
   private _dragBlockOffset = ref<Offset>({ x: 0, y: 0 });
   private _dragBlockOriginalPosition = ref<Offset>({ x: 0, y: 0 });
 
-  constructor(
-    nodes: Ref<FlowBlockElement[]>,
-    connections: Ref<FlowConnection[]>,
-    viewSize: Ref<{ width: number; height: number }>,
-    gridSize: Ref<number>
-  ) {
+  constructor(nodes: Ref<FlowBlock[]>, connections: Ref<FlowConnection[]>, viewSize: Ref<{ width: number; height: number }>, gridSize: Ref<number>) {
     this._blocks = nodes;
     this._connections = connections;
     this._viewSize = viewSize;
@@ -38,7 +33,7 @@ export class FlowDesigner {
     this._zOrder = new ZOrder(nodes);
   }
 
-  public get blocks(): Ref<FlowBlockElement[]> {
+  public get blocks(): Ref<FlowBlock[]> {
     return this._blocks;
   }
 
@@ -50,7 +45,7 @@ export class FlowDesigner {
     return this._viewSize;
   }
 
-  public get dragBlock(): Ref<FlowBlockElement | undefined> {
+  public get dragBlock(): Ref<FlowBlock | undefined> {
     return this._dragBlock;
   }
 
@@ -70,11 +65,11 @@ export class FlowDesigner {
     return this._drawingConnectionEndConnector;
   }
 
-  public get selectedBlock(): FlowBlockElement | undefined {
+  public get selectedBlock(): FlowBlock | undefined {
     return this._selectedBlock.value;
   }
 
-  public set selectedBlock(node: FlowBlockElement | undefined) {
+  public set selectedBlock(node: FlowBlock | undefined) {
     // Clear any existing selections
     this.clearSelectedBlock();
 
@@ -242,7 +237,7 @@ export class FlowDesigner {
 
     const startBlock = this._drawingConnection.value.startBlock;
     const startBlockId = this._drawingConnection.value?.startBlockConnectorId;
-    const endBlock = this._drawingConnectionEndConnector.value?.parent! as FlowBlockElement;
+    const endBlock = this._drawingConnectionEndConnector.value?.parent! as FlowBlock;
     const endBlockId = this._drawingConnectionEndConnector.value.id;
 
     const connection = new FlowConnection(uuidv4(), 'Connection', '', startBlock, startBlockId, endBlock, endBlockId);
@@ -396,7 +391,7 @@ export class FlowDesigner {
     this.clearSelectedItems();
   };
 
-  private deleteBlock = (block: FlowBlockElement): void => {
+  private deleteBlock = (block: FlowBlock): void => {
     // We must also delete any connections that connect to the node
     const connections = this._connections.value.filter((c) => c.startBlock.id === block.id || c.endBlock?.id === block.id);
     connections.forEach((c) => this.deleteConnection(c));
@@ -416,7 +411,7 @@ let flowDesigner: FlowDesigner;
 
 // Initialise the designer
 export const initFlowDesignController = (
-  blocks: Ref<FlowBlockElement[]>,
+  blocks: Ref<FlowBlock[]>,
   connections: Ref<FlowConnection[]>,
   screenSize: Ref<{ width: number; height: number }>,
   gridSize: Ref<number>

@@ -1,23 +1,23 @@
 import type { BlockSide } from './BlockSide';
 import { type Offset } from './Offset';
-import { FlowBlockElement } from './FlowBlockElement';
+import { FlowBlock } from './FlowBlock';
 import { FlowBlockConnector } from './FlowBlockConnector';
 import { FlowTaggedElement } from './FlowTaggedElement';
 import { FlowElementType } from './FlowElementType';
 
 export class FlowConnection extends FlowTaggedElement {
-  _startBlock: FlowBlockElement;
+  _startBlock: FlowBlock;
   _startBlockConnectorId: string;
-  _endBlock: FlowBlockElement | undefined;
+  _endBlock: FlowBlock | undefined;
   _endBlockConnectorId: string | undefined;
 
   constructor(
     id: string,
     label: string,
     description: string,
-    startBlock: FlowBlockElement,
+    startBlock: FlowBlock,
     startBlockConnectorId: string,
-    endBlock?: FlowBlockElement | undefined,
+    endBlock?: FlowBlock | undefined,
     endBlockConnectorId?: string
   ) {
     super(id, label, description, FlowElementType.Connection); // Start with no size, will calculate later
@@ -30,7 +30,7 @@ export class FlowConnection extends FlowTaggedElement {
     this._endBlockConnectorId = endBlockConnectorId;
   }
 
-  public get startBlock(): FlowBlockElement {
+  public get startBlock(): FlowBlock {
     return this._startBlock;
   }
 
@@ -64,7 +64,7 @@ export class FlowConnection extends FlowTaggedElement {
     return this._endBlock.function.connectors.find((c) => c.id === this.endBlockConnectorId)!;
   }
 
-  public get endBlock(): FlowBlockElement | undefined {
+  public get endBlock(): FlowBlock | undefined {
     // If no end block then no end block offset
     if (!this._endBlock) {
       return undefined;

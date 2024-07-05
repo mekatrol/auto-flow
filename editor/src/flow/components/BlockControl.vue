@@ -51,7 +51,7 @@ import LabelControl from './LabelControl.vue';
 import MarkerControl from './MarkerControl.vue';
 import ConnectorControl from './ConnectorControl.vue';
 import { type EnumDictionary } from '../types/EnumDictionary';
-import { FlowBlockElement } from '../types/FlowBlockElement';
+import { FlowBlock } from '../types/FlowBlock';
 import { MarkerShape } from '../types/MarkerShape';
 import { FlowBlockConnector } from '../types/FlowBlockConnector';
 import { computed } from 'vue';
@@ -74,7 +74,7 @@ import {
 const textGap = 5;
 
 interface Props {
-  block: FlowBlockElement;
+  block: FlowBlock;
 }
 
 const props = defineProps<Props>();
@@ -105,7 +105,7 @@ const markers = computed(() => {
   ];
 });
 
-const getConnectorOffsets = (block: FlowBlockElement, offset: number): EnumDictionary<BlockSide, { x: number; y: number }> => {
+const getConnectorOffsets = (block: FlowBlock, offset: number): EnumDictionary<BlockSide, { x: number; y: number }> => {
   const connectorOffsets: EnumDictionary<BlockSide, { x: number; y: number }> = {
     [BlockSide.Left]: { x: -(BLOCK_CONNECTOR_SIZE - BLOCK_CONNECTOR_OFFSET), y: offset },
     [BlockSide.Top]: { x: offset, y: -BLOCK_CONNECTOR_OFFSET },

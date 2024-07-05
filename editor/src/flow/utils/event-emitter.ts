@@ -1,5 +1,5 @@
 import mitt, { type Emitter } from 'mitt';
-import { type FlowBlockElement } from '../types/FlowBlockElement';
+import { type FlowBlock } from '../types/FlowBlock';
 import { type FlowDesigner } from '../types/FlowDesigner';
 import { type FlowBlockConnector } from '../types/FlowBlockConnector';
 import { FlowConnection } from '../types/FlowConnection';
@@ -30,7 +30,7 @@ export interface FlowMouseEvent<T> {
 }
 
 // An event from a flow block
-export interface FlowBlockMouseEvent extends FlowMouseEvent<FlowBlockElement> {}
+export interface FlowBlockMouseEvent extends FlowMouseEvent<FlowBlock> {}
 
 // A mouse event from a flow block connector (includes the block that the connector is attached to)
 export interface FlowNodeConnectorMouseEvent extends FlowBlockMouseEvent {

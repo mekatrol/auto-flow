@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FlowBlockElement } from '../types/FlowBlockElement';
+import type { FlowBlock } from '../types/FlowBlock';
 import type { FlowBlockConnector } from '../types/FlowBlockConnector';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
 import {
@@ -34,7 +34,7 @@ import {
 } from '../constants';
 
 interface Props {
-  block: FlowBlockElement;
+  block: FlowBlock;
   connector: FlowBlockConnector;
   fillColor?: string;
   strokeColor?: string;
