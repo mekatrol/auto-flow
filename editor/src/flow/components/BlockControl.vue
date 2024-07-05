@@ -50,12 +50,12 @@
 import LabelControl from './LabelControl.vue';
 import MarkerControl from './MarkerControl.vue';
 import ConnectorControl from './ConnectorControl.vue';
-import { type EnumDictionary } from '../models/EnumDictionary';
-import { FlowBlockElement } from '../models/FlowBlockElement';
-import { MarkerShape } from '../models/MarkerShape';
-import { FlowBlockConnector } from '../models/FlowBlockConnector';
+import { type EnumDictionary } from '../types/EnumDictionary';
+import { FlowBlockElement } from '../types/FlowBlockElement';
+import { MarkerShape } from '../types/MarkerShape';
+import { FlowBlockConnector } from '../types/FlowBlockConnector';
 import { computed } from 'vue';
-import { BlockSide } from '../models/BlockSide';
+import { BlockSide } from '../types/BlockSide';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
 import {
   BLOCK_CONNECTOR_OFFSET,

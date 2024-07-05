@@ -1,3 +1,4 @@
+import type { FlowElementType } from './FlowElementType';
 import type { Offset } from './Offset';
 import type { Size } from './Size';
 
@@ -13,17 +14,23 @@ export class FlowElement {
   // The size of the flow element relative to top / left of the screen in SVG view units.
   size: Size;
 
+  type: FlowElementType;
+
   // The default colors for an element
   fillColor: string = '#101010';
   strokeColor: string = '#f0f0f0';
 
   parent: FlowElement | undefined;
 
-  constructor(location: Offset, size: Size, parent?: FlowElement) {
+  // Additional CSS classes that can be applied to element
+  cssClasses: string = '';
+
+  constructor(location: Offset, size: Size, type: FlowElementType, parent?: FlowElement) {
     this.selected = false;
     this.location = location;
     this.size = size;
     this.parent = parent;
+    this.type = type;
   }
 
   public getHitElement(offset: Offset): FlowElement | undefined {

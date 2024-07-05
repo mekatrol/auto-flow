@@ -1,5 +1,5 @@
-import { type Offset } from '../models/Offset';
-import { BlockSide } from '../models/BlockSide';
+import { type Offset } from '../types/Offset';
+import { BlockSide } from '../types/BlockSide';
 
 /********************************************************************************************************************
  * Parts (control point adjustment) of this code are taken from:

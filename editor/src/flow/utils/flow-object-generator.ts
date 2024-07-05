@@ -1,10 +1,10 @@
-import { FunctionType } from '../models/FunctionType';
-import { BlockSide } from '../models/BlockSide';
-import { InputOutputDirection } from '../models/InputOutputDirection';
-import { InputOutputSignalType } from '../models/InputOutputSignalType';
-import { InputOutput } from '../models/InputOutput';
-import { FlowBlockConnector } from '../models/FlowBlockConnector';
-import { FlowFunction } from '../models/FlowFunction';
+import { FunctionType } from '../types/FunctionType';
+import { BlockSide } from '../types/BlockSide';
+import { InputOutputDirection } from '../types/InputOutputDirection';
+import { InputOutputSignalType } from '../types/InputOutputSignalType';
+import { InputOutput } from '../types/InputOutput';
+import { FlowBlockConnector } from '../types/FlowBlockConnector';
+import { FlowFunction } from '../types/FlowFunction';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface BlockConfiguration {

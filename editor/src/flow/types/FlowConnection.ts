@@ -1,16 +1,11 @@
 import type { BlockSide } from './BlockSide';
-import { FlowElement } from './FlowElement';
 import { type Offset } from './Offset';
 import { FlowBlockElement } from './FlowBlockElement';
 import { FlowBlockConnector } from './FlowBlockConnector';
+import { FlowTaggedElement } from './FlowTaggedElement';
+import { FlowElementType } from './FlowElementType';
 
-// A flow connection element is a flow element that has start and end block connectors
-
-export class FlowConnection extends FlowElement {
-  public id: string; // A GUID
-  public label: string;
-  public description: string;
-
+export class FlowConnection extends FlowTaggedElement {
   _startBlock: FlowBlockElement;
   _startBlockConnectorId: string;
   _endBlock: FlowBlockElement | undefined;
@@ -25,10 +20,7 @@ export class FlowConnection extends FlowElement {
     endBlock?: FlowBlockElement | undefined,
     endBlockConnectorId?: string
   ) {
-    super({ x: 0, y: 0 }, { width: 0, height: 0 }); // Start with no size, will calculate later
-    this.id = id;
-    this.label = label;
-    this.description = description;
+    super(id, label, description, FlowElementType.Connection); // Start with no size, will calculate later
     this.selected = false;
 
     this._startBlock = startBlock;

@@ -41,18 +41,21 @@
 
 <script setup lang="ts">
 import ConnectionControl from './ConnectionControl.vue';
-import { initFlowDesignController } from '../models/types';
-import { type Line } from '../models/Line';
-import { type Offset } from '../models/Offset';
-import { FlowBlockElement } from '../models/FlowBlockElement';
-import { FlowConnection } from '../models/FlowConnection';
+import { type Line } from '../types/Line';
+import { type Offset } from '../types/Offset';
+import { FlowBlockElement } from '../types/FlowBlockElement';
+import { FlowConnection } from '../types/FlowConnection';
 import { computed, ref, type Ref } from 'vue';
 import { useScreenSize } from 'vue-boosted';
 import BlockControl from './BlockControl.vue';
 import { generateFunctionBlock } from '../utils/flow-object-generator';
-import { FunctionType } from '../models/FunctionType';
+import { FunctionType } from '../types/FunctionType';
+import { initFlowDesignController } from '../types/FlowDesigner';
 
 const flowBlock1 = new FlowBlockElement(
+  '',
+  '',
+  '',
   generateFunctionBlock(FunctionType.And, {
     attributes: { label: 'AND' }
   })
@@ -64,6 +67,9 @@ flowBlock1.size.width = 80;
 flowBlock1.size.height = 40;
 
 const flowBlock2 = new FlowBlockElement(
+  '',
+  '',
+  '',
   generateFunctionBlock(FunctionType.Or, {
     attributes: { label: 'OR' }
   })

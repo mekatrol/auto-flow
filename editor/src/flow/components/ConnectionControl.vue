@@ -41,10 +41,10 @@
 </template>
 
 <script setup lang="ts">
-import { addOffsets } from '../models/types';
-import { type Offset } from '../models/Offset';
-import { FlowConnection } from '../models/FlowConnection';
-import { BlockSide } from '../models/BlockSide';
+import { addOffsets } from '../utils/type-helper';
+import { type Offset } from '../types/Offset';
+import { FlowConnection } from '../types/FlowConnection';
+import { BlockSide } from '../types/BlockSide';
 import { generateCubicBezierPoints } from '../utils/cubic-spline';
 import { cubicBezierToSvg } from '../utils/svg';
 import { computed } from 'vue';

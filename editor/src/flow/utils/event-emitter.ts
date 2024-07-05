@@ -1,8 +1,8 @@
 import mitt, { type Emitter } from 'mitt';
-import { type FlowBlockElement } from '../models/FlowBlockElement';
-import { type FlowDesigner } from '../models/FlowDesigner';
-import { type FlowBlockConnector } from '../models/FlowBlockConnector';
-import { FlowConnection } from '../models/FlowConnection';
+import { type FlowBlockElement } from '../types/FlowBlockElement';
+import { type FlowDesigner } from '../types/FlowDesigner';
+import { type FlowBlockConnector } from '../types/FlowBlockConnector';
+import { FlowConnection } from '../types/FlowConnection';
 import {
   BLOCK_CONNECTOR_MOUSE_DOWN,
   BLOCK_CONNECTOR_MOUSE_ENTER,
@@ -88,7 +88,7 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
 
   emitter.on(BLOCK_MOUSE_DOWN, (e: FlowBlockMouseEvent) => {
     flowDesigner.clearSelectedItems();
-    flowDesigner.selectedBlock.value = e.data;
+    flowDesigner.selectedBlock = e.data;
     flowDesigner.dragBlock.value = e.data;
     flowDesigner.dragBlock.value.zBoost = 0;
     flowDesigner.dragBlockOffset.value = { x: e.mouseEvent.offsetX - e.data.location.x, y: e.mouseEvent.offsetY - e.data.location.y };
@@ -170,7 +170,7 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
   emitter.on(CONNECTION_MOUSE_DOWN, (e) => {
     flowDesigner.clearSelectedItems();
     flowDesigner.drawingConnection.value = undefined;
-    flowDesigner.selectedConnection.value = e.data;
+    flowDesigner.selectedConnection = e.data;
   });
 };
 

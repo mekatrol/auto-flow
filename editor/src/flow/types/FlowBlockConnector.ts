@@ -1,6 +1,7 @@
 import { BLOCK_CONNECTOR_SIZE } from '../constants';
 import type { BlockSide } from './BlockSide';
 import { FlowElement } from './FlowElement';
+import { FlowElementType } from './FlowElementType';
 import { InputOutput } from './InputOutput';
 
 export class FlowBlockConnector extends FlowElement {
@@ -11,7 +12,7 @@ export class FlowBlockConnector extends FlowElement {
   side: BlockSide;
 
   constructor(id: string, label: string, description: string, side: BlockSide, io: InputOutput) {
-    super({ x: 0, y: 0 }, { width: BLOCK_CONNECTOR_SIZE, height: BLOCK_CONNECTOR_SIZE });
+    super({ x: 0, y: 0 }, { width: BLOCK_CONNECTOR_SIZE, height: BLOCK_CONNECTOR_SIZE }, FlowElementType.BlockConnector);
     this.id = id;
     this.label = label;
     this.description = description;

@@ -21,8 +21,8 @@
 </template>
 
 <script setup lang="ts">
-import type { FlowBlockElement } from '../models/FlowBlockElement';
-import type { FlowBlockConnector } from '../models/FlowBlockConnector';
+import type { FlowBlockElement } from '../types/FlowBlockElement';
+import type { FlowBlockConnector } from '../types/FlowBlockConnector';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
 import {
   BLOCK_CONNECTOR_MOUSE_MOVE,
