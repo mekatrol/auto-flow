@@ -50,10 +50,10 @@ import { computed, ref, type Ref } from 'vue';
 import { useScreenSize } from 'vue-boosted';
 import BlockControl from './BlockControl.vue';
 import { generateFunctionBlock } from '../utils/flow-object-generator';
-import { FunctionBlockType } from '../models/FunctionBlockType';
+import { FunctionType } from '../models/FunctionType';
 
 const flowBlock1 = new FlowBlockElement(
-  generateFunctionBlock(FunctionBlockType.And, {
+  generateFunctionBlock(FunctionType.And, {
     attributes: { label: 'AND' }
   })
 );
@@ -64,7 +64,7 @@ flowBlock1.size.width = 80;
 flowBlock1.size.height = 40;
 
 const flowBlock2 = new FlowBlockElement(
-  generateFunctionBlock(FunctionBlockType.Or, {
+  generateFunctionBlock(FunctionType.Or, {
     attributes: { label: 'OR' }
   })
 );
@@ -79,18 +79,18 @@ const connection1: FlowConnection = new FlowConnection(
   '',
   '',
   flowBlock1,
-  flowBlock1.block.connectors[flowBlock1.block.connectors.length - 1].id,
+  flowBlock1.function.connectors[flowBlock1.function.connectors.length - 1].id,
   flowBlock2,
-  flowBlock2.block.connectors[1].id
+  flowBlock2.function.connectors[1].id
 );
 const connection2: FlowConnection = new FlowConnection(
   '',
   '',
   '',
   flowBlock2,
-  flowBlock2.block.connectors[flowBlock2.block.connectors.length - 1].id,
+  flowBlock2.function.connectors[flowBlock2.function.connectors.length - 1].id,
   flowBlock1,
-  flowBlock1.block.connectors[1].id
+  flowBlock1.function.connectors[1].id
 );
 
 const blocks: Ref<FlowBlockElement[]> = ref([flowBlock1, flowBlock2]);

@@ -47,7 +47,7 @@ export class FlowConnection extends FlowElement {
   }
 
   public getStartOffset(): Offset {
-    const startConnector = this._startBlock.block.connectors.find((c) => c.id == this.startBlockConnectorId)!;
+    const startConnector = this._startBlock.function.connectors.find((c) => c.id == this.startBlockConnectorId)!;
     return {
       x: this._startBlock.location.x + startConnector.location.x,
       y: this._startBlock.location.y + startConnector.location.y + startConnector.size.height / 2
@@ -55,12 +55,12 @@ export class FlowConnection extends FlowElement {
   }
 
   public getStartSide(): BlockSide {
-    const startConnector = this._startBlock.block.connectors.find((c) => c.id == this.startBlockConnectorId)!;
+    const startConnector = this._startBlock.function.connectors.find((c) => c.id == this.startBlockConnectorId)!;
     return startConnector.side;
   }
 
   public getStartConnector(): FlowBlockConnector {
-    return this._startBlock.block.connectors.find((c) => c.id === this.startBlockConnectorId)!;
+    return this._startBlock.function.connectors.find((c) => c.id === this.startBlockConnectorId)!;
   }
 
   public getEndConnector(): FlowBlockConnector | undefined {
@@ -69,7 +69,7 @@ export class FlowConnection extends FlowElement {
       return undefined;
     }
 
-    return this._endBlock.block.connectors.find((c) => c.id === this.endBlockConnectorId)!;
+    return this._endBlock.function.connectors.find((c) => c.id === this.endBlockConnectorId)!;
   }
 
   public get endBlock(): FlowBlockElement | undefined {
@@ -96,7 +96,7 @@ export class FlowConnection extends FlowElement {
       return undefined;
     }
 
-    const endConnector = this._endBlock.block.connectors.find((c) => c.id == this.endBlockConnectorId)!;
+    const endConnector = this._endBlock.function.connectors.find((c) => c.id == this.endBlockConnectorId)!;
     return {
       x: this._endBlock.location.x + endConnector.location.x,
       y: this._endBlock.location.y + endConnector.location.y + endConnector.size.height / 2
@@ -104,7 +104,7 @@ export class FlowConnection extends FlowElement {
   }
 
   public getEndSide(): BlockSide | undefined {
-    const endConnector = this.endBlock?.block.connectors.find((c) => c.id == this.endBlockConnectorId);
+    const endConnector = this.endBlock?.function.connectors.find((c) => c.id == this.endBlockConnectorId);
     return endConnector?.side;
   }
 }

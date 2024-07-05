@@ -1,24 +1,24 @@
-import type { FunctionBlockType } from './FunctionBlockType';
+import type { FunctionType as FunctionType } from './FunctionType';
 import { InputOutput } from './InputOutput';
 import { FlowBlockConnector } from './FlowBlockConnector';
 
-export class FunctionBlock {
+export class FlowFunction {
   id: string; // A GUID
   label: string;
   description: string;
-  type: FunctionBlockType;
+  type: FunctionType;
   io: InputOutput[];
   connectors: FlowBlockConnector[];
-  code: (block: FunctionBlock) => void;
+  code: (block: FlowFunction) => void;
 
   constructor(
     id: string,
     label: string,
     description: string,
-    type: FunctionBlockType,
+    type: FunctionType,
     io: InputOutput[],
     connectors: FlowBlockConnector[],
-    code: (block: FunctionBlock) => void
+    code: (block: FlowFunction) => void
   ) {
     this.id = id;
     this.label = label;

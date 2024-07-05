@@ -20,7 +20,7 @@
     <LabelControl
       :x="model.location.x"
       :y="model.location.y + model.size.height + textGap"
-      :text="model.block.label"
+      :text="model.function.label"
     />
     <!-- block markers -->
     <MarkerControl
@@ -117,7 +117,7 @@ const transformConnectors = (side: BlockSide): FlowBlockConnector[] => {
     return [];
   }
 
-  const connectors = model.value.block.connectors.filter((x) => x.side === side);
+  const connectors = model.value.function.connectors.filter((x) => x.side === side);
 
   let shift = 0;
   const connectorOffsets = getConnectorOffsets(model.value, 5);

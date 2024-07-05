@@ -1,4 +1,4 @@
-export enum FunctionBlockType {
+export enum FunctionType {
   And = 'And',
   Average = 'Average',
   Calculator = 'Calculator',

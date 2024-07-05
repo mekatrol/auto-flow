@@ -1,162 +1,162 @@
-import { FunctionBlockType } from '../models/FunctionBlockType';
+import { FunctionType } from '../models/FunctionType';
 import { BlockSide } from '../models/BlockSide';
 import { InputOutputDirection } from '../models/InputOutputDirection';
 import { InputOutputSignalType } from '../models/InputOutputSignalType';
 import { InputOutput } from '../models/InputOutput';
 import { FlowBlockConnector } from '../models/FlowBlockConnector';
-import { FunctionBlock } from '../models/FunctionBlock';
+import { FlowFunction } from '../models/FlowFunction';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface BlockConfiguration {
   attributes: Record<string, any>;
 }
 
-export const generateFunctionBlock = (type: FunctionBlockType, data?: BlockConfiguration | undefined): FunctionBlock => {
+export const generateFunctionBlock = (type: FunctionType, data?: BlockConfiguration | undefined): FlowFunction => {
   switch (type) {
-    case FunctionBlockType.And:
+    case FunctionType.And:
       return generateAndBlock(data);
-    case FunctionBlockType.Average:
+    case FunctionType.Average:
       return generateAverageBlock(data);
-    case FunctionBlockType.Calculator:
+    case FunctionType.Calculator:
       return generateCalculatorBlock(data);
-    case FunctionBlockType.Calendar:
+    case FunctionType.Calendar:
       return generateCalendarBlock(data);
-    case FunctionBlockType.Clamp:
+    case FunctionType.Clamp:
       return generateClampBlock(data);
-    case FunctionBlockType.Comparator:
+    case FunctionType.Comparator:
       return generateComparatorBlock(data);
-    case FunctionBlockType.Delay:
+    case FunctionType.Delay:
       return generateDelayBlock(data);
-    case FunctionBlockType.If:
+    case FunctionType.If:
       return generateIfBlock(data);
-    case FunctionBlockType.Invert:
+    case FunctionType.Invert:
       return generateInvertBlock(data);
-    case FunctionBlockType.Line:
+    case FunctionType.Line:
       return generateLineBlock(data);
-    case FunctionBlockType.Max:
+    case FunctionType.Max:
       return generateMaxBlock(data);
-    case FunctionBlockType.Min:
+    case FunctionType.Min:
       return generateMinBlock(data);
-    case FunctionBlockType.Or:
+    case FunctionType.Or:
       return generateOrBlock(data);
-    case FunctionBlockType.Override:
+    case FunctionType.Override:
       return generateOverrideBlock(data);
-    case FunctionBlockType.Pid:
+    case FunctionType.Pid:
       return generatePidBlock(data);
-    case FunctionBlockType.Pulse:
+    case FunctionType.Pulse:
       return generatePulseBlock(data);
-    case FunctionBlockType.Schedule:
+    case FunctionType.Schedule:
       return generateScheduleBlock(data);
-    case FunctionBlockType.Selector:
+    case FunctionType.Selector:
       return generateSelectorBlock(data);
-    case FunctionBlockType.Sequence:
+    case FunctionType.Sequence:
       return generateSequenceBlock(data);
-    case FunctionBlockType.Split:
+    case FunctionType.Split:
       return generateSplitBlock(data);
-    case FunctionBlockType.Timer:
+    case FunctionType.Timer:
       return generateTimerBlock(data);
-    case FunctionBlockType.Xnor:
+    case FunctionType.Xnor:
       return generateXnorBlock(data);
-    case FunctionBlockType.Xor:
+    case FunctionType.Xor:
       return generateXorBlock(data);
     default:
       throw new Error(`Unknown block type '${type}'`);
   }
 };
 
-const generateAndBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return generate2InputBinaryBlock(FunctionBlockType.And, _data);
+const generateAndBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return generate2InputBinaryBlock(FunctionType.And, _data);
 };
 
-const generateAverageBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generateAverageBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generateCalculatorBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generateCalculatorBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generateCalendarBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generateCalendarBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generateClampBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generateClampBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generateComparatorBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generateComparatorBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generateDelayBlock = (data: BlockConfiguration | undefined): FunctionBlock => {
-  return generate1InputBinaryBlock(FunctionBlockType.Delay, data);
+const generateDelayBlock = (data: BlockConfiguration | undefined): FlowFunction => {
+  return generate1InputBinaryBlock(FunctionType.Delay, data);
 };
 
-const generateIfBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generateIfBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generateInvertBlock = (data: BlockConfiguration | undefined): FunctionBlock => {
-  return generate1InputBinaryBlock(FunctionBlockType.Invert, data);
+const generateInvertBlock = (data: BlockConfiguration | undefined): FlowFunction => {
+  return generate1InputBinaryBlock(FunctionType.Invert, data);
 };
 
-const generateLineBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generateLineBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generateMaxBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generateMaxBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generateMinBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generateMinBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generateOrBlock = (data: BlockConfiguration | undefined): FunctionBlock => {
-  return generate2InputBinaryBlock(FunctionBlockType.Or, data);
+const generateOrBlock = (data: BlockConfiguration | undefined): FlowFunction => {
+  return generate2InputBinaryBlock(FunctionType.Or, data);
 };
 
-const generateOverrideBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generateOverrideBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generatePidBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generatePidBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generatePulseBlock = (data: BlockConfiguration | undefined): FunctionBlock => {
-  return generate1InputBinaryBlock(FunctionBlockType.Pulse, data);
+const generatePulseBlock = (data: BlockConfiguration | undefined): FlowFunction => {
+  return generate1InputBinaryBlock(FunctionType.Pulse, data);
 };
 
-const generateScheduleBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generateScheduleBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generateSelectorBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generateSelectorBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generateSequenceBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generateSequenceBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generateSplitBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generateSplitBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generateTimerBlock = (_data: BlockConfiguration | undefined): FunctionBlock => {
-  return {} as FunctionBlock;
+const generateTimerBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+  return {} as FlowFunction;
 };
 
-const generateXnorBlock = (data: BlockConfiguration | undefined): FunctionBlock => {
-  return generate1InputBinaryBlock(FunctionBlockType.Xnor, data);
+const generateXnorBlock = (data: BlockConfiguration | undefined): FlowFunction => {
+  return generate1InputBinaryBlock(FunctionType.Xnor, data);
 };
 
-const generateXorBlock = (data: BlockConfiguration | undefined): FunctionBlock => {
-  return generate1InputBinaryBlock(FunctionBlockType.Xor, data);
+const generateXorBlock = (data: BlockConfiguration | undefined): FlowFunction => {
+  return generate1InputBinaryBlock(FunctionType.Xor, data);
 };
 
-const generate1InputBinaryBlock = (type: FunctionBlockType, data: BlockConfiguration | undefined): FunctionBlock => {
+const generate1InputBinaryBlock = (type: FunctionType, data: BlockConfiguration | undefined): FlowFunction => {
   const typeUpper = type.toString().toUpperCase();
 
   return {
@@ -180,10 +180,10 @@ const generate1InputBinaryBlock = (type: FunctionBlockType, data: BlockConfigura
         new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Output)
       )
     ]
-  } as FunctionBlock;
+  } as FlowFunction;
 };
 
-const generate2InputBinaryBlock = (type: FunctionBlockType, data: BlockConfiguration | undefined): FunctionBlock => {
+const generate2InputBinaryBlock = (type: FunctionType, data: BlockConfiguration | undefined): FlowFunction => {
   const typeUpper = type.toString().toUpperCase();
 
   return {
@@ -214,5 +214,5 @@ const generate2InputBinaryBlock = (type: FunctionBlockType, data: BlockConfigura
         new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Output)
       )
     ]
-  } as FunctionBlock;
+  } as FlowFunction;
 };
