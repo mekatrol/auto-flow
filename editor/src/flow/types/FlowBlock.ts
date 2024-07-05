@@ -9,7 +9,7 @@ import { FlowElementType } from './FlowElementType';
 // This is the visible component of a function block
 
 export class FlowBlock extends FlowTaggedElement {
-  function: FlowFunction;
+  flowFunction: FlowFunction;
 
   cornerRadius: number = 3;
 
@@ -23,14 +23,17 @@ export class FlowBlock extends FlowTaggedElement {
   //  * clicking on a position will select the element with the highest zOrder at that position
   zOrder: number = 0;
 
-  constructor(id: string, label: string, description: string, block: FlowFunction) {
+  icon: string;
+
+  constructor(id: string, label: string, description: string, flowFunction: FlowFunction) {
     super(id, label, description, FlowElementType.Block, { x: 0, y: 0 }, { width: BLOCK_WIDTH, height: BLOCK_HEIGHT });
-    this.function = block;
+    this.flowFunction = flowFunction;
+    this.icon = flowFunction.type.toLowerCase();
   }
 
   public getHitElement(offset: Offset): FlowElement | undefined {
     // Are any connectors hit?
-    const hitConnectors = this.function.connectors.filter((c) => c.getHitElement(offset) != undefined);
+    const hitConnectors = this.flowFunction.connectors.filter((c) => c.getHitElement(offset) != undefined);
     if (hitConnectors.length > 0) {
       // Return first
       return hitConnectors[0];

@@ -80,18 +80,18 @@ const connection1: FlowConnection = new FlowConnection(
   'Connection 1',
   'This is connection 1.',
   flowBlock1,
-  flowBlock1.function.connectors[flowBlock1.function.connectors.length - 1].id,
+  flowBlock1.flowFunction.connectors[flowBlock1.flowFunction.connectors.length - 1].id,
   flowBlock2,
-  flowBlock2.function.connectors[1].id
+  flowBlock2.flowFunction.connectors[1].id
 );
 const connection2: FlowConnection = new FlowConnection(
   uuidv4(),
   'Connection 2',
   'This is connection 2.',
   flowBlock2,
-  flowBlock2.function.connectors[flowBlock2.function.connectors.length - 1].id,
+  flowBlock2.flowFunction.connectors[flowBlock2.flowFunction.connectors.length - 1].id,
   flowBlock1,
-  flowBlock1.function.connectors[1].id
+  flowBlock1.flowFunction.connectors[1].id
 );
 
 const blocks: Ref<FlowBlock[]> = ref([flowBlock1, flowBlock2]);

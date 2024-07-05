@@ -1,11 +1,12 @@
 <template>
-  <text
-    class="label"
-    :transform="`translate(${x}, ${y})`"
-    :fill="color"
-    :alignment-baseline="verticalAlignment"
-    >{{ text }}</text
-  >
+  <g :transform="`translate(${x}, ${y})`">
+    <text
+      class="label"
+      :fill="color"
+      :alignment-baseline="verticalAlignment"
+      >{{ text }}</text
+    >
+  </g>
 </template>
 
 <script setup lang="ts">

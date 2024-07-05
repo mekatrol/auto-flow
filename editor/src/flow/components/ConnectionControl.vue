@@ -92,8 +92,8 @@ const svg = computed(() => {
     return '';
   }
 
-  const startConnector = props.connection.startBlock.function.connectors.find((c) => c.id === props.connection.startBlockConnectorId)!;
-  const endConnector = props.connection.endBlock.function.connectors.find((c) => c.id === props.connection.endBlockConnectorId)!;
+  const startConnector = props.connection.startBlock.flowFunction.connectors.find((c) => c.id === props.connection.startBlockConnectorId)!;
+  const endConnector = props.connection.endBlock.flowFunction.connectors.find((c) => c.id === props.connection.endBlockConnectorId)!;
 
   const halfOffset: Offset = { x: BLOCK_CONNECTOR_SIZE / 2, y: BLOCK_CONNECTOR_SIZE / 2 };
 

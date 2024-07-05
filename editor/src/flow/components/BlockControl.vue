@@ -1,15 +1,19 @@
 <template>
-  <g v-if="block">
+  <g
+    v-if="block"
+    :transform="`translate(${block.location.x},${block.location.y})`"
+  >
     <rect
       class="flow-block"
-      :x="block.location.x"
-      :y="block.location.y"
+      :x="0"
+      :y="0"
       :width="block.size.width"
       :height="block.size.height"
       :rx="`${block.cornerRadius}px`"
       :ry="`${block.cornerRadius}px`"
       :fill="block.fillColor"
       :stroke="block.strokeColor"
+      :stroke-width="`${strokeWidth}px`"
       @mousemove="(e) => emit(BLOCK_MOUSE_MOVE, e)"
       @mouseover="(e) => emit(BLOCK_MOUSE_OVER, e)"
       @mouseenter="(e) => emit(BLOCK_MOUSE_ENTER, e)"
@@ -18,26 +22,35 @@
       @mouseup="(e) => emit(BLOCK_MOUSE_UP, e)"
     ></rect>
 
+    <!-- Block icon -->
+    <IconControl
+      :x="strokeWidth"
+      :y="strokeWidth"
+      :r="block.cornerRadius"
+      :icon="props.block.icon"
+      :size="iconSize"
+    />
+
     <!-- Label inside block -->
     <LabelControl
-      :x="block.location.x + textGapX"
-      :y="block.location.y + block.size.height / 2"
-      :text="block.function.label"
+      :x="iconSize + textGapX"
+      :y="block.size.height / 2"
+      :text="block.flowFunction.label"
       vertical-alignment="middle"
     />
 
     <!-- Label below block -->
     <LabelControl
-      :x="block.location.x"
-      :y="block.location.y + block.size.height + textGapY"
+      :x="0"
+      :y="block.size.height + textGapY"
       :text="block.label"
     />
     <!-- block markers -->
     <MarkerControl
       v-for="(marker, i) in markers"
       :key="i"
-      :x="block.location.x + marker.location.x"
-      :y="block?.location.y + marker.location.y"
+      :x="marker.location.x"
+      :y="marker.location.y"
       :shape="marker.shape"
       :size="MARKER_SIZE"
       :fill-color="marker.fillColor"
@@ -60,6 +73,7 @@
 import LabelControl from './LabelControl.vue';
 import MarkerControl from './MarkerControl.vue';
 import ConnectorControl from './ConnectorControl.vue';
+import IconControl from './IconControl.vue';
 import { type EnumDictionary } from '../types/EnumDictionary';
 import { FlowBlock } from '../types/FlowBlock';
 import { MarkerShape } from '../types/MarkerShape';
@@ -89,6 +103,13 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+// Standard border (stroke) width for block
+const strokeWidth = 2;
+
+// Make the icon size same as block height (less border size) so that it is displayed as a square.
+// Using height works because the aspect ratio of the block is always width > height
+const iconSize = computed(() => props.block.size.height - 2 * strokeWidth);
 
 const emitter = useEmitter();
 
@@ -132,7 +153,7 @@ const transformConnectors = (side: BlockSide): FlowBlockConnector[] => {
     return [];
   }
 
-  const connectors = props.block.function.connectors.filter((x) => x.side === side);
+  const connectors = props.block.flowFunction.connectors.filter((x) => x.side === side);
 
   let shift = 0;
   const connectorOffsets = getConnectorOffsets(props.block, 5);

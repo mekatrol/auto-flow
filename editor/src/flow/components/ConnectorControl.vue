@@ -1,8 +1,8 @@
 <template>
   <rect
     :class="`connector`"
-    :x="block.location.x + connector.location.x"
-    :y="block.location.y + connector.location.y"
+    :x="connector.location.x"
+    :y="connector.location.y"
     :rx="`${cornerRadius}px`"
     :ry="`${cornerRadius}px`"
     :width="connector.size.width"
