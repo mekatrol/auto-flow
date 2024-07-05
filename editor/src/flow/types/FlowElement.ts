@@ -18,6 +18,7 @@ export class FlowElement {
 
   // The default colors for an element
   fillColor: string = '#101010';
+  fillOpacity: string = '70%';
   strokeColor: string = '#f0f0f0';
 
   parent: FlowElement | undefined;

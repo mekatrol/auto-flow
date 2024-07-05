@@ -14,7 +14,7 @@
     <!-- icon -->
     <image
       :xlink:href="`icons/${icon}.svg`"
-      class="flow-node-icon"
+      class="flow-function-icon"
       :width="`${size}`"
       :height="`${size}`"
     >

@@ -12,6 +12,7 @@
       :rx="`${block.cornerRadius}px`"
       :ry="`${block.cornerRadius}px`"
       :fill="block.fillColor"
+      :fill-opacity="block.fillOpacity"
       :stroke="block.strokeColor"
       :stroke-width="`${strokeWidth}px`"
       @mousemove="(e) => emit(BLOCK_MOUSE_MOVE, e)"
