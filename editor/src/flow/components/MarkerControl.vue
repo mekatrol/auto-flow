@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { Shape } from '../models/types';
+import type { Shape } from '../models/Shape';
 
 interface Props {
   shape: Shape;
@@ -57,6 +57,6 @@ const props = withDefaults(defineProps<Props>(), {
 const halfSize = computed(() => props.size >> 1);
 
 // k is just an arbitrary constant that produces reasonably looking
-// corner radiuses, rect sizes and shape border offsets
+// corner radii, rect sizes and shape border offsets
 const k = 2;
 </script>

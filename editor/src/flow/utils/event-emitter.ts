@@ -1,6 +1,8 @@
-import { v4 as uuidv4 } from 'uuid';
 import mitt, { type Emitter } from 'mitt';
-import { type FlowBlockElement, FlowConnection, type FlowBlockConnector, type FlowDesigner } from '../models/types';
+import { type FlowBlockElement } from '../models/FlowBlockElement';
+import { type FlowDesigner } from '../models/FlowDesigner';
+import { type FlowBlockConnector } from '../models/FlowBlockConnector';
+import { FlowConnection } from '../models/FlowConnection';
 import {
   BLOCK_CONNECTOR_MOUSE_DOWN,
   BLOCK_CONNECTOR_MOUSE_ENTER,
@@ -20,7 +22,7 @@ import {
   CONNECTION_MOUSE_MOVE,
   CONNECTION_MOUSE_OVER,
   CONNECTION_MOUSE_UP
-} from '../models/constants';
+} from '../constants';
 
 export interface FlowMouseEvent<T> {
   data: T;

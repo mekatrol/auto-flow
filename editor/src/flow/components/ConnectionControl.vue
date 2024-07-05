@@ -13,36 +13,38 @@
       @mousedown="(e) => emit(CONNECTION_MOUSE_DOWN, e)"
       @mouseup="(e) => emit(CONNECTION_MOUSE_UP, e)"
     />
-  </g>
-  <rect
-    class="control-start"
-    :x="connection.startBlock.location.x"
-    :y="connection.startBlock.location.y - BLOCK_CONNECTOR_SIZE / 2"
-    rx="2"
-    ry="2"
-    fill="currentColor"
-    stroke="currentColor"
-    :width="BLOCK_CONNECTOR_SIZE"
-    :height="BLOCK_CONNECTOR_SIZE"
-  ></rect>
+    <rect
+      class="control-start"
+      :x="connection.startBlock.location.x"
+      :y="connection.startBlock.location.y - BLOCK_CONNECTOR_SIZE / 2"
+      rx="2"
+      ry="2"
+      fill="currentColor"
+      stroke="currentColor"
+      :width="BLOCK_CONNECTOR_SIZE"
+      :height="BLOCK_CONNECTOR_SIZE"
+    ></rect>
 
-  <rect
-    v-if="connection.endBlock"
-    class="control-end"
-    :x="connection.endBlock.location.x"
-    :y="connection.endBlock.location.y - BLOCK_CONNECTOR_SIZE / 2"
-    rx="2"
-    ry="2"
-    fill="currentColor"
-    stroke="currentColor"
-    :width="BLOCK_CONNECTOR_SIZE"
-    :height="BLOCK_CONNECTOR_SIZE"
-  ></rect>
+    <rect
+      v-if="connection.endBlock"
+      class="control-end"
+      :x="connection.endBlock.location.x"
+      :y="connection.endBlock.location.y - BLOCK_CONNECTOR_SIZE / 2"
+      rx="2"
+      ry="2"
+      fill="currentColor"
+      stroke="currentColor"
+      :width="BLOCK_CONNECTOR_SIZE"
+      :height="BLOCK_CONNECTOR_SIZE"
+    ></rect>
+  </g>
 </template>
 
 <script setup lang="ts">
-import { addOffsets, FlowConnection, type Offset } from '../models/types';
-import { BlockSide } from '../models/enums';
+import { addOffsets } from '../models/types';
+import { type Offset } from '../models/Offset';
+import { FlowConnection } from '../models/FlowConnection';
+import { BlockSide } from '../models/BlockSide';
 import { generateCubicBezierPoints } from '../utils/cubic-spline';
 import { cubicBezierToSvg } from '../utils/svg';
 import { computed } from 'vue';
@@ -55,7 +57,7 @@ import {
   CONNECTION_MOUSE_DOWN,
   CONNECTION_MOUSE_UP,
   BLOCK_CONNECTOR_SIZE
-} from '../models/constants';
+} from '../constants';
 
 interface Props {
   show?: boolean;

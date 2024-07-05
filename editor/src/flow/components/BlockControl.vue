@@ -50,12 +50,26 @@
 import LabelControl from './LabelControl.vue';
 import MarkerControl from './MarkerControl.vue';
 import ConnectorControl from './ConnectorControl.vue';
-import { FlowBlockConnector, FlowBlockElement, MarkerShape, type EnumDictionary } from '../models/types';
+import { type EnumDictionary } from '../models/EnumDictionary';
+import { FlowBlockElement } from '../models/FlowBlockElement';
+import { MarkerShape } from '../models/MarkerShape';
+import { FlowBlockConnector } from '../models/FlowBlockConnector';
 import { computed } from 'vue';
-import { BLOCK_CONNECTOR_OFFSET, BLOCK_CONNECTOR_SIZE, MARKER_OFFSET_X, MARKER_OFFSET_Y, MARKER_SIZE } from '../models/constants';
-import { BlockSide } from '../models/enums';
+import { BlockSide } from '../models/BlockSide';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
-import { BLOCK_MOUSE_MOVE, BLOCK_MOUSE_OVER, BLOCK_MOUSE_ENTER, BLOCK_MOUSE_LEAVE, BLOCK_MOUSE_DOWN, BLOCK_MOUSE_UP } from '../models/constants';
+import {
+  BLOCK_CONNECTOR_OFFSET,
+  BLOCK_CONNECTOR_SIZE,
+  MARKER_OFFSET_X,
+  MARKER_OFFSET_Y,
+  MARKER_SIZE,
+  BLOCK_MOUSE_MOVE,
+  BLOCK_MOUSE_OVER,
+  BLOCK_MOUSE_ENTER,
+  BLOCK_MOUSE_LEAVE,
+  BLOCK_MOUSE_DOWN,
+  BLOCK_MOUSE_UP
+} from '../constants';
 
 const textGap = 5;
 

@@ -21,7 +21,8 @@
 </template>
 
 <script setup lang="ts">
-import type { FlowBlockConnector, FlowBlockElement } from '../models/types';
+import type { FlowBlockElement } from '../models/FlowBlockElement';
+import type { FlowBlockConnector } from '../models/FlowBlockConnector';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
 import {
   BLOCK_CONNECTOR_MOUSE_MOVE,
@@ -30,7 +31,7 @@ import {
   BLOCK_CONNECTOR_MOUSE_LEAVE,
   BLOCK_CONNECTOR_MOUSE_DOWN,
   BLOCK_CONNECTOR_MOUSE_UP
-} from '../models/constants';
+} from '../constants';
 
 interface Props {
   block: FlowBlockElement;

@@ -25,9 +25,11 @@
     <BlockControl v-model="flowBlock2" />
 
     <ConnectionControl
+      v-for="connection in connections"
+      :key="connection.id"
       :show="true"
       :show-points="false"
-      :connection="connection1"
+      :connection="connection"
       start-point-color="magenta"
       end-point-color="orange"
       @mousedown="(m) => controlPointMouseDown(m.e, m.p)"
@@ -39,12 +41,16 @@
 
 <script setup lang="ts">
 import ConnectionControl from './ConnectionControl.vue';
-import { FlowBlockElement, FlowConnection, type Line, type Offset } from '../models/types';
-import { computed, ref } from 'vue';
+import { initFlowDesignController } from '../models/types';
+import { type Line } from '../models/Line';
+import { type Offset } from '../models/Offset';
+import { FlowBlockElement } from '../models/FlowBlockElement';
+import { FlowConnection } from '../models/FlowConnection';
+import { computed, ref, type Ref } from 'vue';
 import { useScreenSize } from 'vue-boosted';
 import BlockControl from './BlockControl.vue';
 import { generateFunctionBlock } from '../utils/flow-object-generator';
-import { FunctionBlockType } from '../models/enums';
+import { FunctionBlockType } from '../models/FunctionBlockType';
 
 const flowBlock1 = new FlowBlockElement(
   generateFunctionBlock(FunctionBlockType.And, {
@@ -68,10 +74,27 @@ flowBlock2.location.y = 100;
 flowBlock2.size.width = 80;
 flowBlock2.size.height = 40;
 
-const startConnector = flowBlock1.block.connectors[flowBlock1.block.connectors.length - 1];
-const endConnector = flowBlock2.block.connectors[1];
+const connection1: FlowConnection = new FlowConnection(
+  '',
+  '',
+  '',
+  flowBlock1,
+  flowBlock1.block.connectors[flowBlock1.block.connectors.length - 1].id,
+  flowBlock2,
+  flowBlock2.block.connectors[1].id
+);
+const connection2: FlowConnection = new FlowConnection(
+  '',
+  '',
+  '',
+  flowBlock2,
+  flowBlock2.block.connectors[flowBlock2.block.connectors.length - 1].id,
+  flowBlock1,
+  flowBlock1.block.connectors[1].id
+);
 
-const connection1 = new FlowConnection('', '', '', flowBlock1, startConnector.id, flowBlock2, endConnector.id);
+const blocks: Ref<FlowBlockElement[]> = ref([flowBlock1, flowBlock2]);
+const connections: Ref<FlowConnection[]> = ref([connection1, connection2]);
 
 const mouseControlPoint = ref(null as Offset | null);
 let mouseControlPointStart = { x: 0, y: 0 } as Offset;
@@ -152,6 +175,10 @@ const gridLines = computed((): Line[] => {
 
   return lines;
 });
+
+const screenSize = useScreenSize();
+
+const flowDesigner = initFlowDesignController(blocks, connections, screenSize, gridSize);
 </script>
 
 <style scoped lang="scss">

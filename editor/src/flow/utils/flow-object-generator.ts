@@ -1,5 +1,10 @@
-import { BlockSide, FunctionBlockType, IoDirection, IoSignalType } from '../models/enums';
-import { FlowBlockConnector, FunctionBlock, InputOutput } from '../models/types';
+import { FunctionBlockType } from '../models/FunctionBlockType';
+import { BlockSide } from '../models/BlockSide';
+import { InputOutputDirection } from '../models/InputOutputDirection';
+import { InputOutputSignalType } from '../models/InputOutputSignalType';
+import { InputOutput } from '../models/InputOutput';
+import { FlowBlockConnector } from '../models/FlowBlockConnector';
+import { FunctionBlock } from '../models/FunctionBlock';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface BlockConfiguration {
@@ -165,14 +170,14 @@ const generate1InputBinaryBlock = (type: FunctionBlockType, data: BlockConfigura
         'Input 1',
         `Binary input of ${typeUpper} gate`,
         BlockSide.Left,
-        new InputOutput(IoSignalType.Digital, IoDirection.Input)
+        new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Input)
       ),
       new FlowBlockConnector(
         uuidv4(),
         'Output',
         `Binary output of ${typeUpper} gate`,
         BlockSide.Left,
-        new InputOutput(IoSignalType.Digital, IoDirection.Output)
+        new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Output)
       )
     ]
   } as FunctionBlock;
@@ -192,21 +197,21 @@ const generate2InputBinaryBlock = (type: FunctionBlockType, data: BlockConfigura
         'Input 1',
         `Binary input 1 of ${typeUpper} gate`,
         BlockSide.Left,
-        new InputOutput(IoSignalType.Digital, IoDirection.Input)
+        new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Input)
       ),
       new FlowBlockConnector(
         uuidv4(),
         'Input 2',
         `Binary input 2 of ${typeUpper} gate`,
         BlockSide.Left,
-        new InputOutput(IoSignalType.Digital, IoDirection.Input)
+        new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Input)
       ),
       new FlowBlockConnector(
         uuidv4(),
         'Output',
         `Binary output of ${typeUpper} gate`,
         BlockSide.Right,
-        new InputOutput(IoSignalType.Digital, IoDirection.Output)
+        new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Output)
       )
     ]
   } as FunctionBlock;
