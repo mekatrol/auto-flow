@@ -17,10 +17,20 @@
       @mousedown="(e) => emit(BLOCK_MOUSE_DOWN, e)"
       @mouseup="(e) => emit(BLOCK_MOUSE_UP, e)"
     ></rect>
+
+    <!-- Label inside block -->
+    <LabelControl
+      :x="block.location.x + textGapX"
+      :y="block.location.y + block.size.height / 2"
+      :text="block.function.label"
+      vertical-alignment="middle"
+    />
+
+    <!-- Label below block -->
     <LabelControl
       :x="block.location.x"
-      :y="block.location.y + block.size.height + textGap"
-      :text="block.function.label"
+      :y="block.location.y + block.size.height + textGapY"
+      :text="block.label"
     />
     <!-- block markers -->
     <MarkerControl
@@ -71,7 +81,8 @@ import {
   BLOCK_MOUSE_UP
 } from '../constants';
 
-const textGap = 5;
+const textGapX = 10;
+const textGapY = 5;
 
 interface Props {
   block: FlowBlock;
