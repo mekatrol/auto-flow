@@ -62,8 +62,6 @@ const flowBlock1 = new FlowBlock(
 
 flowBlock1.location.x = 100;
 flowBlock1.location.y = 200;
-flowBlock1.size.width = 80;
-flowBlock1.size.height = 40;
 
 const flowBlock2 = new FlowBlock(
   uuidv4(),
@@ -76,8 +74,6 @@ const flowBlock2 = new FlowBlock(
 
 flowBlock2.location.x = 600;
 flowBlock2.location.y = 100;
-flowBlock2.size.width = 80;
-flowBlock2.size.height = 40;
 
 const connection1: FlowConnection = new FlowConnection(
   uuidv4(),
