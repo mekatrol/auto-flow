@@ -38,7 +38,7 @@ export class FlowDesigner {
     this._zOrder = new ZOrder(nodes);
   }
 
-  public get nodes(): Ref<FlowBlockElement[]> {
+  public get blocks(): Ref<FlowBlockElement[]> {
     return this._blocks;
   }
 

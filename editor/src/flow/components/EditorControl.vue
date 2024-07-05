@@ -4,10 +4,14 @@
     width="1200"
     height="500"
     class="flow-designer"
-    @mousemove="mouseMove"
-    @mouseleave="mouseLeave"
-    @mousedown="svgMouseDown"
-    @mouseup="svgMouseUp"
+    @mousemove="flowDesigner.mouseMove"
+    @mouseleave="flowDesigner.mouseLeave"
+    @mousedown="flowDesigner.mouseDown"
+    @mouseup="flowDesigner.mouseUp"
+    @keypress="flowDesigner.keyPress"
+    @keydown="flowDesigner.keyDown"
+    @keyup="flowDesigner.keyUp"
+    @focusin="(e) => focusDesigner(e)"
   >
     <g class="grid">
       <line
@@ -21,31 +25,25 @@
       ></line>
     </g>
 
-    <BlockControl v-model="flowBlock1" />
-    <BlockControl v-model="flowBlock2" />
+    <BlockControl
+      v-for="block in flowDesigner.blocks.value"
+      :key="block.id"
+      :block="block"
+    />
 
     <ConnectionControl
-      v-for="connection in connections"
+      v-for="connection in flowDesigner.connections.value"
       :key="connection.id"
-      :show="true"
-      :show-points="false"
       :connection="connection"
-      start-point-color="magenta"
-      end-point-color="orange"
-      @mousedown="(m) => controlPointMouseDown(m.e, m.p)"
-      @mouseup="(m) => controlPointMouseUp(m.e, m.p)"
-      @mousemove="(m) => controlPointMouseMove(m.e, m.p)"
     />
   </svg>
 </template>
 
 <script setup lang="ts">
 import ConnectionControl from './ConnectionControl.vue';
-import { type Line } from '../types/Line';
-import { type Offset } from '../types/Offset';
 import { FlowBlockElement } from '../types/FlowBlockElement';
 import { FlowConnection } from '../types/FlowConnection';
-import { computed, ref, type Ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import { useScreenSize } from 'vue-boosted';
 import BlockControl from './BlockControl.vue';
 import { generateFunctionBlock } from '../utils/flow-object-generator';
@@ -102,89 +100,15 @@ const connection2: FlowConnection = new FlowConnection(
 const blocks: Ref<FlowBlockElement[]> = ref([flowBlock1, flowBlock2]);
 const connections: Ref<FlowConnection[]> = ref([connection1, connection2]);
 
-const mouseControlPoint = ref(null as Offset | null);
-let mouseControlPointStart = { x: 0, y: 0 } as Offset;
+const focusDesigner = (_e: FocusEvent): void => {
+  // Do nothing, and SVG element won't raise keyboard events unless it has
+  // a focus event handler
+};
 
-const viewSize = useScreenSize();
 const gridSize = ref(20);
-
-const controlPointMouseDown = (e: MouseEvent, p: Offset): void => {
-  mouseControlPoint.value = p;
-  mouseControlPointStart = { x: e.offsetX - p.x, y: e.offsetY - p.y };
-};
-
-const controlPointMouseUp = (_e: MouseEvent, _p: Offset): void => {
-  clearSelectedPoint();
-};
-
-const controlPointMouseMove = (e: MouseEvent, _p: Offset): void => {
-  dragPointMove(e);
-};
-
-const clearSelectedPoint = (): void => {
-  // Clear selected block
-  mouseControlPoint.value = null;
-};
-
-const svgMouseDown = (e: MouseEvent): void => {
-  if (e.target instanceof Element) {
-    const element = e.target as Element;
-    if (element.tagName == 'svg' || element.tagName == 'path') {
-      clearSelectedPoint();
-    }
-  }
-};
-
-const svgMouseUp = (e: MouseEvent): void => {
-  if (e.target instanceof Element) {
-    const element = e.target as Element;
-    if (element.tagName == 'svg' || element.tagName == 'circle' || element.tagName == 'path') {
-      clearSelectedPoint();
-    }
-  }
-};
-
-const dragPointMove = (e: MouseEvent): void => {
-  if (!mouseControlPoint.value) return;
-  mouseControlPoint.value.x = e.offsetX - mouseControlPointStart.x;
-  mouseControlPoint.value.y = e.offsetY - mouseControlPointStart.y;
-};
-
-const mouseMove = (e: MouseEvent): void => {
-  dragPointMove(e);
-};
-
-const mouseLeave = (_: MouseEvent): void => {
-  mouseControlPoint.value = null;
-};
-
-const gridLines = computed((): Line[] => {
-  const lines: Line[] = [];
-
-  if (viewSize.value.height < gridSize.value || viewSize.value.height < gridSize.value) {
-    return [];
-  }
-
-  for (let y = 0; y < viewSize.value.height; y += gridSize.value) {
-    lines.push({
-      start: { x: 0, y: y },
-      end: { x: viewSize.value.width, y: y }
-    });
-  }
-
-  for (let x = 0; x < viewSize.value.width; x += gridSize.value) {
-    lines.push({
-      start: { x: x, y: 0 },
-      end: { x: x, y: viewSize.value.height }
-    });
-  }
-
-  return lines;
-});
-
 const screenSize = useScreenSize();
-
 const flowDesigner = initFlowDesignController(blocks, connections, screenSize, gridSize);
+const gridLines = flowDesigner.gridLines;
 </script>
 
 <style scoped lang="scss">
