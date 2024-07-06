@@ -24,12 +24,16 @@
     ></rect>
 
     <!-- Block icon -->
-    <IconControl
+    <SvgIcon
+      icon-name="and"
       :x="strokeWidth"
       :y="strokeWidth"
       :r="block.cornerRadius"
       :icon="props.block.icon"
       :size="iconSize"
+      :fill="block.iconFillColor"
+      :stroke="block.iconStrokeColor"
+      :strokeWidth="block.iconStrokeWidth"
     />
 
     <!-- Label inside block -->
@@ -38,6 +42,7 @@
       :y="block.size.height / 2"
       :text="block.flowFunction.label"
       vertical-alignment="middle"
+      :color="block.functionColor"
     />
 
     <!-- Label below block -->
@@ -45,6 +50,7 @@
       :x="0"
       :y="block.size.height + textGapY"
       :text="block.label"
+      :color="block.labelColor"
     />
     <!-- block markers -->
     <MarkerControl
@@ -74,7 +80,7 @@
 import LabelControl from './LabelControl.vue';
 import MarkerControl from './MarkerControl.vue';
 import ConnectorControl from './ConnectorControl.vue';
-import IconControl from './IconControl.vue';
+import SvgIcon from './SvgIcon.vue';
 import { type EnumDictionary } from '../types/EnumDictionary';
 import { FlowBlock } from '../types/FlowBlock';
 import { MarkerShape } from '../types/MarkerShape';
