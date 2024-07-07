@@ -3,9 +3,10 @@
   <g v-if="show">
     <path
       :d="svg"
-      fill="none"
-      :stroke="lineColor"
-      :stroke-width="lineStrokeWidth"
+      :fill="theme.connectionStyles.fill"
+      :fill-opacity="theme.connectionStyles.fillOpacity"
+      :stroke="theme.connectionStyles.stroke"
+      :stroke-width="theme.connectionStyles.strokeWidth"
       @mousemove="(e) => emit(CONNECTION_MOUSE_MOVE, e)"
       @mouseover="(e) => emit(CONNECTION_MOUSE_OVER, e)"
       @mouseenter="(e) => emit(CONNECTION_MOUSE_ENTER, e)"
@@ -13,30 +14,6 @@
       @mousedown="(e) => emit(CONNECTION_MOUSE_DOWN, e)"
       @mouseup="(e) => emit(CONNECTION_MOUSE_UP, e)"
     />
-    <rect
-      class="control-start"
-      :x="connection.startBlock.location.x"
-      :y="connection.startBlock.location.y - BLOCK_CONNECTOR_SIZE / 2"
-      rx="2"
-      ry="2"
-      fill="currentColor"
-      stroke="currentColor"
-      :width="BLOCK_CONNECTOR_SIZE"
-      :height="BLOCK_CONNECTOR_SIZE"
-    ></rect>
-
-    <rect
-      v-if="connection.endBlock"
-      class="control-end"
-      :x="connection.endBlock.location.x"
-      :y="connection.endBlock.location.y - BLOCK_CONNECTOR_SIZE / 2"
-      rx="2"
-      ry="2"
-      fill="currentColor"
-      stroke="currentColor"
-      :width="BLOCK_CONNECTOR_SIZE"
-      :height="BLOCK_CONNECTOR_SIZE"
-    ></rect>
   </g>
 </template>
 
@@ -58,6 +35,7 @@ import {
   CONNECTION_MOUSE_UP,
   BLOCK_CONNECTOR_SIZE
 } from '../constants';
+import { useThemeStore } from '../store/themeStore';
 
 interface Props {
   show?: boolean;
@@ -83,7 +61,7 @@ const props = withDefaults(defineProps<Props>(), {
   lineStrokeWidth: 2,
   endPointColor: 'red',
   startPointRadius: 5,
-  startPointColor: 'green',
+  startPointColor: '#fff',
   endPointRadius: 5
 });
 
@@ -114,4 +92,6 @@ const emit = (event: keyof FlowEvents, e: MouseEvent): boolean => {
   e.preventDefault();
   return false;
 };
+
+const { theme } = useThemeStore();
 </script>

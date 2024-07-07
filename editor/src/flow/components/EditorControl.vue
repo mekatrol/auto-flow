@@ -25,16 +25,16 @@
       ></line>
     </g>
 
-    <BlockControl
-      v-for="block in flowDesigner.blocks.value"
-      :key="block.id"
-      :block="block"
-    />
-
     <ConnectionControl
       v-for="connection in flowDesigner.connections.value"
       :key="connection.id"
       :connection="connection"
+    />
+
+    <BlockControl
+      v-for="block in flowDesigner.blocks.value"
+      :key="block.id"
+      :block="block"
     />
   </svg>
 </template>
@@ -62,7 +62,6 @@ const flowBlock1 = new FlowBlock(
 
 flowBlock1.location.x = 100;
 flowBlock1.location.y = 200;
-flowBlock1.fillColor = 'magenta';
 
 const flowBlock2 = new FlowBlock(
   uuidv4(),
@@ -75,8 +74,6 @@ const flowBlock2 = new FlowBlock(
 
 flowBlock2.location.x = 600;
 flowBlock2.location.y = 100;
-flowBlock2.fillColor = 'goldenrod';
-flowBlock2.textColor = 'black';
 
 const connection1: FlowConnection = new FlowConnection(
   uuidv4(),

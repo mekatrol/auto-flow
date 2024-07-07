@@ -8,50 +8,67 @@
     <!-- icon shadow -->
     <path
       class="dither"
-      stroke="red"
-      :d="`M${r} 0 h${size - r} v${size} h${-(size - r)} a ${r} ${r} 0 0 1 -${r} -${r} v-${size - 2 * r} a ${r} ${r} 0 0 1 ${r} -${r}`"
+      stroke="none"
+      :d="`M${backgroundCornerRadius} 0 h${size - backgroundCornerRadius} v${size} h${-(size - backgroundCornerRadius)} a ${backgroundCornerRadius} ${backgroundCornerRadius} 0 0 1 -${backgroundCornerRadius} -${backgroundCornerRadius} v-${size - 2 * backgroundCornerRadius} a ${backgroundCornerRadius} ${backgroundCornerRadius} 0 0 1 ${backgroundCornerRadius} -${backgroundCornerRadius}`"
+      :fill="backgroundFill"
+      :opacity="backgroundOpacity"
     >
     </path>
 
     <!-- icon placeholder -->
-    <g ref="icon"></g>
-
-    <!-- icon right border -->
-    <path
-      :d="`M ${size - 0.5} ${0.5} l 0 ${size - 1}`"
-      class="separator"
-    >
-    </path>
+    <g
+      ref="icon"
+      :stroke="svgStroke"
+      :stroke-width="svgStrokeWidth"
+      :opacity="svgFillOpacity"
+      :fill="svgFill"
+      :transform="`translate(${iconTranslateOffset}, ${iconTranslateOffset}) scale(${iconScale})`"
+    ></g>
   </g>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 interface Props {
   iconName: string;
+  iconScale?: number;
   x: number;
   y: number;
   size: number;
-  fill?: string;
-  stroke?: string;
-  strokeWidth?: string;
-  r?: number;
+
+  backgroundCornerRadius?: number;
+
+  svgFill?: string;
+  svgFillOpacity?: string;
+  svgStroke?: string;
+  svgStrokeWidth?: string;
+
+  backgroundFill: string;
+  backgroundOpacity: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  fill: 'currentColor',
-  stroke: 'currentColor',
-  strokeWidth: '2px',
+  iconScale: 0.8,
   x: 0,
   y: 0,
   size: 40,
-  r: 10
+
+  backgroundCornerRadius: 10,
+
+  svgFill: 'currentColor',
+  svgFillOpacity: '100%',
+  svgStroke: 'currentColor',
+  svgStrokeWidth: '2px',
+
+  backgroundFill: '#000',
+  backgroundOpacity: '50%'
 });
 
 const icon = ref(null);
 
 const fetchIcon = async () => {
+  console.log(props.iconName);
   const iconUri = `/function-icons/${props.iconName}.svg`;
   fetch(iconUri)
     .then((response) => response.text())
@@ -60,14 +77,18 @@ const fetchIcon = async () => {
       const svgParsedDom = new DOMParser().parseFromString(htmlText, 'text/html');
 
       // Get the 'g' tag (inside the SVG tag)
-      const g = svgParsedDom.querySelector('svg')!;
+      const svg = svgParsedDom.querySelector('svg')!;
+      const g = svgParsedDom.querySelector('g')!;
 
-      // Set attributes
-      g.setAttribute('fill', props.fill);
-      g.setAttribute('stroke', props.stroke);
-      g.setAttribute('stroke-width', props.strokeWidth);
-      g.setAttribute('width', `${props.size}`);
-      g.setAttribute('height', `${props.size}`);
+      // Set attributes for internal graphic
+      g.setAttribute('fill', props.svgFill);
+      g.setAttribute('opacity', props.svgFillOpacity);
+      g.setAttribute('stroke', props.svgStroke);
+      g.setAttribute('stroke-width', props.svgStrokeWidth);
+
+      // Set svg attributes
+      svg.setAttribute('width', `${props.size}`);
+      svg.setAttribute('height', `${props.size}`);
 
       // Get SVG container on the current Vue component
       const svgContainer = icon.value! as SVGGElement;
@@ -76,12 +97,19 @@ const fetchIcon = async () => {
       svgContainer.innerHTML = '';
 
       // Add the fetched 'g' element as the middle child
-      svgContainer.appendChild(g);
+      svgContainer.appendChild(svg);
     });
 };
 
 onMounted(async () => {
   await fetchIcon();
+});
+
+const iconTranslateOffset = computed(() => {
+  // Scale the icon size and then the offset is half the
+  // difference between original size and the scaled icon size
+  const offset = (props.size - props.size * props.iconScale) / 2;
+  return offset;
 });
 
 watch(
@@ -91,19 +119,3 @@ watch(
   }
 );
 </script>
-
-<style lang="scss">
-.icon {
-  .dither {
-    fill: green;
-    fill-opacity: 100%;
-    stroke: none;
-  }
-
-  .separator {
-    stroke-opacity: 100%;
-    stroke: #fff;
-    stroke-width: 2;
-  }
-}
-</style>

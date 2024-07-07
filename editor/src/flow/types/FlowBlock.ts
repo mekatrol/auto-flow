@@ -11,8 +11,6 @@ import { FlowElementType } from './FlowElementType';
 export class FlowBlock extends FlowTaggedElement {
   flowFunction: FlowFunction;
 
-  cornerRadius: number = 3;
-
   readonly z: number = 0; // zOrder + zBoost
   zBoost: number = 0;
 
@@ -24,11 +22,6 @@ export class FlowBlock extends FlowTaggedElement {
   zOrder: number = 0;
 
   icon: string;
-  labelColor: string = '#fff';
-  functionColor: string = '#fff';
-  iconFillColor: string = '#fff';
-  iconStrokeColor: string = '#fff';
-  iconStrokeWidth: string = '2px';
 
   constructor(id: string, label: string, description: string, flowFunction: FlowFunction) {
     super(id, label, description, FlowElementType.Block, { x: 0, y: 0 }, { width: BLOCK_WIDTH, height: BLOCK_HEIGHT });

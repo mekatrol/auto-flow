@@ -9,12 +9,12 @@
       :y="0"
       :width="block.size.width"
       :height="block.size.height"
-      :rx="`${block.cornerRadius}px`"
-      :ry="`${block.cornerRadius}px`"
-      :fill="block.fillColor"
-      :fill-opacity="block.fillOpacity"
-      :stroke="block.strokeColor"
-      :stroke-width="`${strokeWidth}px`"
+      :rx="`${theme.blockStyles.radius}px`"
+      :ry="`${theme.blockStyles.radius}px`"
+      :fill="theme.blockStyles.fill"
+      :fill-opacity="theme.blockStyles.fillOpacity"
+      :stroke="theme.blockStyles.stroke"
+      :stroke-width="theme.blockStyles.strokeWidth"
       @mousemove="(e) => emit(BLOCK_MOUSE_MOVE, e)"
       @mouseover="(e) => emit(BLOCK_MOUSE_OVER, e)"
       @mouseenter="(e) => emit(BLOCK_MOUSE_ENTER, e)"
@@ -25,16 +25,28 @@
 
     <!-- Block icon -->
     <SvgIcon
-      icon-name="and"
-      :x="strokeWidth"
-      :y="strokeWidth"
-      :r="block.cornerRadius"
+      :icon-name="block.flowFunction.type.toLowerCase()"
+      :x="0"
+      :y="0"
+      :backgroundCornerRadius="theme.blockStyles.radius"
       :icon="props.block.icon"
       :size="iconSize"
-      :fill="block.iconFillColor"
-      :stroke="block.iconStrokeColor"
-      :strokeWidth="block.iconStrokeWidth"
+      :svg-fill="theme.blockIconStyles.svg.fill"
+      :svg-fill-opacity="theme.blockIconStyles.svg.opacity"
+      :svg-stroke="theme.blockIconStyles.svg.stroke"
+      :svg-strokeWidth="theme.blockIconStyles.svg.strokeWidth"
+      :background-fill="theme.blockIconStyles.background.fill"
+      :background-opacity="theme.blockIconStyles.background.opacity"
     />
+
+    <!-- icon right border -->
+    <path
+      :d="`M ${iconSize - 0.5} ${0.5} l 0 ${iconSize - 1}`"
+      class="separator"
+      :stroke="theme.blockStyles.stroke"
+      :stroke-width="theme.blockStyles.strokeWidth"
+    >
+    </path>
 
     <!-- Label inside block -->
     <LabelControl
@@ -42,7 +54,7 @@
       :y="block.size.height / 2"
       :text="block.flowFunction.label"
       vertical-alignment="middle"
-      :color="block.functionColor"
+      :color="theme.blockFunctionLabelStyles.color"
     />
 
     <!-- Label below block -->
@@ -50,8 +62,9 @@
       :x="0"
       :y="block.size.height + textGapY"
       :text="block.label"
-      :color="block.labelColor"
+      :color="theme.blockLabelStyles.color"
     />
+
     <!-- block markers -->
     <MarkerControl
       v-for="(marker, i) in markers"
@@ -70,8 +83,9 @@
       :key="connector.id"
       :block="block"
       :connector="connector"
-      :fill-color="connector.fillColor"
-      :stroke-color="connector.strokeColor"
+      :fill-color="theme.blockConnectorStyles.fill"
+      :stroke-color="theme.blockConnectorStyles.stroke"
+      :stroke-width="theme.blockConnectorStyles.strokeWidth"
     />
   </g>
 </template>
@@ -101,6 +115,7 @@ import {
   BLOCK_MOUSE_DOWN,
   BLOCK_MOUSE_UP
 } from '../constants';
+import { useThemeStore } from '../store/themeStore';
 
 const textGapX = 10;
 const textGapY = 5;
@@ -111,12 +126,9 @@ interface Props {
 
 const props = defineProps<Props>();
 
-// Standard border (stroke) width for block
-const strokeWidth = 2;
-
 // Make the icon size same as block height (less border size) so that it is displayed as a square.
 // Using height works because the aspect ratio of the block is always width > height
-const iconSize = computed(() => props.block.size.height - 2 * strokeWidth);
+const iconSize = computed(() => props.block.size.height);
 
 const emitter = useEmitter();
 
@@ -186,4 +198,6 @@ const alignedConnectors = computed((): FlowBlockConnector[] => {
 
   return connectors;
 });
+
+const { theme } = useThemeStore();
 </script>

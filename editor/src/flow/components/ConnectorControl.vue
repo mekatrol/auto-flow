@@ -9,6 +9,7 @@
     :height="connector.size.height"
     :fill="fillColor"
     :stroke="strokeColor"
+    :stroke-width="strokeWidth"
     @mousemove="(e) => emit(BLOCK_CONNECTOR_MOUSE_MOVE, e)"
     @mouseover="(e) => emit(BLOCK_CONNECTOR_MOUSE_OVER, e)"
     @mouseenter="(e) => emit(BLOCK_CONNECTOR_MOUSE_ENTER, e)"
@@ -38,13 +39,15 @@ interface Props {
   connector: FlowBlockConnector;
   fillColor?: string;
   strokeColor?: string;
+  strokeWidth?: string;
 }
 const cornerRadius = 2;
 
 const props = withDefaults(defineProps<Props>(), {
   // Default colors to current color
   fillColor: 'currentColor',
-  strokeColor: 'currentColor'
+  strokeColor: 'currentColor',
+  strokeWidth: '2px'
 });
 
 const emitter = useEmitter();

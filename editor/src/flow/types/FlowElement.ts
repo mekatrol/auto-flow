@@ -16,11 +16,6 @@ export class FlowElement {
 
   type: FlowElementType;
 
-  // The default colors for an element
-  fillColor: string = '#101010';
-  fillOpacity: string = '70%';
-  strokeColor: string = '#f0f0f0';
-
   parent: FlowElement | undefined;
 
   // Additional CSS classes that can be applied to element

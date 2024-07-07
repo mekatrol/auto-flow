@@ -31,8 +31,6 @@ export const generateFunctionBlock = (type: FunctionType, data?: BlockConfigurat
       return generateIfBlock(data);
     case FunctionType.Invert:
       return generateInvertBlock(data);
-    case FunctionType.Line:
-      return generateLineBlock(data);
     case FunctionType.Max:
       return generateMaxBlock(data);
     case FunctionType.Min:
@@ -51,6 +49,8 @@ export const generateFunctionBlock = (type: FunctionType, data?: BlockConfigurat
       return generateSelectorBlock(data);
     case FunctionType.Sequence:
       return generateSequenceBlock(data);
+    case FunctionType.Span:
+      return generateSpanBlock(data);
     case FunctionType.Split:
       return generateSplitBlock(data);
     case FunctionType.Timer:
@@ -100,7 +100,7 @@ const generateInvertBlock = (data: BlockConfiguration | undefined): FlowFunction
   return generate1InputBinaryBlock(FunctionType.Invert, data);
 };
 
-const generateLineBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
+const generateSpanBlock = (_data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
