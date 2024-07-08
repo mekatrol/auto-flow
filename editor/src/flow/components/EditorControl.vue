@@ -4,13 +4,13 @@
     width="1200"
     height="500"
     class="flow-designer"
-    @mousemove="flowDesigner.mouseMove"
-    @mouseleave="flowDesigner.mouseLeave"
-    @mousedown="flowDesigner.mouseDown"
-    @mouseup="flowDesigner.mouseUp"
-    @keypress="flowDesigner.keyPress"
-    @keydown="flowDesigner.keyDown"
-    @keyup="flowDesigner.keyUp"
+    @mousemove="(e) => flowDesigner.mouseMove(e)"
+    @mouseleave="(e) => flowDesigner.mouseLeave(e)"
+    @mousedown="(e) => flowDesigner.mouseDown(e)"
+    @mouseup="(e) => flowDesigner.mouseUp(e)"
+    @keypress="(e) => flowDesigner.keyPress(e)"
+    @keydown="(e) => flowDesigner.keyDown(e)"
+    @keyup="(e) => flowDesigner.keyUp(e)"
     @focusin="(e) => focusDesigner(e)"
   >
     <g class="grid">
@@ -159,14 +159,10 @@ if (!flowDesigner.validateIds()) {
   height: 100%;
   border: 1px solid #b6b3b6;
 
-  & > svg {
-    width: 100%;
-    height: 100%;
-  }
-
   .grid-line {
     stroke: #aaaaaa77;
     stroke-width: 0.3;
+    pointer-events: none;
   }
 }
 </style>

@@ -211,7 +211,8 @@ export class FlowDesigner {
     const startConnector = flowDesigner.drawingConnection.value.getStartConnector();
 
     // Is there an element at the mouse position (that is not the drawing connection)
-    const hitConnectors = this.getHitElements(e).filter(
+    const hitElements = this.getHitElements(e);
+    const hitConnectors = hitElements.filter(
       (flowElement) =>
         // Must be a block connector
         flowElement.type === FlowElementType.BlockConnector &&
@@ -279,8 +280,8 @@ export class FlowDesigner {
     const hitElements = [] as FlowElement[];
     const offset = { x: e.offsetX, y: e.offsetY } as Offset;
 
-    this._blocks.value.forEach((n) => {
-      const hitElement = n.getHitElement(offset);
+    this._blocks.value.forEach((block) => {
+      const hitElement = block.getHitElement(offset);
 
       if (hitElement) {
         hitElements.push(hitElement);

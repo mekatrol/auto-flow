@@ -30,8 +30,11 @@ export class FlowBlock extends FlowTaggedElement {
   }
 
   public getHitElement(offset: Offset): FlowElement | undefined {
+    // Convert off set to local offset for connector hit testing
+    const localOffset: Offset = { x: offset.x - this.location.x, y: offset.y - this.location.y };
+
     // Are any connectors hit?
-    const hitConnectors = this.flowFunction.connectors.filter((c) => c.getHitElement(offset) != undefined);
+    const hitConnectors = this.flowFunction.connectors.filter((c) => c.getHitElement(localOffset) != undefined);
     if (hitConnectors.length > 0) {
       // Return first
       return hitConnectors[0];
