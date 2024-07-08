@@ -24,7 +24,7 @@ import { FlowConnection } from '../types/FlowConnection';
 import { BlockSide } from '../types/BlockSide';
 import { generateCubicBezierPoints } from '../utils/cubic-spline';
 import { cubicBezierToSvg } from '../utils/svg';
-import { computed } from 'vue';
+import { ref, watch } from 'vue';
 import { useEmitter, type FlowConnectionMouseEvent, type FlowEvents } from '../utils/event-emitter';
 import {
   CONNECTION_MOUSE_MOVE,
@@ -65,23 +65,28 @@ const props = withDefaults(defineProps<Props>(), {
   endPointRadius: 5
 });
 
-const svg = computed(() => {
-  if (!props.connection.endBlock) {
-    return '';
-  }
-
+const generateSvg = () => {
   const startConnector = props.connection.startBlock.flowFunction.connectors.find((c) => c.id === props.connection.startBlockConnectorId)!;
-  const endConnector = props.connection.endBlock.flowFunction.connectors.find((c) => c.id === props.connection.endBlockConnectorId)!;
 
   const halfOffset: Offset = { x: BLOCK_CONNECTOR_SIZE / 2, y: BLOCK_CONNECTOR_SIZE / 2 };
 
+  let endOffset: Offset = { x: 0, y: 0 };
+  if (!props.connection.endBlock) {
+    endOffset = props.connection.getEndOffset()!;
+  } else {
+    const endConnector = props.connection.endBlock.flowFunction.connectors.find((c) => c.id === props.connection.endBlockConnectorId);
+    endOffset = addOffsets([props.connection.endBlock.location, endConnector!.location, halfOffset]);
+  }
+
   const points = generateCubicBezierPoints(
     addOffsets([props.connection.startBlock.location, startConnector.location, halfOffset]),
-    addOffsets([props.connection.endBlock.location, endConnector.location, halfOffset]),
+    endOffset,
     BlockSide.Right
   );
   return cubicBezierToSvg(points);
-});
+};
+
+const svg = ref(generateSvg());
 
 const emitter = useEmitter();
 const emit = (event: keyof FlowEvents, e: MouseEvent): boolean => {
@@ -94,4 +99,15 @@ const emit = (event: keyof FlowEvents, e: MouseEvent): boolean => {
 };
 
 const { theme } = useThemeStore();
+
+watch(
+  () => props.connection.location,
+  () => {
+    // If creating a connection then end block will be undefined
+    // so we update svg whenever the location has changed.
+    if (!props.connection.endBlock) {
+      svg.value = generateSvg();
+    }
+  }
+);
 </script>

@@ -176,7 +176,7 @@ const generate1InputBinaryBlock = (type: FunctionType, data: BlockConfiguration 
         uuidv4(),
         'Output',
         `Binary output of ${typeUpper} gate`,
-        BlockSide.Left,
+        BlockSide.Right,
         new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Output)
       )
     ]

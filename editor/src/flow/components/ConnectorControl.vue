@@ -62,3 +62,9 @@ const emit = (event: keyof FlowEvents, e: MouseEvent): boolean => {
   return false;
 };
 </script>
+
+<style>
+rect.connector {
+  cursor: crosshair;
+}
+</style>

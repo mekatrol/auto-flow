@@ -68,7 +68,6 @@ const props = withDefaults(defineProps<Props>(), {
 const icon = ref(null);
 
 const fetchIcon = async () => {
-  console.log(props.iconName);
   const iconUri = `/function-icons/${props.iconName}.svg`;
   fetch(iconUri)
     .then((response) => response.text())

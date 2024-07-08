@@ -85,7 +85,9 @@ export class FlowConnection extends FlowTaggedElement {
   public getEndOffset(): Offset | undefined {
     // If no end block then no end block offset
     if (!this._endBlock) {
-      return undefined;
+      // If no end block then we must be creating a connector so return
+      // location (which is set to end off connection offset)
+      return this.location;
     }
 
     const endConnector = this._endBlock.flowFunction.connectors.find((c) => c.id == this.endBlockConnectorId)!;

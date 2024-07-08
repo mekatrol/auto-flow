@@ -36,6 +36,11 @@
       :key="block.id"
       :block="block"
     />
+
+    <ConnectionControl
+      v-if="flowDesigner.drawingConnection.value"
+      :connection="flowDesigner.drawingConnection.value!"
+    />
   </svg>
 </template>
 

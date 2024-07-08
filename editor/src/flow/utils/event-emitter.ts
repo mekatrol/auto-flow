@@ -3,6 +3,7 @@ import { type FlowBlock } from '../types/FlowBlock';
 import { type FlowDesigner } from '../types/FlowDesigner';
 import { type FlowBlockConnector } from '../types/FlowBlockConnector';
 import { FlowConnection } from '../types/FlowConnection';
+import { v4 as uuidv4 } from 'uuid';
 import {
   BLOCK_CONNECTOR_MOUSE_DOWN,
   BLOCK_CONNECTOR_MOUSE_ENTER,
@@ -136,15 +137,9 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
 
   emitter.on(BLOCK_CONNECTOR_MOUSE_DOWN, (e) => {
     flowDesigner.clearSelectedItems();
-    // flowDesigner.drawingConnection.value = new FlowConnection(
-    //   uuidv4(),
-    //   'connecting',
-    //   '',
-    //   e.data,
-    //   e.connector.id,
-    //   e.mouseEvent.offsetX,
-    //   e.mouseEvent.offsetY
-    // );
+    flowDesigner.drawingConnection.value = new FlowConnection(uuidv4(), 'connecting', '', e.data, e.connector.id);
+
+    flowDesigner.drawingConnection.value.location = { x: e.mouseEvent.offsetX, y: e.mouseEvent.offsetY };
   });
 
   emitter.on(CONNECTION_MOUSE_MOVE, (_e) => {
