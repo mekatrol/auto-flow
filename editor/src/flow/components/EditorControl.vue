@@ -75,6 +75,42 @@ const flowBlock2 = new FlowBlock(
 flowBlock2.location.x = 600;
 flowBlock2.location.y = 100;
 
+const flowBlock3 = new FlowBlock(
+  uuidv4(),
+  'Block 3',
+  'This is block 3.',
+  generateFunctionBlock(FunctionType.Xnor, {
+    attributes: { label: 'XNOR' }
+  })
+);
+
+flowBlock3.location.x = 600;
+flowBlock3.location.y = 200;
+
+const flowBlock4 = new FlowBlock(
+  uuidv4(),
+  'Block 4',
+  'This is block 4.',
+  generateFunctionBlock(FunctionType.Xor, {
+    attributes: { label: 'XOR' }
+  })
+);
+
+flowBlock4.location.x = 900;
+flowBlock4.location.y = 200;
+
+const flowBlock5 = new FlowBlock(
+  uuidv4(),
+  'Block 5',
+  'This is block 5.',
+  generateFunctionBlock(FunctionType.Invert, {
+    attributes: { label: 'INVERT' }
+  })
+);
+
+flowBlock5.location.x = 200;
+flowBlock5.location.y = 400;
+
 const connection1: FlowConnection = new FlowConnection(
   uuidv4(),
   'Connection 1',
@@ -94,7 +130,7 @@ const connection2: FlowConnection = new FlowConnection(
   flowBlock1.flowFunction.connectors[1].id
 );
 
-const blocks: Ref<FlowBlock[]> = ref([flowBlock1, flowBlock2]);
+const blocks: Ref<FlowBlock[]> = ref([flowBlock1, flowBlock2, flowBlock3, flowBlock4, flowBlock5]);
 const connections: Ref<FlowConnection[]> = ref([connection1, connection2]);
 
 const focusDesigner = (_e: FocusEvent): void => {

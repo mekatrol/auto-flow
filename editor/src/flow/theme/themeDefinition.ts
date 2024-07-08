@@ -53,7 +53,7 @@ export const defaultTheme: ThemeDefinition = {
     svg: {
       fill: '#fff',
       opacity: '100%',
-      stroke: '#fff',
+      stroke: '#ddd',
       strokeWidth: '10px'
     }
   },
