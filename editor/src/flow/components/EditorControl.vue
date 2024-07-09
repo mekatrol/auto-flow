@@ -51,70 +51,15 @@ import { FlowConnection } from '../types/FlowConnection';
 import { ref, type Ref } from 'vue';
 import { useScreenSize } from 'vue-boosted';
 import BlockControl from './BlockControl.vue';
-import { generateFunctionBlock } from '../utils/flow-object-generator';
 import { FunctionType } from '../types/FunctionType';
 import { initFlowDesignController } from '../types/FlowDesigner';
 import { v4 as uuidv4 } from 'uuid';
 
-const flowBlock1 = new FlowBlock(
-  uuidv4(),
-  'Block 1',
-  'This is block 1.',
-  generateFunctionBlock(FunctionType.And, {
-    attributes: { label: 'AND' }
-  })
-);
-
-flowBlock1.location.x = 100;
-flowBlock1.location.y = 200;
-
-const flowBlock2 = new FlowBlock(
-  uuidv4(),
-  'Block 2',
-  'This is block 2.',
-  generateFunctionBlock(FunctionType.Or, {
-    attributes: { label: 'OR' }
-  })
-);
-
-flowBlock2.location.x = 600;
-flowBlock2.location.y = 100;
-
-const flowBlock3 = new FlowBlock(
-  uuidv4(),
-  'Block 3',
-  'This is block 3.',
-  generateFunctionBlock(FunctionType.Xnor, {
-    attributes: { label: 'XNOR' }
-  })
-);
-
-flowBlock3.location.x = 600;
-flowBlock3.location.y = 200;
-
-const flowBlock4 = new FlowBlock(
-  uuidv4(),
-  'Block 4',
-  'This is block 4.',
-  generateFunctionBlock(FunctionType.Xor, {
-    attributes: { label: 'XOR' }
-  })
-);
-
-flowBlock4.location.x = 900;
-flowBlock4.location.y = 200;
-
-const flowBlock5 = new FlowBlock(
-  uuidv4(),
-  'Block 5',
-  'This is block 5.',
-  generateFunctionBlock(FunctionType.Invert, {
-    attributes: { label: 'INVERT' }
-  })
-);
-
-flowBlock5.location.x = 200;
-flowBlock5.location.y = 400;
+const flowBlock1 = new FlowBlock(uuidv4(), 'Block 1', 'This is block 1.', FunctionType.And, { x: 100, y: 200 });
+const flowBlock2 = new FlowBlock(uuidv4(), 'Block 2', 'This is block 2.', FunctionType.Or, { x: 600, y: 100 });
+const flowBlock3 = new FlowBlock(uuidv4(), 'Block 3', 'This is block 3.', FunctionType.Xnor, { x: 600, y: 200 });
+const flowBlock4 = new FlowBlock(uuidv4(), 'Block 4', 'This is block 4.', FunctionType.Xor, { x: 900, y: 200 });
+const flowBlock5 = new FlowBlock(uuidv4(), 'Block 5', 'This is block 5.', FunctionType.Invert, { x: 200, y: 400 });
 
 const connection1: FlowConnection = new FlowConnection(
   uuidv4(),

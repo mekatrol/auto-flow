@@ -4,6 +4,8 @@ import type { Offset } from './Offset';
 import { BLOCK_HEIGHT, BLOCK_WIDTH } from '../constants';
 import { FlowTaggedElement } from './FlowTaggedElement';
 import { FlowElementType } from './FlowElementType';
+import { generateFunctionBlock } from '../utils/flow-object-generator';
+import { FunctionType } from './FunctionType';
 
 // A flow block element is a flow element that has a location and size
 // This is the visible component of a function block
@@ -23,10 +25,12 @@ export class FlowBlock extends FlowTaggedElement {
 
   icon: string;
 
-  constructor(id: string, label: string, description: string, flowFunction: FlowFunction) {
-    super(id, label, description, FlowElementType.Block, { x: 0, y: 0 }, { width: BLOCK_WIDTH, height: BLOCK_HEIGHT });
-    this.flowFunction = flowFunction;
-    this.icon = flowFunction.type.toLowerCase();
+  constructor(id: string, label: string, description: string, functionType: FunctionType, offset: Offset) {
+    super(id, label, description, FlowElementType.Block, offset, { width: BLOCK_WIDTH, height: BLOCK_HEIGHT });
+    this.icon = functionType.toLowerCase();
+    this.flowFunction = generateFunctionBlock(functionType, this, {
+      attributes: { label: functionType.toUpperCase() }
+    });
   }
 
   public getHitElement(offset: Offset): FlowElement | undefined {
