@@ -1,11 +1,14 @@
 import type { FlowFunction } from './FlowFunction';
 import { FlowElement } from './FlowElement';
 import type { Offset } from './Offset';
-import { BLOCK_HEIGHT, BLOCK_WIDTH } from '../constants';
+import { BLOCK_CONNECTOR_OFFSET, BLOCK_CONNECTOR_SIZE, BLOCK_HEIGHT, BLOCK_WIDTH } from '../constants';
 import { FlowTaggedElement } from './FlowTaggedElement';
 import { FlowElementType } from './FlowElementType';
 import { generateFunctionBlock } from '../utils/flow-object-generator';
 import { FunctionType } from './FunctionType';
+import { BlockSide } from './BlockSide';
+import { FlowBlockConnector } from './FlowBlockConnector';
+import type { EnumDictionary } from './EnumDictionary';
 
 // A flow block element is a flow element that has a location and size
 // This is the visible component of a function block
@@ -31,6 +34,8 @@ export class FlowBlock extends FlowTaggedElement {
     this.flowFunction = generateFunctionBlock(functionType, this, {
       attributes: { label: functionType.toUpperCase() }
     });
+
+    this.layoutConnectors();
   }
 
   public getHitElement(offset: Offset): FlowElement | undefined {
@@ -46,5 +51,38 @@ export class FlowBlock extends FlowTaggedElement {
 
     // Call base class method
     return super.getHitElement(offset);
+  }
+
+  private layoutConnectors() {
+    this.transformConnectors(BlockSide.Left);
+    this.transformConnectors(BlockSide.Right);
+  }
+
+  getConnectorOffsets(offset: number): EnumDictionary<BlockSide, Offset> {
+    const connectorOffsets: EnumDictionary<BlockSide, Offset> = {
+      [BlockSide.Left]: { x: -(BLOCK_CONNECTOR_SIZE - BLOCK_CONNECTOR_OFFSET), y: offset },
+      [BlockSide.Top]: { x: offset, y: -BLOCK_CONNECTOR_OFFSET },
+      [BlockSide.Right]: { x: this.size.width - BLOCK_CONNECTOR_OFFSET, y: offset },
+      [BlockSide.Bottom]: { x: offset, y: this.size.height - BLOCK_CONNECTOR_OFFSET }
+    };
+
+    return connectorOffsets;
+  }
+
+  transformConnectors(side: BlockSide): FlowBlockConnector[] {
+    const connectors = this.flowFunction.connectors.filter((x) => x.side === side);
+
+    const connectorOffsets = this.getConnectorOffsets(5);
+
+    let shift = 0;
+    connectors.forEach((c) => {
+      const shiftHorizontal = c.side === BlockSide.Top || c.side === BlockSide.Bottom;
+      const offset = connectorOffsets[side];
+      c.location.x = offset.x + (shiftHorizontal ? shift : 0);
+      c.location.y = offset.y + (!shiftHorizontal ? shift : 0);
+      shift += BLOCK_CONNECTOR_SIZE + (BLOCK_CONNECTOR_SIZE >> 1);
+    });
+
+    return connectors;
   }
 }

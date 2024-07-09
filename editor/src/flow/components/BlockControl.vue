@@ -116,6 +116,7 @@ import {
   BLOCK_MOUSE_UP
 } from '../constants';
 import { useThemeStore } from '../store/themeStore';
+import type { Offset } from '../types/Offset';
 
 const textGapX = 10;
 const textGapY = 5;
@@ -156,8 +157,8 @@ const markers = computed(() => {
   ];
 });
 
-const getConnectorOffsets = (block: FlowBlock, offset: number): EnumDictionary<BlockSide, { x: number; y: number }> => {
-  const connectorOffsets: EnumDictionary<BlockSide, { x: number; y: number }> = {
+const getConnectorOffsets = (block: FlowBlock, offset: number): EnumDictionary<BlockSide, Offset> => {
+  const connectorOffsets: EnumDictionary<BlockSide, Offset> = {
     [BlockSide.Left]: { x: -(BLOCK_CONNECTOR_SIZE - BLOCK_CONNECTOR_OFFSET), y: offset },
     [BlockSide.Top]: { x: offset, y: -BLOCK_CONNECTOR_OFFSET },
     [BlockSide.Right]: { x: block.size.width - BLOCK_CONNECTOR_OFFSET, y: offset },
@@ -174,9 +175,9 @@ const transformConnectors = (side: BlockSide): FlowBlockConnector[] => {
 
   const connectors = props.block.flowFunction.connectors.filter((x) => x.side === side);
 
-  let shift = 0;
   const connectorOffsets = getConnectorOffsets(props.block, 5);
 
+  let shift = 0;
   connectors.forEach((c) => {
     const shiftHorizontal = c.side === BlockSide.Top || c.side === BlockSide.Bottom;
     const offset = connectorOffsets[side];
