@@ -147,31 +147,6 @@ export class FlowDesigner {
     return elements;
   };
 
-  public validateIds = (): boolean => {
-    let valid = true;
-
-    // Get all elements that require a unique id
-    const elements = this.getAllElements();
-
-    // Create a dictionary to key by id
-    const keyed: { [id: string]: UILabelledElement } = {};
-
-    // Iterate over elements
-    elements.forEach((e) => {
-      // Does the dictionary already contain the key
-      if (e.id in keyed) {
-        // Return false to indicate not valid
-        valid = false;
-        return;
-      }
-
-      keyed[e.id] = e;
-    });
-
-    // Return false if has duplicate id
-    return valid;
-  };
-
   public moveBlockZOrder = (action: string): void => {
     if (!this.selectedBlock || !this._blocks || !this._blocks.value) {
       return;
@@ -245,20 +220,20 @@ export class FlowDesigner {
     const startBlock = this._drawingConnection.value.startBlock;
     const startBlockId = this._drawingConnection.value?.startBlockConnectorId;
     const endBlock = this._drawingConnectionEndConnector.value?.parent! as UIBlockElement;
-    const endBlockId = this._drawingConnectionEndConnector.value.id;
+    const endBlockId = this._drawingConnectionEndConnector.value.connector.id;
 
-    const connection = new UIConnectionElement(uuidv4(), 'Connection', '', startBlock, startBlockId, endBlock, endBlockId);
+    const connection = new UIConnectionElement('Connection', '', startBlock, startBlockId, endBlock, endBlockId);
     this._connections.value.push(connection);
   };
 
   public canConnect = (from: UIBlockConnectorElement, to: UIBlockConnectorElement): boolean => {
     // Connection must be between connectors is opposite direction
-    if (from.io.signalDirection === to.io.signalDirection) {
+    if (from.connector.io.signalDirection === to.connector.io.signalDirection) {
       return false;
     }
 
     // Connectors must have logic type match (eg, analogue / digital compatibility)
-    if (from.io.signalType != to.io.signalType) {
+    if (from.connector.io.signalType != to.connector.io.signalType) {
       return false;
     }
 
@@ -400,16 +375,16 @@ export class FlowDesigner {
 
   public deleteBlock = (block: UIBlockElement): void => {
     // We must also delete any connections that connect to the node
-    const connections = this._connections.value.filter((c) => c.startBlock.id === block.id || c.endBlock?.id === block.id);
+    const connections = this._connections.value.filter((c) => c.startBlock === block || c.endBlock === block);
     connections.forEach((c) => this.deleteConnection(c));
 
     // Filter nodes to the set without the node
-    this._blocks.value = this._blocks.value.filter((c) => c.id != block.id);
+    this._blocks.value = this._blocks.value.filter((b) => b != block);
   };
 
   public deleteConnection = (connection: UIConnectionElement): void => {
     // Filter connections to the set without the connection
-    this._connections.value = this._connections.value.filter((c) => c.id != connection.id);
+    this._connections.value = this._connections.value.filter((c) => c != connection);
   };
 }
 

@@ -1,6 +1,6 @@
+import type { FlowFunctionConnector } from './FlowFunctionConnector';
 import type { FunctionType as FunctionType } from './FunctionType';
 import { InputOutput } from './InputOutput';
-import { UIBlockConnectorElement } from './UIBlockConnectorElement';
 
 export class FlowFunction {
   id: string; // A GUID
@@ -8,7 +8,7 @@ export class FlowFunction {
   description: string;
   type: FunctionType;
   io: InputOutput[];
-  connectors: UIBlockConnectorElement[];
+  connectors: FlowFunctionConnector[];
   code: (block: FlowFunction) => void;
 
   constructor(
@@ -17,7 +17,7 @@ export class FlowFunction {
     description: string,
     type: FunctionType,
     io: InputOutput[],
-    connectors: UIBlockConnectorElement[],
+    connectors: FlowFunctionConnector[],
     code: (block: FlowFunction) => void
   ) {
     this.id = id;

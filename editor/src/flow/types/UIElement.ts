@@ -3,7 +3,6 @@ import type { Offset } from './Offset';
 import type { Size } from './Size';
 
 export abstract class UIElement {
-  public _id: string; // A GUID
   public _type: UIElementType;
   public _parent: UIElement | undefined;
   public _selected: boolean;
@@ -11,18 +10,13 @@ export abstract class UIElement {
   public _size: Size;
   public _cssClasses: string;
 
-  constructor(id: string, type: UIElementType, location: Offset, size: Size, parent: UIElement | undefined = undefined) {
-    this._id = id;
+  constructor(type: UIElementType, location: Offset, size: Size, parent: UIElement | undefined = undefined) {
     this._type = type;
     this._parent = parent;
     this._selected = false;
     this._location = location;
     this._size = size;
     this._cssClasses = '';
-  }
-
-  public get id() {
-    return this._id;
   }
 
   public get type() {

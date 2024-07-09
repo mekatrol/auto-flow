@@ -26,14 +26,14 @@
     </g>
 
     <ConnectionControl
-      v-for="connection in flowDesigner.connections.value"
-      :key="connection.id"
+      v-for="(connection, i) in flowDesigner.connections.value"
+      :key="i"
       :connection="connection"
     />
 
     <BlockControl
-      v-for="block in flowDesigner.blocks.value"
-      :key="block.id"
+      v-for="(block, i) in flowDesigner.blocks.value"
+      :key="i"
       :block="block"
     />
 
@@ -54,7 +54,6 @@ import BlockControl from './BlockControl.vue';
 import { FunctionType } from '../types/FunctionType';
 import { initFlowDesignController } from '../types/FlowDesigner';
 import { v4 as uuidv4 } from 'uuid';
-import type { UIElement } from '../types/UIElement';
 
 const gridSize = ref(20);
 const screenSize = useScreenSize();
@@ -63,14 +62,13 @@ const screenSize = useScreenSize();
 const flowDesigner = initFlowDesignController(screenSize, gridSize);
 const gridLines = flowDesigner.gridLines;
 
-const flowBlock1 = new UIBlockElement(uuidv4(), 'Block 1', 'This is block 1.', FunctionType.And, { x: 100, y: 200 });
-const flowBlock2 = new UIBlockElement(uuidv4(), 'Block 2', 'This is block 2.', FunctionType.Or, { x: 600, y: 100 });
-const flowBlock3 = new UIBlockElement(uuidv4(), 'Block 3', 'This is block 3.', FunctionType.Xnor, { x: 600, y: 200 });
-const flowBlock4 = new UIBlockElement(uuidv4(), 'Block 4', 'This is block 4.', FunctionType.Xor, { x: 900, y: 200 });
-const flowBlock5 = new UIBlockElement(uuidv4(), 'Block 5', 'This is block 5.', FunctionType.Invert, { x: 200, y: 400 });
+const flowBlock1 = new UIBlockElement('Block 1', 'This is block 1.', FunctionType.And, { x: 100, y: 200 });
+const flowBlock2 = new UIBlockElement('Block 2', 'This is block 2.', FunctionType.Or, { x: 600, y: 100 });
+const flowBlock3 = new UIBlockElement('Block 3', 'This is block 3.', FunctionType.Xnor, { x: 600, y: 200 });
+const flowBlock4 = new UIBlockElement('Block 4', 'This is block 4.', FunctionType.Xor, { x: 900, y: 200 });
+const flowBlock5 = new UIBlockElement('Block 5', 'This is block 5.', FunctionType.Invert, { x: 200, y: 400 });
 
 const connection1: UIConnectionElement = new UIConnectionElement(
-  uuidv4(),
   'Connection 1',
   'This is connection 1.',
   flowBlock1,
@@ -79,7 +77,6 @@ const connection1: UIConnectionElement = new UIConnectionElement(
   flowBlock2.flowFunction.connectors[1].id
 );
 const connection2: UIConnectionElement = new UIConnectionElement(
-  uuidv4(),
   'Connection 2',
   'This is connection 2.',
   flowBlock2,
@@ -98,10 +95,6 @@ const focusDesigner = (_e: FocusEvent): void => {
   // Do nothing, and SVG element won't raise keyboard events unless it has
   // a focus event handler
 };
-
-if (!flowDesigner.validateIds()) {
-  throw new Error('Duplicate IDs found in the flow. This may cause unexpected behaviour in the designer.');
-}
 </script>
 
 <style scoped lang="scss">

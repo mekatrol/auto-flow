@@ -79,10 +79,10 @@
 
     <!-- block connectors -->
     <ConnectorControl
-      v-for="connector in alignedConnectors"
-      :key="connector.id"
+      v-for="connectorElement in alignedConnectors"
+      :key="connectorElement.connector.id"
       :block="block"
-      :connector="connector"
+      :connector="connectorElement"
       :fill-color="theme.blockConnectorStyles.fill"
       :stroke-color="theme.blockConnectorStyles.stroke"
       :stroke-width="theme.blockConnectorStyles.strokeWidth"
@@ -151,25 +151,9 @@ const markers = computed(() => {
   }
 
   return [
-    new MarkerShape(
-      'circle',
-      'circle',
-      props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 1,
-      MARKER_OFFSET_Y,
-      props.block,
-      'black',
-      'yellow'
-    ),
-    new MarkerShape(
-      'triangle',
-      'triangle',
-      props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 2,
-      MARKER_OFFSET_Y,
-      props.block,
-      'darkred',
-      'coral'
-    ),
-    new MarkerShape('square', 'square', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 3, MARKER_OFFSET_Y, props.block, 'green', 'white')
+    new MarkerShape('circle', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 1, MARKER_OFFSET_Y, props.block, 'black', 'yellow'),
+    new MarkerShape('triangle', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 2, MARKER_OFFSET_Y, props.block, 'darkred', 'coral'),
+    new MarkerShape('square', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 3, MARKER_OFFSET_Y, props.block, 'green', 'white')
   ];
 });
 
@@ -189,7 +173,7 @@ const transformConnectors = (side: BlockSide): UIBlockConnectorElement[] => {
     return [];
   }
 
-  const connectors = props.block.flowFunction.connectors.filter((x) => x.side === side);
+  const connectors = props.block.connectors.filter((x) => x.side === side);
 
   const connectorOffsets = getConnectorOffsets(props.block, 5);
 

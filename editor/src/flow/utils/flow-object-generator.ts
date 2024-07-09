@@ -1,12 +1,11 @@
 import { FunctionType } from '../types/FunctionType';
-import { BlockSide } from '../types/BlockSide';
 import { InputOutputDirection } from '../types/InputOutputDirection';
 import { InputOutputSignalType } from '../types/InputOutputSignalType';
 import { InputOutput } from '../types/InputOutput';
-import { UIBlockConnectorElement } from '../types/UIBlockConnectorElement';
 import { FlowFunction } from '../types/FlowFunction';
 import { v4 as uuidv4 } from 'uuid';
 import { UIElement } from '../types/UIElement';
+import { FlowFunctionConnector } from '../types/FlowFunctionConnector';
 
 export interface BlockConfiguration {
   attributes: Record<string, any>;
@@ -162,28 +161,14 @@ const generate1InputBinaryBlock = (type: FunctionType, parent: UIElement | undef
 
   const flowFunction = {
     id: data?.attributes['id'] ?? uuidv4(),
-    label: data?.attributes['label'] ?? '',
+    label: data?.attributes['label'] ?? typeUpper,
     description: data?.attributes['description'] ?? '',
     type: type,
     connectors: [
-      new UIBlockConnectorElement(
-        uuidv4(),
-        'Input 1',
-        `Binary input of ${typeUpper} gate`,
-        BlockSide.Left,
-        new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Input)
-      ),
-      new UIBlockConnectorElement(
-        uuidv4(),
-        'Output',
-        `Binary output of ${typeUpper} gate`,
-        BlockSide.Right,
-        new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Output)
-      )
+      new FlowFunctionConnector(uuidv4(), new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Input)),
+      new FlowFunctionConnector(uuidv4(), new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Output))
     ]
   } as FlowFunction;
-
-  flowFunction.connectors.forEach((c) => (c.parent = parent));
 
   return flowFunction;
 };
@@ -197,31 +182,11 @@ const generate2InputBinaryBlock = (type: FunctionType, parent: UIElement | undef
     description: data?.attributes['description'] ?? '',
     type: type,
     connectors: [
-      new UIBlockConnectorElement(
-        uuidv4(),
-        'Input 1',
-        `Binary input 1 of ${typeUpper} gate`,
-        BlockSide.Left,
-        new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Input)
-      ),
-      new UIBlockConnectorElement(
-        uuidv4(),
-        'Input 2',
-        `Binary input 2 of ${typeUpper} gate`,
-        BlockSide.Left,
-        new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Input)
-      ),
-      new UIBlockConnectorElement(
-        uuidv4(),
-        'Output',
-        `Binary output of ${typeUpper} gate`,
-        BlockSide.Right,
-        new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Output)
-      )
+      new FlowFunctionConnector(uuidv4(), new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Input)),
+      new FlowFunctionConnector(uuidv4(), new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Input)),
+      new FlowFunctionConnector(uuidv4(), new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Output))
     ]
   } as FlowFunction;
-
-  flowFunction.connectors.forEach((c) => (c.parent = parent));
 
   return flowFunction;
 };

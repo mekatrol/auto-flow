@@ -66,7 +66,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const generateSvg = () => {
-  const startConnector = props.connection.startBlock.flowFunction.connectors.find((c) => c.id === props.connection.startBlockConnectorId)!;
+  const startConnector = props.connection.startBlock.connectors.find((c) => c.connector.id === props.connection.startBlockConnectorId)!;
 
   const halfOffset: Offset = { x: BLOCK_CONNECTOR_SIZE / 2, y: BLOCK_CONNECTOR_SIZE / 2 };
 
@@ -74,7 +74,7 @@ const generateSvg = () => {
   if (!props.connection.endBlock) {
     endOffset = props.connection.getEndOffset()!;
   } else {
-    const endConnector = props.connection.endBlock.flowFunction.connectors.find((c) => c.id === props.connection.endBlockConnectorId);
+    const endConnector = props.connection.endBlock.connectors.find((c) => c.connector.id === props.connection.endBlockConnectorId);
     endOffset = addOffsets([props.connection.endBlock.location, endConnector!.location, halfOffset]);
   }
 

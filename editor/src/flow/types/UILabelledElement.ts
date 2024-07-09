@@ -7,16 +7,8 @@ export abstract class UILabelledElement extends UIElement {
   public label: string;
   public description: string;
 
-  constructor(
-    id: string,
-    label: string,
-    description: string,
-    type: UIElementType,
-    location: Offset,
-    size: Size,
-    parent: UIElement | undefined = undefined
-  ) {
-    super(id, type, location, size, parent);
+  constructor(label: string, description: string, type: UIElementType, location: Offset, size: Size, parent: UIElement | undefined = undefined) {
+    super(type, location, size, parent);
     this.label = label;
     this.description = description;
   }

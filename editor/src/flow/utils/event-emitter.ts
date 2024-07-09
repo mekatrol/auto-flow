@@ -137,7 +137,7 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
 
   emitter.on(BLOCK_CONNECTOR_MOUSE_DOWN, (e) => {
     flowDesigner.clearSelectedItems();
-    flowDesigner.drawingConnection.value = new UIConnectionElement(uuidv4(), 'connecting', '', e.data, e.connector.id);
+    flowDesigner.drawingConnection.value = new UIConnectionElement('connecting', '', e.data, e.connector.connector.id);
 
     flowDesigner.drawingConnection.value.location = { x: e.mouseEvent.offsetX, y: e.mouseEvent.offsetY };
   });

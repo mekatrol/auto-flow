@@ -9,12 +9,14 @@ import { FunctionType } from './FunctionType';
 import { BlockSide } from './BlockSide';
 import { UIBlockConnectorElement } from './UIBlockConnectorElement';
 import type { EnumDictionary } from './EnumDictionary';
+import { InputOutputDirection } from './InputOutputDirection';
 
 // A flow block element is a flow element that has a location and size
 // This is the visible component of a function block
 
 export class UIBlockElement extends UILabelledElement {
   public flowFunction: FlowFunction;
+  public connectors: UIBlockConnectorElement[];
 
   public readonly z: number = 0; // zOrder + zBoost
   public zBoost: number = 0;
@@ -28,12 +30,16 @@ export class UIBlockElement extends UILabelledElement {
 
   public icon: string;
 
-  constructor(id: string, label: string, description: string, functionType: FunctionType, offset: Offset) {
-    super(id, label, description, UIElementType.Block, offset, { width: BLOCK_WIDTH, height: BLOCK_HEIGHT });
+  constructor(label: string, description: string, functionType: FunctionType, offset: Offset) {
+    super(label, description, UIElementType.Block, offset, { width: BLOCK_WIDTH, height: BLOCK_HEIGHT });
     this.icon = functionType.toLowerCase();
     this.flowFunction = generateFunctionBlock(functionType, this, {
       attributes: { label: functionType.toUpperCase() }
     });
+
+    this.connectors = this.flowFunction.connectors.map(
+      (c) => new UIBlockConnectorElement('', '', c.io.signalDirection === InputOutputDirection.Input ? BlockSide.Left : BlockSide.Right, c)
+    );
 
     this.layoutConnectors();
   }
@@ -43,7 +49,7 @@ export class UIBlockElement extends UILabelledElement {
     const localOffset: Offset = { x: offset.x - this.location.x, y: offset.y - this.location.y };
 
     // Are any connectors hit?
-    const hitConnectors = this.flowFunction.connectors.filter((c) => c.getHitElement(localOffset) != undefined);
+    const hitConnectors = this.connectors.filter((c) => c.getHitElement(localOffset) != undefined);
     if (hitConnectors.length > 0) {
       // Return first
       return hitConnectors[0];
@@ -70,13 +76,13 @@ export class UIBlockElement extends UILabelledElement {
   }
 
   public transformConnectors(side: BlockSide): UIBlockConnectorElement[] {
-    const connectors = this.flowFunction.connectors.filter((x) => x.side === side);
+    const connectors = this.connectors.filter((x) => x.side === side);
 
     const connectorOffsets = this.getConnectorOffsets(5);
 
     let shift = 0;
     connectors.forEach((c) => {
-      const shiftHorizontal = c.side === BlockSide.Top || c.side === BlockSide.Bottom;
+      const shiftHorizontal = side === BlockSide.Top || side === BlockSide.Bottom;
       const offset = connectorOffsets[side];
       c.location.x = offset.x + (shiftHorizontal ? shift : 0);
       c.location.y = offset.y + (!shiftHorizontal ? shift : 0);

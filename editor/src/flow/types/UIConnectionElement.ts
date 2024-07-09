@@ -12,7 +12,6 @@ export class UIConnectionElement extends UILabelledElement {
   _endBlockConnectorId: string | undefined;
 
   constructor(
-    id: string,
     label: string,
     description: string,
     startBlock: UIBlockElement,
@@ -20,7 +19,7 @@ export class UIConnectionElement extends UILabelledElement {
     endBlock?: UIBlockElement | undefined,
     endBlockConnectorId?: string
   ) {
-    super(id, label, description, UIElementType.Connection, { x: 0, y: 0 }, { width: 0, height: 0 }); // Start with no size, will calculate later
+    super(label, description, UIElementType.Connection, { x: 0, y: 0 }, { width: 0, height: 0 }); // Start with no size, will calculate later
 
     this._startBlock = startBlock;
     this._startBlockConnectorId = startBlockConnectorId;
@@ -38,7 +37,7 @@ export class UIConnectionElement extends UILabelledElement {
   }
 
   public getStartOffset(): Offset {
-    const startConnector = this._startBlock.flowFunction.connectors.find((c) => c.id == this.startBlockConnectorId)!;
+    const startConnector = this._startBlock.connectors.find((c) => c.connector.id == this.startBlockConnectorId)!;
     return {
       x: this._startBlock.location.x + startConnector.location.x,
       y: this._startBlock.location.y + startConnector.location.y + startConnector.size.height / 2
@@ -46,12 +45,12 @@ export class UIConnectionElement extends UILabelledElement {
   }
 
   public getStartSide(): BlockSide {
-    const startConnector = this._startBlock.flowFunction.connectors.find((c) => c.id == this.startBlockConnectorId)!;
+    const startConnector = this._startBlock.connectors.find((c) => c.connector.id == this.startBlockConnectorId)!;
     return startConnector.side;
   }
 
   public getStartConnector(): UIBlockConnectorElement {
-    return this._startBlock.flowFunction.connectors.find((c) => c.id === this.startBlockConnectorId)!;
+    return this._startBlock.connectors.find((c) => c.connector.id === this.startBlockConnectorId)!;
   }
 
   public getEndConnector(): UIBlockConnectorElement | undefined {
@@ -60,7 +59,7 @@ export class UIConnectionElement extends UILabelledElement {
       return undefined;
     }
 
-    return this._endBlock.flowFunction.connectors.find((c) => c.id === this.endBlockConnectorId)!;
+    return this._endBlock.connectors.find((c) => c.connector.id === this.endBlockConnectorId)!;
   }
 
   public get endBlock(): UIBlockElement | undefined {
@@ -89,7 +88,7 @@ export class UIConnectionElement extends UILabelledElement {
       return this.location;
     }
 
-    const endConnector = this._endBlock.flowFunction.connectors.find((c) => c.id == this.endBlockConnectorId)!;
+    const endConnector = this._endBlock.connectors.find((c) => c.connector.id == this.endBlockConnectorId)!;
     return {
       x: this._endBlock.location.x + endConnector.location.x,
       y: this._endBlock.location.y + endConnector.location.y + endConnector.size.height / 2
@@ -97,7 +96,7 @@ export class UIConnectionElement extends UILabelledElement {
   }
 
   public getEndSide(): BlockSide | undefined {
-    const endConnector = this.endBlock?.flowFunction.connectors.find((c) => c.id == this.endBlockConnectorId);
+    const endConnector = this.endBlock?.connectors.find((c) => c.connector.id == this.endBlockConnectorId);
     return endConnector?.side;
   }
 }
