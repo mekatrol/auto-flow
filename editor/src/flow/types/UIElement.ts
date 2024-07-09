@@ -2,16 +2,16 @@ import type { UIElementType } from './UIElementType';
 import type { Offset } from './Offset';
 import type { Size } from './Size';
 
-export abstract class UIFlowElement {
+export abstract class UIElement {
   public _id: string; // A GUID
   public _type: UIElementType;
-  public _parent: UIFlowElement | undefined;
+  public _parent: UIElement | undefined;
   public _selected: boolean;
   public _location: Offset;
   public _size: Size;
   public _cssClasses: string;
 
-  constructor(id: string, type: UIElementType, location: Offset, size: Size, parent: UIFlowElement | undefined = undefined) {
+  constructor(id: string, type: UIElementType, location: Offset, size: Size, parent: UIElement | undefined = undefined) {
     this._id = id;
     this._type = type;
     this._parent = parent;
@@ -33,7 +33,7 @@ export abstract class UIFlowElement {
     return this._parent;
   }
 
-  public set parent(parent: UIFlowElement | undefined) {
+  public set parent(parent: UIElement | undefined) {
     this._parent = parent;
     this.fireUpdate();
   }
@@ -74,7 +74,7 @@ export abstract class UIFlowElement {
     this.fireUpdate();
   }
 
-  public getHitElement(offset: Offset): UIFlowElement | undefined {
+  public getHitElement(offset: Offset): UIElement | undefined {
     const hitElement = this.containsOffset(offset) ? this : undefined;
     return hitElement;
   }

@@ -54,7 +54,7 @@ import BlockControl from './BlockControl.vue';
 import { FunctionType } from '../types/FunctionType';
 import { initFlowDesignController } from '../types/FlowDesigner';
 import { v4 as uuidv4 } from 'uuid';
-import type { UIFlowElement } from '../types/UIFlowElement';
+import type { UIElement } from '../types/UIElement';
 
 const gridSize = ref(20);
 const screenSize = useScreenSize();

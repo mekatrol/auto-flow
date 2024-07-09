@@ -1,7 +1,7 @@
 import { computed, type Ref, ref } from 'vue';
 import { UIBlockConnectorElement } from './UIBlockConnectorElement';
 import { UIConnectionElement } from './UIConnectionElement';
-import { UIFlowElement } from './UIFlowElement';
+import { UIElement } from './UIElement';
 import type { Offset } from './Offset';
 import { UIBlockElement } from './UIBlockElement';
 import { ZOrder } from './ZOrder';
@@ -33,7 +33,7 @@ export class FlowDesigner {
     this._zOrder = new ZOrder(this._blocks);
   }
 
-  public update(changedElement: UIFlowElement) {
+  public update(changedElement: UIElement) {
     // Force refresh
     this._blocks.value = [...this._blocks.value];
     this._connections.value = [...this._connections.value];
@@ -282,8 +282,8 @@ export class FlowDesigner {
     return isConnected;
   };
 
-  public getHitElements = (e: MouseEvent): UIFlowElement[] => {
-    const hitElements = [] as UIFlowElement[];
+  public getHitElements = (e: MouseEvent): UIElement[] => {
+    const hitElements = [] as UIElement[];
     const offset = { x: e.offsetX, y: e.offsetY } as Offset;
 
     this._blocks.value.forEach((block) => {

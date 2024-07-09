@@ -1,5 +1,5 @@
 import type { FlowFunction } from './FlowFunction';
-import { UIFlowElement } from './UIFlowElement';
+import { UIElement } from './UIElement';
 import type { Offset } from './Offset';
 import { BLOCK_CONNECTOR_OFFSET, BLOCK_CONNECTOR_SIZE, BLOCK_HEIGHT, BLOCK_WIDTH } from '../constants';
 import { UILabelledElement } from './UILabelledElement';
@@ -38,7 +38,7 @@ export class UIBlockElement extends UILabelledElement {
     this.layoutConnectors();
   }
 
-  public getHitElement(offset: Offset): UIFlowElement | undefined {
+  public getHitElement(offset: Offset): UIElement | undefined {
     // Convert off set to local offset for connector hit testing
     const localOffset: Offset = { x: offset.x - this.location.x, y: offset.y - this.location.y };
 

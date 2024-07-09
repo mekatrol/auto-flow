@@ -1,9 +1,9 @@
-import { UIFlowElement } from './UIFlowElement';
+import { UIElement } from './UIElement';
 import type { UIElementType } from './UIElementType';
 import type { Offset } from './Offset';
 import type { Size } from './Size';
 
-export abstract class UILabelledElement extends UIFlowElement {
+export abstract class UILabelledElement extends UIElement {
   public label: string;
   public description: string;
 
@@ -14,7 +14,7 @@ export abstract class UILabelledElement extends UIFlowElement {
     type: UIElementType,
     location: Offset,
     size: Size,
-    parent: UIFlowElement | undefined = undefined
+    parent: UIElement | undefined = undefined
   ) {
     super(id, type, location, size, parent);
     this.label = label;
