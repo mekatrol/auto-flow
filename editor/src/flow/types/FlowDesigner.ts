@@ -1,43 +1,49 @@
 import { computed, type Ref, ref } from 'vue';
-import { FlowBlockConnector } from './FlowBlockConnector';
-import { FlowConnection } from './FlowConnection';
-import { FlowElement } from './FlowElement';
+import { UIBlockConnectorElement } from './UIBlockConnectorElement';
+import { UIConnectionElement } from './UIConnectionElement';
+import { UIFlowElement } from './UIFlowElement';
 import type { Offset } from './Offset';
-import { FlowBlock } from './FlowBlock';
+import { UIBlockElement } from './UIBlockElement';
 import { ZOrder } from './ZOrder';
 import type { Line } from './Line';
-import type { FlowTaggedElement } from './FlowTaggedElement';
+import type { UILabelledElement } from './UILabelledElement';
 import { v4 as uuidv4 } from 'uuid';
 import { configureFlowMouseEvents } from '../utils/event-emitter';
-import { FlowElementType } from './FlowElementType';
+import { UIElementType } from './UIElementType';
 
 export class FlowDesigner {
   private _viewSize: Ref<{ width: number; height: number }>;
-  private _blocks: Ref<FlowBlock[]>;
-  private _connections: Ref<FlowConnection[]>;
+  private _blocks: Ref<UIBlockElement[]>;
+  private _connections: Ref<UIConnectionElement[]>;
   private _zOrder: ZOrder;
   private _gridSize: Ref<number>;
-  private _drawingConnection = ref<FlowConnection | undefined>(undefined);
-  private _drawingConnectionEndConnector = ref<FlowBlockConnector | undefined>(undefined);
-  private _selectedConnection = ref<FlowConnection | undefined>(undefined);
-  private _selectedBlock = ref<FlowBlock | undefined>(undefined);
-  private _dragBlock = ref<FlowBlock | undefined>(undefined);
+  private _drawingConnection = ref<UIConnectionElement | undefined>(undefined);
+  private _drawingConnectionEndConnector = ref<UIBlockConnectorElement | undefined>(undefined);
+  private _selectedConnection = ref<UIConnectionElement | undefined>(undefined);
+  private _selectedBlock = ref<UIBlockElement | undefined>(undefined);
+  private _dragBlock = ref<UIBlockElement | undefined>(undefined);
   private _dragBlockOffset = ref<Offset>({ x: 0, y: 0 });
   private _dragBlockOriginalPosition = ref<Offset>({ x: 0, y: 0 });
 
-  constructor(nodes: Ref<FlowBlock[]>, connections: Ref<FlowConnection[]>, viewSize: Ref<{ width: number; height: number }>, gridSize: Ref<number>) {
-    this._blocks = nodes;
-    this._connections = connections;
+  constructor(viewSize: Ref<{ width: number; height: number }>, gridSize: Ref<number>) {
+    this._blocks = ref([]);
+    this._connections = ref([]);
     this._viewSize = viewSize;
     this._gridSize = gridSize;
-    this._zOrder = new ZOrder(nodes);
+    this._zOrder = new ZOrder(this._blocks);
   }
 
-  public get blocks(): Ref<FlowBlock[]> {
+  public update(changedElement: UIFlowElement) {
+    // Force refresh
+    this._blocks.value = [...this._blocks.value];
+    this._connections.value = [...this._connections.value];
+  }
+
+  public get blocks(): Ref<UIBlockElement[]> {
     return this._blocks;
   }
 
-  public get connections(): Ref<FlowConnection[]> {
+  public get connections(): Ref<UIConnectionElement[]> {
     return this._connections;
   }
 
@@ -45,7 +51,7 @@ export class FlowDesigner {
     return this._viewSize;
   }
 
-  public get dragBlock(): Ref<FlowBlock | undefined> {
+  public get dragBlock(): Ref<UIBlockElement | undefined> {
     return this._dragBlock;
   }
 
@@ -57,19 +63,19 @@ export class FlowDesigner {
     return this._dragBlockOffset;
   }
 
-  public get drawingConnection(): Ref<FlowConnection | undefined> {
+  public get drawingConnection(): Ref<UIConnectionElement | undefined> {
     return this._drawingConnection;
   }
 
-  public get drawingConnectionEndConnector(): Ref<FlowBlockConnector | undefined> {
+  public get drawingConnectionEndConnector(): Ref<UIBlockConnectorElement | undefined> {
     return this._drawingConnectionEndConnector;
   }
 
-  public get selectedBlock(): FlowBlock | undefined {
+  public get selectedBlock(): UIBlockElement | undefined {
     return this._selectedBlock.value;
   }
 
-  public set selectedBlock(node: FlowBlock | undefined) {
+  public set selectedBlock(node: UIBlockElement | undefined) {
     // Clear any existing selections
     this.clearSelectedBlock();
 
@@ -81,11 +87,11 @@ export class FlowDesigner {
     this._selectedBlock.value = node;
   }
 
-  public get selectedConnection(): FlowConnection | undefined {
+  public get selectedConnection(): UIConnectionElement | undefined {
     return this._selectedConnection.value;
   }
 
-  public set selectedConnection(connection: FlowConnection | undefined) {
+  public set selectedConnection(connection: UIConnectionElement | undefined) {
     // Clear any existing selections
     this.clearSelectedConnection();
 
@@ -112,7 +118,7 @@ export class FlowDesigner {
     this.drawingConnectionEndConnector.value = undefined;
   }
 
-  private clearSelectedConnection = (): void => {
+  public clearSelectedConnection = (): void => {
     // Clear selected node
     this._selectedConnection.value = undefined;
 
@@ -124,7 +130,7 @@ export class FlowDesigner {
     this._connections.value.forEach((c) => (c.selected = false));
   };
 
-  private clearSelectedBlock = (): void => {
+  public clearSelectedBlock = (): void => {
     // Clear selected node
     this._selectedBlock.value = undefined;
 
@@ -136,19 +142,19 @@ export class FlowDesigner {
     this._blocks.value.forEach((n) => (n.selected = false));
   };
 
-  private getAllElements = (): FlowTaggedElement[] => {
-    const elements: FlowTaggedElement[] = [...this._connections.value, ...this._blocks.value] as FlowTaggedElement[];
+  public getAllElements = (): UILabelledElement[] => {
+    const elements: UILabelledElement[] = [...this._connections.value, ...this._blocks.value] as UILabelledElement[];
     return elements;
   };
 
-  validateIds = (): boolean => {
+  public validateIds = (): boolean => {
     let valid = true;
 
     // Get all elements that require a unique id
     const elements = this.getAllElements();
 
     // Create a dictionary to key by id
-    const keyed: { [id: string]: FlowTaggedElement } = {};
+    const keyed: { [id: string]: UILabelledElement } = {};
 
     // Iterate over elements
     elements.forEach((e) => {
@@ -166,7 +172,7 @@ export class FlowDesigner {
     return valid;
   };
 
-  moveBlockZOrder = (action: string): void => {
+  public moveBlockZOrder = (action: string): void => {
     if (!this.selectedBlock || !this._blocks || !this._blocks.value) {
       return;
     }
@@ -174,7 +180,7 @@ export class FlowDesigner {
     this._zOrder.moveBlockZOrder(action, this.selectedBlock);
   };
 
-  gridLines = computed((): Line[] => {
+  public gridLines = computed((): Line[] => {
     const lines: Line[] = [];
 
     if (this.viewSize.value.height < this._gridSize.value || this.viewSize.value.height < this._gridSize.value) {
@@ -198,13 +204,13 @@ export class FlowDesigner {
     return lines;
   });
 
-  dragBlockMove = (e: MouseEvent): void => {
+  public dragBlockMove = (e: MouseEvent): void => {
     if (!this._dragBlock.value) return;
     this._dragBlock.value.location.x = e.offsetX - this._dragBlockOffset.value.x;
     this._dragBlock.value.location.y = e.offsetY - this._dragBlockOffset.value.y;
   };
 
-  dragConnectionMove = (e: MouseEvent): void => {
+  public dragConnectionMove = (e: MouseEvent): void => {
     if (!flowDesigner.drawingConnection.value) return;
 
     // Get starting connector
@@ -215,7 +221,7 @@ export class FlowDesigner {
     const hitConnectors = hitElements.filter(
       (flowElement) =>
         // Must be a block connector
-        flowElement.type === FlowElementType.BlockConnector &&
+        flowElement.type === UIElementType.BlockConnector &&
         // Don't hit test connection being connected
         flowElement !== flowDesigner.drawingConnection.value &&
         // Don't hit test the starting connector
@@ -223,7 +229,7 @@ export class FlowDesigner {
     );
 
     // Set css extra if is hovering over valid connector (hit connector and connector is a compatible type)
-    const connector = hitConnectors.length > 0 ? (hitConnectors[0] as FlowBlockConnector) : undefined;
+    const connector = hitConnectors.length > 0 ? (hitConnectors[0] as UIBlockConnectorElement) : undefined;
     flowDesigner.drawingConnection.value.cssClasses = connector && this.canConnect(connector, startConnector) ? 'valid-end-point' : '';
     this._drawingConnectionEndConnector.value = connector;
 
@@ -231,21 +237,21 @@ export class FlowDesigner {
     flowDesigner.drawingConnection.value.location = { x: e.offsetX, y: e.offsetY };
   };
 
-  dragConnectionCreateConnection = (): void => {
+  public dragConnectionCreateConnection = (): void => {
     if (!this._drawingConnection.value || !this._drawingConnectionEndConnector.value) {
       return;
     }
 
     const startBlock = this._drawingConnection.value.startBlock;
     const startBlockId = this._drawingConnection.value?.startBlockConnectorId;
-    const endBlock = this._drawingConnectionEndConnector.value?.parent! as FlowBlock;
+    const endBlock = this._drawingConnectionEndConnector.value?.parent! as UIBlockElement;
     const endBlockId = this._drawingConnectionEndConnector.value.id;
 
-    const connection = new FlowConnection(uuidv4(), 'Connection', '', startBlock, startBlockId, endBlock, endBlockId);
+    const connection = new UIConnectionElement(uuidv4(), 'Connection', '', startBlock, startBlockId, endBlock, endBlockId);
     this._connections.value.push(connection);
   };
 
-  canConnect = (from: FlowBlockConnector, to: FlowBlockConnector): boolean => {
+  public canConnect = (from: UIBlockConnectorElement, to: UIBlockConnectorElement): boolean => {
     // Connection must be between connectors is opposite direction
     if (from.io.signalDirection === to.io.signalDirection) {
       return false;
@@ -264,7 +270,7 @@ export class FlowDesigner {
     return true;
   };
 
-  isConnectorConnected = (connector: FlowBlockConnector): boolean => {
+  public isConnectorConnected = (connector: UIBlockConnectorElement): boolean => {
     let isConnected = false;
     this._connections.value.forEach((c) => {
       if (c.getStartConnector() === connector || c.getEndConnector() === connector) {
@@ -276,8 +282,8 @@ export class FlowDesigner {
     return isConnected;
   };
 
-  getHitElements = (e: MouseEvent): FlowElement[] => {
-    const hitElements = [] as FlowElement[];
+  public getHitElements = (e: MouseEvent): UIFlowElement[] => {
+    const hitElements = [] as UIFlowElement[];
     const offset = { x: e.offsetX, y: e.offsetY } as Offset;
 
     this._blocks.value.forEach((block) => {
@@ -302,7 +308,7 @@ export class FlowDesigner {
   // Whenever mouse is clicked anywhere in the designer
   // allows clearing any currently selected node when clicking
   // on designer background (ie not on a node)
-  mouseDown = (e: MouseEvent): void => {
+  public mouseDown = (e: MouseEvent): void => {
     if (e.target instanceof SVGElement || e.target instanceof HTMLElement) {
       const element = e.target as HTMLElement | SVGElement;
 
@@ -318,7 +324,7 @@ export class FlowDesigner {
     }
   };
 
-  mouseUp = (e: MouseEvent): void => {
+  public mouseUp = (e: MouseEvent): void => {
     if (this.drawingConnection.value && this.drawingConnectionEndConnector.value) {
       this.dragConnectionCreateConnection();
     }
@@ -334,7 +340,7 @@ export class FlowDesigner {
     this.drawingConnection.value = undefined;
   };
 
-  mouseMove = (e: MouseEvent): void => {
+  public mouseMove = (e: MouseEvent): void => {
     // Is there a connection being drawn
     if (this.drawingConnection.value) {
       this.dragConnectionMove(e);
@@ -343,20 +349,20 @@ export class FlowDesigner {
     this.dragBlockMove(e);
   };
 
-  mouseLeave = (_: MouseEvent): void => {
+  public mouseLeave = (_: MouseEvent): void => {
     this.dragBlock.value = undefined;
     this.drawingConnection.value = undefined;
   };
 
-  keyPress = (_e: KeyboardEvent): void => {
+  public keyPress = (_e: KeyboardEvent): void => {
     // console.log('keyPress', _e);
   };
 
-  keyDown = (_e: KeyboardEvent): void => {
+  public keyDown = (_e: KeyboardEvent): void => {
     // console.log('keyDown', _e);
   };
 
-  keyUp = (e: KeyboardEvent): void => {
+  public keyUp = (e: KeyboardEvent): void => {
     if (e.key === 'Delete') {
       if (this._selectedBlock.value) {
         this.deleteSelectedBlock();
@@ -366,7 +372,7 @@ export class FlowDesigner {
     }
   };
 
-  deleteSelectedBlock = (): void => {
+  public deleteSelectedBlock = (): void => {
     // Can only delete the selected node if a node is actually selected
     if (!this._selectedBlock.value) {
       return;
@@ -379,7 +385,7 @@ export class FlowDesigner {
     this.clearSelectedItems();
   };
 
-  deleteSelectedConnection = (): void => {
+  public deleteSelectedConnection = (): void => {
     // Can only delete the selected connection if a connection is actually selected
     if (!this._selectedConnection.value) {
       return;
@@ -392,7 +398,7 @@ export class FlowDesigner {
     this.clearSelectedItems();
   };
 
-  private deleteBlock = (block: FlowBlock): void => {
+  public deleteBlock = (block: UIBlockElement): void => {
     // We must also delete any connections that connect to the node
     const connections = this._connections.value.filter((c) => c.startBlock.id === block.id || c.endBlock?.id === block.id);
     connections.forEach((c) => this.deleteConnection(c));
@@ -401,7 +407,7 @@ export class FlowDesigner {
     this._blocks.value = this._blocks.value.filter((c) => c.id != block.id);
   };
 
-  private deleteConnection = (connection: FlowConnection): void => {
+  public deleteConnection = (connection: UIConnectionElement): void => {
     // Filter connections to the set without the connection
     this._connections.value = this._connections.value.filter((c) => c.id != connection.id);
   };
@@ -411,13 +417,8 @@ export class FlowDesigner {
 let flowDesigner: FlowDesigner;
 
 // Initialise the designer
-export const initFlowDesignController = (
-  blocks: Ref<FlowBlock[]>,
-  connections: Ref<FlowConnection[]>,
-  screenSize: Ref<{ width: number; height: number }>,
-  gridSize: Ref<number>
-): FlowDesigner => {
-  flowDesigner = new FlowDesigner(blocks, connections, screenSize, gridSize);
+export const initFlowDesignController = (screenSize: Ref<{ width: number; height: number }>, gridSize: Ref<number>): FlowDesigner => {
+  flowDesigner = new FlowDesigner(screenSize, gridSize);
 
   // Mouse events
   configureFlowMouseEvents(flowDesigner);
@@ -426,7 +427,7 @@ export const initFlowDesignController = (
   return flowDesigner;
 };
 
-// Use the controller methods and values
-export const useFlowDesignController = (): FlowDesigner => {
+// Use the designer methods and values
+export const useFlowDesigner = (): FlowDesigner => {
   return flowDesigner;
 };

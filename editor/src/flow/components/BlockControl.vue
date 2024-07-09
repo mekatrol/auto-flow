@@ -96,9 +96,9 @@ import MarkerControl from './MarkerControl.vue';
 import ConnectorControl from './ConnectorControl.vue';
 import SvgIcon from './SvgIcon.vue';
 import { type EnumDictionary } from '../types/EnumDictionary';
-import { FlowBlock } from '../types/FlowBlock';
+import { UIBlockElement } from '../types/UIBlockElement';
 import { MarkerShape } from '../types/MarkerShape';
-import { FlowBlockConnector } from '../types/FlowBlockConnector';
+import { UIBlockConnectorElement } from '../types/UIBlockConnectorElement';
 import { computed } from 'vue';
 import { BlockSide } from '../types/BlockSide';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
@@ -122,7 +122,7 @@ const textGapX = 10;
 const textGapY = 5;
 
 interface Props {
-  block: FlowBlock;
+  block: UIBlockElement;
 }
 
 const props = defineProps<Props>();
@@ -151,13 +151,29 @@ const markers = computed(() => {
   }
 
   return [
-    new MarkerShape('circle', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 1, MARKER_OFFSET_Y, props.block, 'black', 'yellow'),
-    new MarkerShape('triangle', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 2, MARKER_OFFSET_Y, props.block, 'darkred', 'coral'),
-    new MarkerShape('square', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 3, MARKER_OFFSET_Y, props.block, 'green', 'white')
+    new MarkerShape(
+      'circle',
+      'circle',
+      props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 1,
+      MARKER_OFFSET_Y,
+      props.block,
+      'black',
+      'yellow'
+    ),
+    new MarkerShape(
+      'triangle',
+      'triangle',
+      props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 2,
+      MARKER_OFFSET_Y,
+      props.block,
+      'darkred',
+      'coral'
+    ),
+    new MarkerShape('square', 'square', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 3, MARKER_OFFSET_Y, props.block, 'green', 'white')
   ];
 });
 
-const getConnectorOffsets = (block: FlowBlock, offset: number): EnumDictionary<BlockSide, Offset> => {
+const getConnectorOffsets = (block: UIBlockElement, offset: number): EnumDictionary<BlockSide, Offset> => {
   const connectorOffsets: EnumDictionary<BlockSide, Offset> = {
     [BlockSide.Left]: { x: -(BLOCK_CONNECTOR_SIZE - BLOCK_CONNECTOR_OFFSET), y: offset },
     [BlockSide.Top]: { x: offset, y: -BLOCK_CONNECTOR_OFFSET },
@@ -168,7 +184,7 @@ const getConnectorOffsets = (block: FlowBlock, offset: number): EnumDictionary<B
   return connectorOffsets;
 };
 
-const transformConnectors = (side: BlockSide): FlowBlockConnector[] => {
+const transformConnectors = (side: BlockSide): UIBlockConnectorElement[] => {
   if (!props.block) {
     return [];
   }
@@ -189,7 +205,7 @@ const transformConnectors = (side: BlockSide): FlowBlockConnector[] => {
   return connectors;
 };
 
-const alignedConnectors = computed((): FlowBlockConnector[] => {
+const alignedConnectors = computed((): UIBlockConnectorElement[] => {
   const connectors = [];
 
   connectors.push(...transformConnectors(BlockSide.Left));

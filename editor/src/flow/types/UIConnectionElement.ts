@@ -1,27 +1,26 @@
 import type { BlockSide } from './BlockSide';
 import { type Offset } from './Offset';
-import { FlowBlock } from './FlowBlock';
-import { FlowBlockConnector } from './FlowBlockConnector';
-import { FlowTaggedElement } from './FlowTaggedElement';
-import { FlowElementType } from './FlowElementType';
+import { UIBlockElement } from './UIBlockElement';
+import { UIBlockConnectorElement } from './UIBlockConnectorElement';
+import { UILabelledElement } from './UILabelledElement';
+import { UIElementType } from './UIElementType';
 
-export class FlowConnection extends FlowTaggedElement {
-  _startBlock: FlowBlock;
+export class UIConnectionElement extends UILabelledElement {
+  _startBlock: UIBlockElement;
   _startBlockConnectorId: string;
-  _endBlock: FlowBlock | undefined;
+  _endBlock: UIBlockElement | undefined;
   _endBlockConnectorId: string | undefined;
 
   constructor(
     id: string,
     label: string,
     description: string,
-    startBlock: FlowBlock,
+    startBlock: UIBlockElement,
     startBlockConnectorId: string,
-    endBlock?: FlowBlock | undefined,
+    endBlock?: UIBlockElement | undefined,
     endBlockConnectorId?: string
   ) {
-    super(id, label, description, FlowElementType.Connection); // Start with no size, will calculate later
-    this.selected = false;
+    super(id, label, description, UIElementType.Connection, { x: 0, y: 0 }, { width: 0, height: 0 }); // Start with no size, will calculate later
 
     this._startBlock = startBlock;
     this._startBlockConnectorId = startBlockConnectorId;
@@ -30,7 +29,7 @@ export class FlowConnection extends FlowTaggedElement {
     this._endBlockConnectorId = endBlockConnectorId;
   }
 
-  public get startBlock(): FlowBlock {
+  public get startBlock(): UIBlockElement {
     return this._startBlock;
   }
 
@@ -51,11 +50,11 @@ export class FlowConnection extends FlowTaggedElement {
     return startConnector.side;
   }
 
-  public getStartConnector(): FlowBlockConnector {
+  public getStartConnector(): UIBlockConnectorElement {
     return this._startBlock.flowFunction.connectors.find((c) => c.id === this.startBlockConnectorId)!;
   }
 
-  public getEndConnector(): FlowBlockConnector | undefined {
+  public getEndConnector(): UIBlockConnectorElement | undefined {
     // If no end block then no end block offset
     if (!this._endBlock) {
       return undefined;
@@ -64,7 +63,7 @@ export class FlowConnection extends FlowTaggedElement {
     return this._endBlock.flowFunction.connectors.find((c) => c.id === this.endBlockConnectorId)!;
   }
 
-  public get endBlock(): FlowBlock | undefined {
+  public get endBlock(): UIBlockElement | undefined {
     // If no end block then no end block offset
     if (!this._endBlock) {
       return undefined;

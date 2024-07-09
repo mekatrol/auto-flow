@@ -1,4 +1,4 @@
-export enum FlowElementType {
+export enum UIElementType {
   // A flow block
   Block = 'Block',
 

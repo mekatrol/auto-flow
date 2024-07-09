@@ -1,35 +1,35 @@
 import type { FlowFunction } from './FlowFunction';
-import { FlowElement } from './FlowElement';
+import { UIFlowElement } from './UIFlowElement';
 import type { Offset } from './Offset';
 import { BLOCK_CONNECTOR_OFFSET, BLOCK_CONNECTOR_SIZE, BLOCK_HEIGHT, BLOCK_WIDTH } from '../constants';
-import { FlowTaggedElement } from './FlowTaggedElement';
-import { FlowElementType } from './FlowElementType';
+import { UILabelledElement } from './UILabelledElement';
+import { UIElementType } from './UIElementType';
 import { generateFunctionBlock } from '../utils/flow-object-generator';
 import { FunctionType } from './FunctionType';
 import { BlockSide } from './BlockSide';
-import { FlowBlockConnector } from './FlowBlockConnector';
+import { UIBlockConnectorElement } from './UIBlockConnectorElement';
 import type { EnumDictionary } from './EnumDictionary';
 
 // A flow block element is a flow element that has a location and size
 // This is the visible component of a function block
 
-export class FlowBlock extends FlowTaggedElement {
-  flowFunction: FlowFunction;
+export class UIBlockElement extends UILabelledElement {
+  public flowFunction: FlowFunction;
 
-  readonly z: number = 0; // zOrder + zBoost
-  zBoost: number = 0;
+  public readonly z: number = 0; // zOrder + zBoost
+  public zBoost: number = 0;
 
   // The display zOrder for the element. Used to determine rendering and mouse click order.
   // Elements with a higher zOrder are considered on top of elements with a lower zOrder.
   // That is:
   //  * higher zOrder items will be rendered over the top of lower zOrder items
   //  * clicking on a position will select the element with the highest zOrder at that position
-  zOrder: number = 0;
+  public zOrder: number = 0;
 
-  icon: string;
+  public icon: string;
 
   constructor(id: string, label: string, description: string, functionType: FunctionType, offset: Offset) {
-    super(id, label, description, FlowElementType.Block, offset, { width: BLOCK_WIDTH, height: BLOCK_HEIGHT });
+    super(id, label, description, UIElementType.Block, offset, { width: BLOCK_WIDTH, height: BLOCK_HEIGHT });
     this.icon = functionType.toLowerCase();
     this.flowFunction = generateFunctionBlock(functionType, this, {
       attributes: { label: functionType.toUpperCase() }
@@ -38,7 +38,7 @@ export class FlowBlock extends FlowTaggedElement {
     this.layoutConnectors();
   }
 
-  public getHitElement(offset: Offset): FlowElement | undefined {
+  public getHitElement(offset: Offset): UIFlowElement | undefined {
     // Convert off set to local offset for connector hit testing
     const localOffset: Offset = { x: offset.x - this.location.x, y: offset.y - this.location.y };
 
@@ -53,12 +53,12 @@ export class FlowBlock extends FlowTaggedElement {
     return super.getHitElement(offset);
   }
 
-  private layoutConnectors() {
+  public layoutConnectors() {
     this.transformConnectors(BlockSide.Left);
     this.transformConnectors(BlockSide.Right);
   }
 
-  getConnectorOffsets(offset: number): EnumDictionary<BlockSide, Offset> {
+  public getConnectorOffsets(offset: number): EnumDictionary<BlockSide, Offset> {
     const connectorOffsets: EnumDictionary<BlockSide, Offset> = {
       [BlockSide.Left]: { x: -(BLOCK_CONNECTOR_SIZE - BLOCK_CONNECTOR_OFFSET), y: offset },
       [BlockSide.Top]: { x: offset, y: -BLOCK_CONNECTOR_OFFSET },
@@ -69,7 +69,7 @@ export class FlowBlock extends FlowTaggedElement {
     return connectorOffsets;
   }
 
-  transformConnectors(side: BlockSide): FlowBlockConnector[] {
+  public transformConnectors(side: BlockSide): UIBlockConnectorElement[] {
     const connectors = this.flowFunction.connectors.filter((x) => x.side === side);
 
     const connectorOffsets = this.getConnectorOffsets(5);

@@ -1,10 +1,10 @@
 import type { Ref } from 'vue';
-import type { FlowBlock } from './FlowBlock';
+import type { UIBlockElement } from './UIBlockElement';
 
 export class ZOrder {
-  private _blocks: Ref<FlowBlock[]>;
+  private _blocks: Ref<UIBlockElement[]>;
 
-  constructor(blocks: Ref<FlowBlock[]>) {
+  constructor(blocks: Ref<UIBlockElement[]>) {
     this._blocks = blocks;
   }
 
@@ -17,11 +17,11 @@ export class ZOrder {
   };
 
   public sort = (): void => {
-    this._blocks.value.sort((a: FlowBlock, b: FlowBlock) => a.z + a.zBoost - (b.z + b.zBoost));
+    this._blocks.value.sort((a: UIBlockElement, b: UIBlockElement) => a.z + a.zBoost - (b.z + b.zBoost));
     this.sequenceZOrder();
   };
 
-  private moveToFront = (selected: FlowBlock): void => {
+  private moveToFront = (selected: UIBlockElement): void => {
     if (!selected || !this._blocks || !this._blocks.value) {
       return;
     }
@@ -38,7 +38,7 @@ export class ZOrder {
     this.sort();
   };
 
-  private moveForward = (selected: FlowBlock): void => {
+  private moveForward = (selected: UIBlockElement): void => {
     if (!selected || !this._blocks || !this._blocks.value) {
       return;
     }
@@ -53,7 +53,7 @@ export class ZOrder {
     }
   };
 
-  private moveBackward = (selected: FlowBlock): void => {
+  private moveBackward = (selected: UIBlockElement): void => {
     if (!selected || !this._blocks || !this._blocks.value) {
       return;
     }
@@ -68,7 +68,7 @@ export class ZOrder {
     }
   };
 
-  private moveToBack = (selected: FlowBlock): void => {
+  private moveToBack = (selected: UIBlockElement): void => {
     if (!selected || !this._blocks || !this._blocks.value) {
       return;
     }
@@ -85,7 +85,7 @@ export class ZOrder {
     this.sort();
   };
 
-  public moveBlockZOrder = (action: string, selected: FlowBlock): void => {
+  public moveBlockZOrder = (action: string, selected: UIBlockElement): void => {
     switch (action) {
       case 'moveToFront':
         this.moveToFront(selected);

@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { addOffsets } from '../utils/type-helper';
 import { type Offset } from '../types/Offset';
-import { FlowConnection } from '../types/FlowConnection';
+import { UIConnectionElement } from '../types/UIConnectionElement';
 import { BlockSide } from '../types/BlockSide';
 import { generateCubicBezierPoints } from '../utils/cubic-spline';
 import { cubicBezierToSvg } from '../utils/svg';
@@ -40,7 +40,7 @@ import { useThemeStore } from '../store/themeStore';
 interface Props {
   show?: boolean;
 
-  connection: FlowConnection;
+  connection: UIConnectionElement;
 
   showPoints?: boolean;
 

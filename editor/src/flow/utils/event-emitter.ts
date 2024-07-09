@@ -1,8 +1,8 @@
 import mitt, { type Emitter } from 'mitt';
-import { type FlowBlock } from '../types/FlowBlock';
+import { type UIBlockElement } from '../types/UIBlockElement';
 import { type FlowDesigner } from '../types/FlowDesigner';
-import { type FlowBlockConnector } from '../types/FlowBlockConnector';
-import { FlowConnection } from '../types/FlowConnection';
+import { type UIBlockConnectorElement } from '../types/UIBlockConnectorElement';
+import { UIConnectionElement } from '../types/UIConnectionElement';
 import { v4 as uuidv4 } from 'uuid';
 import {
   BLOCK_CONNECTOR_MOUSE_DOWN,
@@ -31,15 +31,15 @@ export interface FlowMouseEvent<T> {
 }
 
 // An event from a flow block
-export interface FlowBlockMouseEvent extends FlowMouseEvent<FlowBlock> {}
+export interface FlowBlockMouseEvent extends FlowMouseEvent<UIBlockElement> {}
 
 // A mouse event from a flow block connector (includes the block that the connector is attached to)
 export interface FlowNodeConnectorMouseEvent extends FlowBlockMouseEvent {
-  connector: FlowBlockConnector;
+  connector: UIBlockConnectorElement;
 }
 
 // A mouse event from a flow connection
-export interface FlowConnectionMouseEvent extends FlowMouseEvent<FlowConnection> {}
+export interface FlowConnectionMouseEvent extends FlowMouseEvent<UIConnectionElement> {}
 
 export type FlowEvents = {
   /*
@@ -137,7 +137,7 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
 
   emitter.on(BLOCK_CONNECTOR_MOUSE_DOWN, (e) => {
     flowDesigner.clearSelectedItems();
-    flowDesigner.drawingConnection.value = new FlowConnection(uuidv4(), 'connecting', '', e.data, e.connector.id);
+    flowDesigner.drawingConnection.value = new UIConnectionElement(uuidv4(), 'connecting', '', e.data, e.connector.id);
 
     flowDesigner.drawingConnection.value.location = { x: e.mouseEvent.offsetX, y: e.mouseEvent.offsetY };
   });

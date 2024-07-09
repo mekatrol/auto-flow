@@ -22,8 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import type { FlowBlock } from '../types/FlowBlock';
-import type { FlowBlockConnector } from '../types/FlowBlockConnector';
+import type { UIBlockElement } from '../types/UIBlockElement';
+import type { UIBlockConnectorElement } from '../types/UIBlockConnectorElement';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
 import {
   BLOCK_CONNECTOR_MOUSE_MOVE,
@@ -35,8 +35,8 @@ import {
 } from '../constants';
 
 interface Props {
-  block: FlowBlock;
-  connector: FlowBlockConnector;
+  block: UIBlockElement;
+  connector: UIBlockConnectorElement;
   fillColor?: string;
   strokeColor?: string;
   strokeWidth?: string;

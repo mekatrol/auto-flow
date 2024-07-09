@@ -3,16 +3,16 @@ import { BlockSide } from '../types/BlockSide';
 import { InputOutputDirection } from '../types/InputOutputDirection';
 import { InputOutputSignalType } from '../types/InputOutputSignalType';
 import { InputOutput } from '../types/InputOutput';
-import { FlowBlockConnector } from '../types/FlowBlockConnector';
+import { UIBlockConnectorElement } from '../types/UIBlockConnectorElement';
 import { FlowFunction } from '../types/FlowFunction';
 import { v4 as uuidv4 } from 'uuid';
-import { FlowElement } from '../types/FlowElement';
+import { UIFlowElement } from '../types/UIFlowElement';
 
 export interface BlockConfiguration {
   attributes: Record<string, any>;
 }
 
-export const generateFunctionBlock = (type: FunctionType, parent: FlowElement | undefined, data?: BlockConfiguration | undefined): FlowFunction => {
+export const generateFunctionBlock = (type: FunctionType, parent: UIFlowElement | undefined, data?: BlockConfiguration | undefined): FlowFunction => {
   switch (type) {
     case FunctionType.And:
       return generateAndBlock(parent, data);
@@ -65,99 +65,99 @@ export const generateFunctionBlock = (type: FunctionType, parent: FlowElement | 
   }
 };
 
-const generateAndBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateAndBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return generate2InputBinaryBlock(FunctionType.And, parent, _data);
 };
 
-const generateAverageBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateAverageBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generateCalculatorBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateCalculatorBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generateCalendarBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateCalendarBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generateClampBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateClampBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generateComparatorBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateComparatorBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generateDelayBlock = (parent: FlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
+const generateDelayBlock = (parent: UIFlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
   return generate1InputBinaryBlock(FunctionType.Delay, parent, data);
 };
 
-const generateIfBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateIfBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generateInvertBlock = (parent: FlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
+const generateInvertBlock = (parent: UIFlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
   return generate1InputBinaryBlock(FunctionType.Invert, parent, data);
 };
 
-const generateSpanBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateSpanBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generateMaxBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateMaxBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generateMinBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateMinBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generateOrBlock = (parent: FlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
+const generateOrBlock = (parent: UIFlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
   return generate2InputBinaryBlock(FunctionType.Or, parent, data);
 };
 
-const generateOverrideBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateOverrideBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generatePidBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generatePidBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generatePulseBlock = (parent: FlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
+const generatePulseBlock = (parent: UIFlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
   return generate1InputBinaryBlock(FunctionType.Pulse, parent, data);
 };
 
-const generateScheduleBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateScheduleBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generateSelectorBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateSelectorBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generateSequenceBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateSequenceBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generateSplitBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateSplitBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generateTimerBlock = (parent: FlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
+const generateTimerBlock = (parent: UIFlowElement | undefined, _data: BlockConfiguration | undefined): FlowFunction => {
   return {} as FlowFunction;
 };
 
-const generateXnorBlock = (parent: FlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
+const generateXnorBlock = (parent: UIFlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
   return generate1InputBinaryBlock(FunctionType.Xnor, parent, data);
 };
 
-const generateXorBlock = (parent: FlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
+const generateXorBlock = (parent: UIFlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
   return generate1InputBinaryBlock(FunctionType.Xor, parent, data);
 };
 
-const generate1InputBinaryBlock = (type: FunctionType, parent: FlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
+const generate1InputBinaryBlock = (type: FunctionType, parent: UIFlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
   const typeUpper = type.toString().toUpperCase();
 
   const flowFunction = {
@@ -166,14 +166,14 @@ const generate1InputBinaryBlock = (type: FunctionType, parent: FlowElement | und
     description: data?.attributes['description'] ?? '',
     type: type,
     connectors: [
-      new FlowBlockConnector(
+      new UIBlockConnectorElement(
         uuidv4(),
         'Input 1',
         `Binary input of ${typeUpper} gate`,
         BlockSide.Left,
         new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Input)
       ),
-      new FlowBlockConnector(
+      new UIBlockConnectorElement(
         uuidv4(),
         'Output',
         `Binary output of ${typeUpper} gate`,
@@ -188,7 +188,7 @@ const generate1InputBinaryBlock = (type: FunctionType, parent: FlowElement | und
   return flowFunction;
 };
 
-const generate2InputBinaryBlock = (type: FunctionType, parent: FlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
+const generate2InputBinaryBlock = (type: FunctionType, parent: UIFlowElement | undefined, data: BlockConfiguration | undefined): FlowFunction => {
   const typeUpper = type.toString().toUpperCase();
 
   const flowFunction = {
@@ -197,21 +197,21 @@ const generate2InputBinaryBlock = (type: FunctionType, parent: FlowElement | und
     description: data?.attributes['description'] ?? '',
     type: type,
     connectors: [
-      new FlowBlockConnector(
+      new UIBlockConnectorElement(
         uuidv4(),
         'Input 1',
         `Binary input 1 of ${typeUpper} gate`,
         BlockSide.Left,
         new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Input)
       ),
-      new FlowBlockConnector(
+      new UIBlockConnectorElement(
         uuidv4(),
         'Input 2',
         `Binary input 2 of ${typeUpper} gate`,
         BlockSide.Left,
         new InputOutput(InputOutputSignalType.Digital, InputOutputDirection.Input)
       ),
-      new FlowBlockConnector(
+      new UIBlockConnectorElement(
         uuidv4(),
         'Output',
         `Binary output of ${typeUpper} gate`,
