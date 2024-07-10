@@ -7,7 +7,7 @@ import { UIBlockElement } from './UIBlockElement';
 import { ZOrder } from './ZOrder';
 import type { Line } from './Line';
 import type { UILabelledElement } from './UILabelledElement';
-import { configureFlowMouseEvents } from '../utils/event-emitter';
+import { configureFlowMouseEvents } from '../../utils/event-emitter';
 import { UIElementType } from './UIElementType';
 
 export class FlowDesigner {

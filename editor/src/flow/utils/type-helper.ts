@@ -1,4 +1,4 @@
-import type { Offset } from '../types/Offset';
+import type { Offset } from '../types/ui/Offset';
 
 export const addOffsets = (offsets: Offset[]): Offset => {
   const output: Offset = { x: 0, y: 0 };

@@ -1,15 +1,15 @@
-import type { FlowFunction } from './FlowFunction';
+import type { FlowFunction } from '../function/FlowFunction';
 import { UIElement } from './UIElement';
 import type { Offset } from './Offset';
-import { BLOCK_CONNECTOR_OFFSET, BLOCK_CONNECTOR_SIZE, BLOCK_HEIGHT, BLOCK_WIDTH } from '../constants';
+import { BLOCK_CONNECTOR_OFFSET, BLOCK_CONNECTOR_SIZE, BLOCK_HEIGHT, BLOCK_WIDTH } from '../../constants';
 import { UILabelledElement } from './UILabelledElement';
 import { UIElementType } from './UIElementType';
-import { generateFunctionBlock } from '../utils/flow-object-generator';
-import { FunctionType } from './FunctionType';
+import { generateFunctionBlock } from '../../utils/flow-object-generator';
+import { FunctionType } from '../function/FunctionType';
 import { BlockSide } from './BlockSide';
 import { UIBlockConnectorElement } from './UIBlockConnectorElement';
-import type { EnumDictionary } from './EnumDictionary';
-import { InputOutputDirection } from './InputOutputDirection';
+import type { EnumDictionary } from '../EnumDictionary';
+import { InputOutputDirection } from '../function/InputOutputDirection';
 
 // A flow block element is a flow element that has a location and size
 // This is the visible component of a function block

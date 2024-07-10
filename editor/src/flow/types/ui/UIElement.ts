@@ -1,8 +1,8 @@
 import type { UIElementType } from './UIElementType';
 import type { Offset } from './Offset';
 import type { Size } from './Size';
-import { useEmitter } from '../utils/event-emitter';
-import { ELEMENT_CHANGED } from '../constants';
+import { useEmitter } from '../../utils/event-emitter';
+import { ELEMENT_CHANGED } from '../../constants';
 
 export abstract class UIElement {
   public _type: UIElementType;

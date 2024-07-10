@@ -1,4 +1,4 @@
-import { FunctionType } from '../types/FunctionType';
+import { FunctionType } from '../../function/FunctionType';
 
 export interface ElementStyles {
   color: string;

@@ -96,11 +96,11 @@ import MarkerControl from './MarkerControl.vue';
 import ConnectorControl from './ConnectorControl.vue';
 import SvgIcon from './SvgIcon.vue';
 import { type EnumDictionary } from '../types/EnumDictionary';
-import { UIBlockElement } from '../types/UIBlockElement';
-import { MarkerShape } from '../types/MarkerShape';
-import { UIBlockConnectorElement } from '../types/UIBlockConnectorElement';
+import { UIBlockElement } from '../types/ui/UIBlockElement';
+import { MarkerShape } from '../types/ui/MarkerShape';
+import { UIBlockConnectorElement } from '../types/ui/UIBlockConnectorElement';
 import { computed } from 'vue';
-import { BlockSide } from '../types/BlockSide';
+import { BlockSide } from '../types/ui/BlockSide';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
 import {
   BLOCK_CONNECTOR_OFFSET,
@@ -116,7 +116,7 @@ import {
   BLOCK_MOUSE_UP
 } from '../constants';
 import { useThemeStore } from '../store/themeStore';
-import type { Offset } from '../types/Offset';
+import type { Offset } from '../types/ui/Offset';
 
 const textGapX = 10;
 const textGapY = 5;

@@ -46,13 +46,13 @@
 
 <script setup lang="ts">
 import ConnectionControl from './ConnectionControl.vue';
-import { UIBlockElement } from '../types/UIBlockElement';
-import { UIConnectionElement } from '../types/UIConnectionElement';
+import { UIBlockElement } from '../types/ui/UIBlockElement';
+import { UIConnectionElement } from '../types/ui/UIConnectionElement';
 import { ref, type Ref } from 'vue';
 import { useScreenSize } from 'vue-boosted';
 import BlockControl from './BlockControl.vue';
-import { FunctionType } from '../types/FunctionType';
-import { initFlowDesignController } from '../types/FlowDesigner';
+import { FunctionType } from '../types/function/FunctionType';
+import { initFlowDesignController } from '../types/ui/FlowDesigner';
 
 const gridSize = ref(20);
 const screenSize = useScreenSize();

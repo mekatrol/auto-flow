@@ -1,8 +1,8 @@
 import mitt, { type Emitter } from 'mitt';
-import { type UIBlockElement } from '../types/UIBlockElement';
-import { type FlowDesigner } from '../types/FlowDesigner';
-import { type UIBlockConnectorElement } from '../types/UIBlockConnectorElement';
-import { UIConnectionElement } from '../types/UIConnectionElement';
+import { type UIBlockElement } from '../types/ui/UIBlockElement';
+import { type FlowDesigner } from '../types/ui/FlowDesigner';
+import { type UIBlockConnectorElement } from '../types/ui/UIBlockConnectorElement';
+import { UIConnectionElement } from '../types/ui/UIConnectionElement';
 import {
   BLOCK_CONNECTOR_MOUSE_DOWN,
   BLOCK_CONNECTOR_MOUSE_ENTER,
@@ -24,7 +24,7 @@ import {
   CONNECTION_MOUSE_UP,
   ELEMENT_CHANGED
 } from '../constants';
-import type { UIElement } from '../types/UIElement';
+import type { UIElement } from '../types/ui/UIElement';
 
 export interface FlowMouseEvent<T> {
   data: T;

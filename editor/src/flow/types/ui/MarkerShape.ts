@@ -1,4 +1,4 @@
-import { MARKER_SIZE } from '../constants';
+import { MARKER_SIZE } from '../../constants';
 import { UIElement } from './UIElement';
 import { UIElementType } from './UIElementType';
 import type { Shape } from './Shape';

@@ -22,8 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import type { UIBlockElement } from '../types/UIBlockElement';
-import type { UIBlockConnectorElement } from '../types/UIBlockConnectorElement';
+import type { UIBlockElement } from '../types/ui/UIBlockElement';
+import type { UIBlockConnectorElement } from '../types/ui/UIBlockConnectorElement';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
 import {
   BLOCK_CONNECTOR_MOUSE_MOVE,

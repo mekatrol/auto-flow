@@ -19,9 +19,9 @@
 
 <script setup lang="ts">
 import { addOffsets } from '../utils/type-helper';
-import { type Offset } from '../types/Offset';
-import { UIConnectionElement } from '../types/UIConnectionElement';
-import { BlockSide } from '../types/BlockSide';
+import { type Offset } from '../types/ui/Offset';
+import { UIConnectionElement } from '../types/ui/UIConnectionElement';
+import { BlockSide } from '../types/ui/BlockSide';
 import { generateCubicBezierPoints } from '../utils/cubic-spline';
 import { cubicBezierToSvg } from '../utils/svg';
 import { computed } from 'vue';

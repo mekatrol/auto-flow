@@ -1,11 +1,11 @@
-import { FunctionType } from '../types/FunctionType';
-import { InputOutputDirection } from '../types/InputOutputDirection';
-import { InputOutputSignalType } from '../types/InputOutputSignalType';
-import { InputOutput } from '../types/InputOutput';
-import { FlowFunction } from '../types/FlowFunction';
+import { FunctionType } from '../types/function/FunctionType';
+import { InputOutputDirection } from '../types/function/InputOutputDirection';
+import { InputOutputSignalType } from '../types/function/InputOutputSignalType';
+import { InputOutput } from '../types/function/InputOutput';
+import { FlowFunction } from '../types/function/FlowFunction';
 import { v4 as uuidv4 } from 'uuid';
-import { UIElement } from '../types/UIElement';
-import { FlowFunctionConnector } from '../types/FlowFunctionConnector';
+import { UIElement } from '../types/ui/UIElement';
+import { FlowFunctionConnector } from '../types/function/FlowFunctionConnector';
 
 export interface BlockConfiguration {
   attributes: Record<string, any>;

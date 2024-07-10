@@ -1,8 +1,8 @@
-import { BLOCK_CONNECTOR_SIZE } from '../constants';
+import { BLOCK_CONNECTOR_SIZE } from '../../constants';
 import type { BlockSide } from './BlockSide';
 import { UILabelledElement } from './UILabelledElement';
 import { UIElementType } from './UIElementType';
-import { FlowFunctionConnector } from './FlowFunctionConnector';
+import { FlowFunctionConnector } from '../function/FlowFunctionConnector';
 
 export class UIBlockConnectorElement extends UILabelledElement {
   connector: FlowFunctionConnector;
