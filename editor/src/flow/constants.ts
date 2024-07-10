@@ -11,6 +11,8 @@ export const MARKER_OFFSET_Y = -8;
  * This file defines the various events that a flow and its elements will generate
  */
 
+export const ELEMENT_CHANGED = 'elementChanged';
+
 export const BLOCK_MOUSE_MOVE = 'blockMouseMove';
 export const BLOCK_MOUSE_OVER = 'blockMouseOver';
 export const BLOCK_MOUSE_ENTER = 'blockMouseEnter';

@@ -24,7 +24,7 @@ import { UIConnectionElement } from '../types/UIConnectionElement';
 import { BlockSide } from '../types/BlockSide';
 import { generateCubicBezierPoints } from '../utils/cubic-spline';
 import { cubicBezierToSvg } from '../utils/svg';
-import { ref, watch } from 'vue';
+import { computed } from 'vue';
 import { useEmitter, type FlowConnectionMouseEvent, type FlowEvents } from '../utils/event-emitter';
 import {
   CONNECTION_MOUSE_MOVE,
@@ -65,7 +65,7 @@ const props = withDefaults(defineProps<Props>(), {
   endPointRadius: 5
 });
 
-const generateSvg = () => {
+const svg = computed(() => {
   const startConnector = props.connection.startBlock.connectors.find((c) => c.connector.id === props.connection.startBlockConnectorId)!;
 
   const halfOffset: Offset = { x: BLOCK_CONNECTOR_SIZE / 2, y: BLOCK_CONNECTOR_SIZE / 2 };
@@ -84,9 +84,7 @@ const generateSvg = () => {
     BlockSide.Right
   );
   return cubicBezierToSvg(points);
-};
-
-const svg = ref(generateSvg());
+});
 
 const emitter = useEmitter();
 const emit = (event: keyof FlowEvents, e: MouseEvent): boolean => {
@@ -99,15 +97,4 @@ const emit = (event: keyof FlowEvents, e: MouseEvent): boolean => {
 };
 
 const { theme } = useThemeStore();
-
-watch(
-  () => props.connection.location,
-  () => {
-    // If creating a connection then end block will be undefined
-    // so we update svg whenever the location has changed.
-    if (!props.connection.endBlock) {
-      svg.value = generateSvg();
-    }
-  }
-);
 </script>

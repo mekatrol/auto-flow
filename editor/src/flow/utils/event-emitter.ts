@@ -3,7 +3,6 @@ import { type UIBlockElement } from '../types/UIBlockElement';
 import { type FlowDesigner } from '../types/FlowDesigner';
 import { type UIBlockConnectorElement } from '../types/UIBlockConnectorElement';
 import { UIConnectionElement } from '../types/UIConnectionElement';
-import { v4 as uuidv4 } from 'uuid';
 import {
   BLOCK_CONNECTOR_MOUSE_DOWN,
   BLOCK_CONNECTOR_MOUSE_ENTER,
@@ -22,12 +21,18 @@ import {
   CONNECTION_MOUSE_LEAVE,
   CONNECTION_MOUSE_MOVE,
   CONNECTION_MOUSE_OVER,
-  CONNECTION_MOUSE_UP
+  CONNECTION_MOUSE_UP,
+  ELEMENT_CHANGED
 } from '../constants';
+import type { UIElement } from '../types/UIElement';
 
 export interface FlowMouseEvent<T> {
   data: T;
   mouseEvent: MouseEvent;
+}
+
+export interface ElementChangedEvent {
+  element: UIElement;
 }
 
 // An event from a flow block
@@ -42,6 +47,11 @@ export interface FlowNodeConnectorMouseEvent extends FlowBlockMouseEvent {
 export interface FlowConnectionMouseEvent extends FlowMouseEvent<UIConnectionElement> {}
 
 export type FlowEvents = {
+  /*
+   * Element events
+   */
+  elementChanged: ElementChangedEvent;
+
   /*
    * Block mouse events
    */
@@ -78,6 +88,10 @@ const emitter: Emitter<FlowEvents> = mitt<FlowEvents>();
 
 export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
   const emitter = useEmitter();
+
+  emitter.on(ELEMENT_CHANGED, (e: ElementChangedEvent) => {
+    flowDesigner.update(e.element);
+  });
 
   emitter.on(BLOCK_MOUSE_ENTER, (_e: FlowBlockMouseEvent) => {
     // console.log(`block mouse enter: ${e.data.id}`, e);

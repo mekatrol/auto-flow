@@ -7,7 +7,6 @@ import { UIBlockElement } from './UIBlockElement';
 import { ZOrder } from './ZOrder';
 import type { Line } from './Line';
 import type { UILabelledElement } from './UILabelledElement';
-import { v4 as uuidv4 } from 'uuid';
 import { configureFlowMouseEvents } from '../utils/event-emitter';
 import { UIElementType } from './UIElementType';
 
@@ -33,11 +32,7 @@ export class FlowDesigner {
     this._zOrder = new ZOrder(this._blocks);
   }
 
-  public update(changedElement: UIElement) {
-    // Force refresh
-    this._blocks.value = [...this._blocks.value];
-    this._connections.value = [...this._connections.value];
-  }
+  public update(_element: UIElement) {}
 
   public get blocks(): Ref<UIBlockElement[]> {
     return this._blocks;

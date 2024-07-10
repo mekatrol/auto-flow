@@ -53,7 +53,6 @@ import { useScreenSize } from 'vue-boosted';
 import BlockControl from './BlockControl.vue';
 import { FunctionType } from '../types/FunctionType';
 import { initFlowDesignController } from '../types/FlowDesigner';
-import { v4 as uuidv4 } from 'uuid';
 
 const gridSize = ref(20);
 const screenSize = useScreenSize();
@@ -85,11 +84,8 @@ const connection2: UIConnectionElement = new UIConnectionElement(
   flowBlock1.flowFunction.connectors[1].id
 );
 
-const blocks: Ref<UIBlockElement[]> = ref([flowBlock1, flowBlock2, flowBlock3, flowBlock4, flowBlock5]);
-const connections: Ref<UIConnectionElement[]> = ref([connection1, connection2]);
-
-flowDesigner.blocks.value = blocks.value;
-flowDesigner.connections.value = connections.value;
+flowDesigner.blocks.value = [flowBlock1, flowBlock2, flowBlock3, flowBlock4, flowBlock5];
+flowDesigner.connections.value = [connection1, connection2];
 
 const focusDesigner = (_e: FocusEvent): void => {
   // Do nothing, and SVG element won't raise keyboard events unless it has
