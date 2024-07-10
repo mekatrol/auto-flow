@@ -1,5 +1,8 @@
 <template>
-  <g :transform="`translate(${x}, ${y})`">
+  <g
+    :transform="`translate(${x}, ${y})`"
+    class="label"
+  >
     <text
       class="label"
       :fill="color"
@@ -39,3 +42,10 @@ const props = withDefaults(defineProps<Props>(), {
   verticalAlignment: 'hanging'
 });
 </script>
+
+<style>
+.label {
+  pointer-events: none;
+  user-select: none;
+}
+</style>
