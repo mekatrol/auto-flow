@@ -115,7 +115,7 @@ import {
   BLOCK_MOUSE_DOWN,
   BLOCK_MOUSE_UP
 } from '../constants';
-import { useThemeStore } from '../store/themeStore';
+import { useThemeStore } from '../stores/themeStore';
 import type { Offset } from '../types/ui/Offset';
 
 const textGapX = 10;

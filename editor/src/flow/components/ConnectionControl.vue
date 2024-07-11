@@ -35,7 +35,7 @@ import {
   CONNECTION_MOUSE_UP,
   BLOCK_IO_SIZE
 } from '../constants';
-import { useThemeStore } from '../store/themeStore';
+import { useThemeStore } from '../stores/themeStore';
 
 interface Props {
   show?: boolean;

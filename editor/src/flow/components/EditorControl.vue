@@ -54,7 +54,7 @@ import { loadFlowFromJson } from '../types/persistence/flow-persistor';
 import type { IFlow, IFlowBlock, IFlowElements, IFlowFunctionality } from '../types/persistence/types';
 import { v4 as uuidv4 } from 'uuid';
 import { FunctionType } from '../types/function/FunctionType';
-import { useFlowStore } from '../store/flowStore';
+import { useFlowStore } from '../stores/flowStore';
 import { ElementType } from '../types/ui/ElementType';
 import { BlockElement } from '../types/ui/BlockElement';
 import { ConnectionElement } from '../types/ui/ConnectionElement';

@@ -8,7 +8,7 @@ import { BlockSide } from '../ui/BlockSide';
 import type { FlowElement } from '../ui/FlowElement';
 import { ConnectionElement } from '../ui/ConnectionElement';
 import { FlowConnection } from '../function/FlowConnection';
-import { useFlowStore } from '@/flow/store/flowStore';
+import { useFlowStore } from '@/flow/stores/flowStore';
 
 // Loaded functions and connections that do no have a matching element definition with have their location
 // randomized such that (0, 0) <= (x,y) <= (maxX, maxY)
