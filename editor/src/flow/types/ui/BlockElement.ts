@@ -8,7 +8,8 @@ import type { FlowFunction } from '../persistence/FlowFunction';
 import type { Offset } from './Offset';
 import type { Size } from './Size';
 
-export class BlockElement {
+export class BlockElement implements FlowBlockElement {
+  public functionId: string;
   public flowFunction: FlowFunction;
   public io: InputOutputElement[];
 
@@ -26,6 +27,7 @@ export class BlockElement {
   constructor(element: FlowBlockElement, functionType: FunctionType, flowFunction: FlowFunction) {
     this.icon = functionType.toLowerCase();
     this.flowFunction = flowFunction;
+    this.functionId = flowFunction.id;
     this.type = ElementType.Block;
     this.location = element.location;
     this.size = element.size;
