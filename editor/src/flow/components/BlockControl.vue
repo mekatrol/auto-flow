@@ -25,7 +25,7 @@
 
     <!-- Block icon -->
     <SvgIcon
-      :icon-name="(block as BlockElement).flowFunction.type.toLowerCase()"
+      :icon-name="block.flowFunction.type.toLowerCase()"
       :x="0"
       :y="0"
       :backgroundCornerRadius="theme.blockStyles.radius"
@@ -52,7 +52,7 @@
     <LabelControl
       :x="iconSize + textGapX"
       :y="block.size.height / 2"
-      :text="(block as BlockElement).flowFunction.type.toUpperCase()"
+      :text="block.flowFunction.type.toUpperCase()"
       vertical-alignment="middle"
       :color="theme.blockFunctionLabelStyles.color"
     />
@@ -61,7 +61,7 @@
     <LabelControl
       :x="0"
       :y="block.size.height + textGapY"
-      :text="(block as BlockElement).flowFunction.label ?? ''"
+      :text="block.flowFunction.label ?? ''"
       :color="theme.blockLabelStyles.color"
     />
 
@@ -115,19 +115,18 @@ import { InputOutputElement } from '../types/ui/InputOutputElement';
 import { InputOutputDirection } from '../types/InputOutputDirection';
 import { BlockSide } from '../types/ui/BlockSide';
 import { layoutInputOutputs } from '../utils/flow-element-helpers';
-import type { FlowBlockElement } from '../types/FlowBlockElement';
 
 const textGapX = 10;
 const textGapY = 5;
 
 interface Props {
-  block: FlowBlockElement;
+  block: BlockElement;
 }
 
 const props = defineProps<Props>();
 
-const io = (props.block as BlockElement).flowFunction.io.map(
-  (io) => new InputOutputElement(props.block as BlockElement, io.direction === InputOutputDirection.Input ? BlockSide.Left : BlockSide.Right, io)
+const io = props.block.flowFunction.io.map(
+  (io) => new InputOutputElement(props.block, io.direction === InputOutputDirection.Input ? BlockSide.Left : BlockSide.Right, io)
 );
 
 layoutInputOutputs(props.block.size, io);
@@ -141,7 +140,7 @@ const emitter = useEmitter();
 const emit = (event: keyof FlowEvents, e: MouseEvent): boolean => {
   if (props.block) {
     emitter.emit(event, {
-      data: props.block as BlockElement,
+      data: props.block,
       mouseEvent: e
     });
   }

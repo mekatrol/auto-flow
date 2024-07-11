@@ -25,7 +25,6 @@ import {
   CONNECTION_MOUSE_UP
 } from '../constants';
 import type { FlowConnection } from '../types/FlowConnection';
-import type { FlowBlockElement } from '../types/FlowBlockElement';
 
 export interface FlowMouseEvent<T> {
   data: T;
@@ -37,7 +36,7 @@ export interface ElementChangedEvent {
 }
 
 // An event from a flow block
-export interface FlowBlockMouseEvent extends FlowMouseEvent<FlowBlockElement> {}
+export interface FlowBlockMouseEvent extends FlowMouseEvent<BlockElement> {}
 
 // A mouse event from a flow block io (includes the block that the io is attached to)
 export interface FlowBlockConnectorMouseEvent extends FlowBlockMouseEvent {
