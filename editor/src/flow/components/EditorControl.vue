@@ -68,9 +68,13 @@ const { elements } = useFlowStore();
 
 const function1Id = uuidv4();
 const function2Id = uuidv4();
+const function3Id = uuidv4();
 
 const function1OutputId = uuidv4();
-const function2InputId = uuidv4();
+const function2Input1Id = uuidv4();
+const function2Input2Id = uuidv4();
+const function3InputId = uuidv4();
+const function3OutputId = uuidv4();
 
 const f = {
   functionality: {
@@ -111,14 +115,14 @@ const f = {
         type: FunctionType.Or,
         io: [
           {
-            id: function2InputId,
+            id: function2Input1Id,
             label: 'Input 1',
             description: 'OR gate input 1',
             signalType: InputOutputSignalType.Digital,
             direction: InputOutputDirection.Input
           },
           {
-            id: uuidv4(),
+            id: function2Input2Id,
             label: 'Input 2',
             description: 'OR gate input 2',
             signalType: InputOutputSignalType.Digital,
@@ -132,6 +136,28 @@ const f = {
             direction: InputOutputDirection.Output
           }
         ]
+      } as IFlowBlock,
+      {
+        id: function3Id,
+        label: 'Block 3',
+        description: 'Block 3 description',
+        type: FunctionType.Invert,
+        io: [
+          {
+            id: function3InputId,
+            label: 'Input',
+            description: 'NOT gate input',
+            signalType: InputOutputSignalType.Digital,
+            direction: InputOutputDirection.Input
+          },
+          {
+            id: function3OutputId,
+            label: 'Output',
+            description: 'NOT gate output',
+            signalType: InputOutputSignalType.Digital,
+            direction: InputOutputDirection.Output
+          }
+        ]
       } as IFlowBlock
     ],
     connections: [
@@ -140,7 +166,21 @@ const f = {
         label: null,
         description: null,
         startInputOutputId: function1OutputId,
-        endInputOutputId: function2InputId
+        endInputOutputId: function2Input1Id
+      },
+      {
+        id: uuidv4(),
+        label: null,
+        description: null,
+        startInputOutputId: function3OutputId,
+        endInputOutputId: function2Input2Id
+      },
+      {
+        id: uuidv4(),
+        label: null,
+        description: null,
+        startInputOutputId: function1OutputId,
+        endInputOutputId: function3InputId
       }
     ]
   } as IFlowFunctionality,
@@ -148,12 +188,17 @@ const f = {
     blocks: [
       {
         functionId: function1Id,
-        location: { x: 200, y: 100 },
+        location: { x: 300, y: 100 },
         size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT }
       },
       {
         functionId: function2Id,
-        location: { x: 400, y: 200 },
+        location: { x: 700, y: 200 },
+        size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT }
+      },
+      {
+        functionId: function3Id,
+        location: { x: 180, y: 200 },
         size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT }
       }
     ],
