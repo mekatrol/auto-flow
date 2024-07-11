@@ -1,12 +1,12 @@
-import { FlowFunction } from '../function/FlowFunction';
-import { InputOutput } from '../function/InputOutput';
-import { InputOutputDirection } from '../function/InputOutputDirection';
-import type { IFlow, IFlowBlock, IFlowBlockElement, IFlowConnection } from '../persistence/types';
+import { InputOutputDirection } from '../InputOutputDirection';
+import type { Flow } from './Flow';
+import type { FlowBlockElement } from './FlowBlockElement';
+import type { FlowConnection } from './FlowConnection';
+import type { FlowFunction } from './FlowFunction';
 import { InputOutputElement } from '../ui/InputOutputElement';
 import { BlockElement } from '../ui/BlockElement';
 import { BlockSide } from '../ui/BlockSide';
 import { ConnectionElement } from '../ui/ConnectionElement';
-import { FlowConnection } from '../function/FlowConnection';
 import { layoutInputOutputs } from '@/flow/utils/flow-element-helpers';
 import { BLOCK_HEIGHT, BLOCK_WIDTH } from '@/flow/constants';
 
@@ -15,82 +15,62 @@ import { BLOCK_HEIGHT, BLOCK_WIDTH } from '@/flow/constants';
 const maxX = 400;
 const maxY = 300;
 
-const loadBlock = (flow: IFlow, elements: Record<string, any>, flowBlock: IFlowBlock): void => {
-  // Create a flow function based on the deserialized values
-  const flowFunction = new FlowFunction(flowBlock.id, flowBlock.type.toUpperCase(), flowBlock.description, flowBlock.type, [], () => {});
-
+const loadBlock = (flow: Flow, elements: Record<string, any>, flowFunction: FlowFunction): void => {
   // Try and find the definition for the block element
-  let loadedFlowElement: IFlowBlockElement | undefined = flow.elements.blocks.find((b) => b.functionId === flowBlock.id);
+  let loadedFlowElement: FlowBlockElement | undefined = flow.elements.blocks.find((b) => b.functionId === flowFunction.id);
 
   // If couldn't find it then create a new one at a random location
   if (!loadedFlowElement) {
     loadedFlowElement = {
-      functionId: flowBlock.id,
+      functionId: flowFunction.id,
       location: { x: Math.floor(Math.random() * maxX), y: Math.floor(Math.random() * maxY) },
       size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
-      icon: flowBlock.type.toUpperCase(),
+      icon: flowFunction.type.toUpperCase(),
       zOrder: 1
     };
   }
 
   // Create a block element for the flow function
-  const blockElement = new BlockElement(loadedFlowElement, flowBlock.type, flowFunction);
+  const blockElement = new BlockElement(loadedFlowElement, flowFunction.type, flowFunction);
 
   // Add to dictionary of keyed elements
   elements[flowFunction.id] = blockElement;
 
-  for (let j = 0; j < flowBlock.io.length; j++) {
+  for (let j = 0; j < flowFunction.io.length; j++) {
     // Get deserialized IO
-    const io = flowBlock.io[j];
-
-    // Create an input/output instance
-    const inputOutput = new InputOutput(io.id, io.label, io.description, io.signalType, io.direction);
-
-    // Add the IO to the function
-    flowFunction.io.push(inputOutput);
+    const io = flowFunction.io[j];
 
     // Determine block side based on input or output
     const side = io.direction === InputOutputDirection.Input ? BlockSide.Left : BlockSide.Right;
 
     // Create input/output element for input/output
-    const inputOutputElement = new InputOutputElement(blockElement, side, inputOutput);
+    const inputOutputElement = new InputOutputElement(blockElement, side, io);
 
     // Set parent
     inputOutputElement.parent = blockElement;
 
-    // Add to parent inputs/outputs
-    blockElement.io.push(inputOutputElement);
-
     // Add to dictionary of keyed elements
-    elements[inputOutput.id] = inputOutputElement;
+    elements[io.id] = inputOutputElement;
   }
 
   layoutInputOutputs(blockElement);
 };
 
-const loadConnection = (flow: IFlow, elements: Record<string, any>, flowConnection: IFlowConnection): void => {
+const loadConnection = (flow: Flow, elements: Record<string, any>, flowConnection: FlowConnection): void => {
   const startInputOutput = elements[flowConnection.startInputOutputId];
   const endInputOutput = elements[flowConnection.endInputOutputId];
 
   const startBlock = startInputOutput.parent! as BlockElement;
   const endBlock = endInputOutput.parent! as BlockElement;
 
-  const connection = new FlowConnection(
-    flowConnection.id,
-    flowConnection.label,
-    flowConnection.description,
-    flowConnection.startInputOutputId,
-    flowConnection.endInputOutputId
-  );
-
-  const connectionElement = new ConnectionElement(connection, startBlock, endBlock);
+  const connectionElement = new ConnectionElement(flowConnection, startBlock, endBlock);
 
   // Add to dictionary of keyed elements
   elements[flowConnection.id] = connectionElement;
 };
 
 export const loadFlowFromJson = (json: string): Record<string, any> => {
-  const flow = JSON.parse(json) as IFlow;
+  const flow = JSON.parse(json) as Flow;
   const elements: Record<string, any> = {};
 
   // Load functionality blocks first
@@ -108,7 +88,7 @@ export const loadFlowFromJson = (json: string): Record<string, any> => {
   return elements;
 };
 
-export const flowToJson = (flow: IFlow): string => {
+export const flowToJson = (flow: Flow): string => {
   const json = JSON.stringify(flow);
   return json;
 };

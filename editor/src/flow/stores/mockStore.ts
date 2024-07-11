@@ -1,9 +1,12 @@
 import { defineStore } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
-import { FunctionType } from '../types/function/FunctionType';
-import { InputOutputSignalType } from '../types/function/InputOutputSignalType';
-import { InputOutputDirection } from '../types/function/InputOutputDirection';
-import type { IFlow, IFlowBlock, IFlowElements, IFlowFunctionality } from '../types/persistence/types';
+import { FunctionType } from '../types/FunctionType';
+import { InputOutputSignalType } from '../types/InputOutputSignalType';
+import { InputOutputDirection } from '../types/InputOutputDirection';
+import type { Flow } from '../types/persistence/Flow';
+import type { FlowElements } from '../types/persistence/FlowElements';
+import type { FlowFunctionality } from '../types/persistence/FlowFunctionality';
+import type { FlowFunction } from '../types/persistence/FlowFunction';
 import { BLOCK_HEIGHT, BLOCK_WIDTH } from '../constants';
 import { loadFlowFromJson } from '../types/persistence/flow-persistor';
 import type { BlockElement } from '../types/ui/BlockElement';
@@ -37,25 +40,25 @@ export const useMockStore = defineStore('mock', () => {
               id: uuidv4(),
               label: 'Input 1',
               description: 'AND gate input 1',
-              signalType: InputOutputSignalType.Digital,
+              type: InputOutputSignalType.Digital,
               direction: InputOutputDirection.Input
             },
             {
               id: uuidv4(),
               label: 'Input 2',
               description: 'AND gate input 2',
-              signalType: InputOutputSignalType.Digital,
+              type: InputOutputSignalType.Digital,
               direction: InputOutputDirection.Input
             },
             {
               id: function1OutputId,
               label: 'Output',
               description: 'AND gate output',
-              signalType: InputOutputSignalType.Digital,
+              type: InputOutputSignalType.Digital,
               direction: InputOutputDirection.Output
             }
           ]
-        } as IFlowBlock,
+        } as FlowFunction,
         {
           id: function2Id,
           label: 'Block 2',
@@ -66,25 +69,25 @@ export const useMockStore = defineStore('mock', () => {
               id: function2Input1Id,
               label: 'Input 1',
               description: 'OR gate input 1',
-              signalType: InputOutputSignalType.Digital,
+              type: InputOutputSignalType.Digital,
               direction: InputOutputDirection.Input
             },
             {
               id: function2Input2Id,
               label: 'Input 2',
               description: 'OR gate input 2',
-              signalType: InputOutputSignalType.Digital,
+              type: InputOutputSignalType.Digital,
               direction: InputOutputDirection.Input
             },
             {
               id: uuidv4(),
               label: 'Output',
               description: 'OR gate output',
-              signalType: InputOutputSignalType.Digital,
+              type: InputOutputSignalType.Digital,
               direction: InputOutputDirection.Output
             }
           ]
-        } as IFlowBlock,
+        } as FlowFunction,
         {
           id: function3Id,
           label: 'Block 3',
@@ -95,18 +98,18 @@ export const useMockStore = defineStore('mock', () => {
               id: function3InputId,
               label: 'Input',
               description: 'NOT gate input',
-              signalType: InputOutputSignalType.Digital,
+              type: InputOutputSignalType.Digital,
               direction: InputOutputDirection.Input
             },
             {
               id: function3OutputId,
               label: 'Output',
               description: 'NOT gate output',
-              signalType: InputOutputSignalType.Digital,
+              type: InputOutputSignalType.Digital,
               direction: InputOutputDirection.Output
             }
           ]
-        } as IFlowBlock
+        } as FlowFunction
       ],
       connections: [
         {
@@ -131,7 +134,7 @@ export const useMockStore = defineStore('mock', () => {
           endInputOutputId: function3InputId
         }
       ]
-    } as IFlowFunctionality,
+    } as FlowFunctionality,
     elements: {
       blocks: [
         {
@@ -157,8 +160,8 @@ export const useMockStore = defineStore('mock', () => {
         }
       ],
       connections: []
-    } as IFlowElements
-  } as IFlow;
+    } as FlowElements
+  } as Flow;
 
   // Load elements from JSON
   const loadedElements = loadFlowFromJson(JSON.stringify(f));

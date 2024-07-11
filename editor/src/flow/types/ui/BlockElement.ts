@@ -1,10 +1,10 @@
-import type { FlowFunction } from '../function/FlowFunction';
 import { ElementType } from './ElementType';
-import { FunctionType } from '../function/FunctionType';
+import { FunctionType } from '../FunctionType';
 import { BlockSide } from './BlockSide';
 import { InputOutputElement } from './InputOutputElement';
-import { InputOutputDirection } from '../function/InputOutputDirection';
-import type { IFlowBlockElement } from '../persistence/types';
+import { InputOutputDirection } from '../InputOutputDirection';
+import type { FlowBlockElement } from '../persistence/FlowBlockElement';
+import type { FlowFunction } from '../persistence/FlowFunction';
 import type { Offset } from './Offset';
 import type { Size } from './Size';
 
@@ -23,7 +23,7 @@ export class BlockElement {
 
   public selected: boolean = false;
 
-  constructor(element: IFlowBlockElement, functionType: FunctionType, flowFunction: FlowFunction) {
+  constructor(element: FlowBlockElement, functionType: FunctionType, flowFunction: FlowFunction) {
     this.icon = functionType.toLowerCase();
     this.flowFunction = flowFunction;
     this.type = ElementType.Block;
@@ -31,7 +31,7 @@ export class BlockElement {
     this.size = element.size;
 
     this.io = this.flowFunction.io.map(
-      (io) => new InputOutputElement(this, io.signalDirection === InputOutputDirection.Input ? BlockSide.Left : BlockSide.Right, io)
+      (io) => new InputOutputElement(this, io.direction === InputOutputDirection.Input ? BlockSide.Left : BlockSide.Right, io)
     );
   }
 

@@ -6,7 +6,7 @@ import { BlockElement } from './BlockElement';
 import { ZOrder } from './ZOrder';
 import type { Line } from './Line';
 import { configureFlowMouseEvents } from '../../utils/event-emitter';
-import type { IFlowConnection } from '../persistence/types';
+import type { FlowConnection } from '../persistence/FlowConnection';
 import { v4 as uuidv4 } from 'uuid';
 import type { Size } from './Size';
 
@@ -211,7 +211,7 @@ export class FlowDesigner {
       description: null,
       startInputOutputId: startBlockId,
       endInputOutputId: endBlockId
-    } as IFlowConnection;
+    } as FlowConnection;
 
     const connectionElement = new ConnectionElement(connection, startBlock, endBlock);
     this._connections.value.push(connectionElement);
@@ -219,12 +219,12 @@ export class FlowDesigner {
 
   public canConnect = (from: InputOutputElement, to: InputOutputElement): boolean => {
     // Connection must be between io is opposite direction
-    if (from.io.signalDirection === to.io.signalDirection) {
+    if (from.io.direction === to.io.direction) {
       return false;
     }
 
     // Connectors must have logic type match (eg, analogue / digital compatibility)
-    if (from.io.signalType != to.io.signalType) {
+    if (from.io.type != to.io.type) {
       return false;
     }
 

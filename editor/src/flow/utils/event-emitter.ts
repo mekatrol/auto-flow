@@ -24,7 +24,7 @@ import {
   CONNECTION_MOUSE_OVER,
   CONNECTION_MOUSE_UP
 } from '../constants';
-import type { IFlowConnection } from '../types/persistence/types';
+import type { FlowConnection } from '../types/persistence/FlowConnection';
 
 export interface FlowMouseEvent<T> {
   data: T;
@@ -154,7 +154,7 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
       description: null,
       startInputOutputId: e.inputOutput.io.id,
       endInputOutputId: ''
-    } as IFlowConnection;
+    } as FlowConnection;
 
     flowDesigner.drawingConnection.value = new ConnectionElement(connection, e.data, null);
     flowDesigner.drawingConnection.value.endLocation = { x: e.mouseEvent.offsetX, y: e.mouseEvent.offsetY };

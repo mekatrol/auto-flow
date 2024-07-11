@@ -1,10 +1,10 @@
 import { BLOCK_IO_SIZE } from '../../constants';
 import type { BlockSide } from './BlockSide';
 import { ElementType } from './ElementType';
-import type { InputOutput } from '../function/InputOutput';
 import type { Offset } from './Offset';
 import type { Size } from './Size';
 import type { BlockElement } from './BlockElement';
+import type { InputOutput } from '../persistence/InputOutput';
 
 export class InputOutputElement {
   type: ElementType;
