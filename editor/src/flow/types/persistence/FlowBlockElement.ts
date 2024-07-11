@@ -21,4 +21,13 @@ export interface FlowBlockElement {
   //  * higher zOrder items will be rendered over the top of lower zOrder items
   //  * clicking on a position will select the element with the highest zOrder at that position
   zOrder: number;
+
+  // The amount to boost the zOrder by. Use to bring element to front for operations such as dragging.
+  zBoost: number;
+
+  // zOrder + zBoost to give total z value
+  z: number;
+
+  // True if the element is currently selected
+  selected: boolean;
 }

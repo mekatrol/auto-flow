@@ -25,6 +25,7 @@ import {
   CONNECTION_MOUSE_UP
 } from '../constants';
 import type { FlowConnection } from '../types/persistence/FlowConnection';
+import type { FlowBlockElement } from '../types/persistence/FlowBlockElement';
 
 export interface FlowMouseEvent<T> {
   data: T;
@@ -36,10 +37,10 @@ export interface ElementChangedEvent {
 }
 
 // An event from a flow block
-export interface FlowBlockMouseEvent extends FlowMouseEvent<BlockElement> {}
+export interface FlowBlockMouseEvent extends FlowMouseEvent<FlowBlockElement> {}
 
 // A mouse event from a flow block io (includes the block that the io is attached to)
-export interface FlowNodeConnectorMouseEvent extends FlowBlockMouseEvent {
+export interface FlowBlockConnectorMouseEvent extends FlowBlockMouseEvent {
   inputOutput: InputOutputElement;
 }
 
@@ -65,12 +66,12 @@ export type FlowEvents = {
   /*
    * Block input/output mouse events
    */
-  blockConnectorMouseMove: FlowNodeConnectorMouseEvent;
-  blockConnectorMouseOver: FlowNodeConnectorMouseEvent;
-  blockConnectorMouseEnter: FlowNodeConnectorMouseEvent;
-  blockConnectorMouseLeave: FlowNodeConnectorMouseEvent;
-  blockConnectorMouseDown: FlowNodeConnectorMouseEvent;
-  blockConnectorMouseUp: FlowNodeConnectorMouseEvent;
+  blockIOMouseMove: FlowBlockConnectorMouseEvent;
+  blockIOMouseOver: FlowBlockConnectorMouseEvent;
+  blockIOMouseEnter: FlowBlockConnectorMouseEvent;
+  blockIOMouseLeave: FlowBlockConnectorMouseEvent;
+  blockIOMouseDown: FlowBlockConnectorMouseEvent;
+  blockIOMouseUp: FlowBlockConnectorMouseEvent;
 
   /*
    * Connection mouse events
@@ -101,7 +102,7 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
     flowDesigner.clearSelectedItems();
     flowDesigner.selectedBlock = e.data;
     flowDesigner.dragBlock.value = e.data;
-    flowDesigner.dragBlock.value.zBoost = 0;
+    (flowDesigner.dragBlock.value as BlockElement).zBoost = 0;
     flowDesigner.dragBlockOffset.value = { x: e.mouseEvent.offsetX - e.data.location.x, y: e.mouseEvent.offsetY - e.data.location.y };
     flowDesigner.dragBlockOriginalPosition.value = { x: e.data.location.x, y: e.data.location.y };
   });
@@ -109,7 +110,7 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
   emitter.on(BLOCK_MOUSE_UP, (_e: FlowBlockMouseEvent) => {
     // Restore drag block boost if a block is being dragged
     if (flowDesigner.dragBlock.value) {
-      flowDesigner.dragBlock.value.zBoost = 0;
+      (flowDesigner.dragBlock.value as BlockElement).zBoost = 0;
     }
 
     // Clear drag block
@@ -156,7 +157,7 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
       endInputOutputId: ''
     } as FlowConnection;
 
-    flowDesigner.drawingConnection.value = new ConnectionElement(connection, e.data, null);
+    flowDesigner.drawingConnection.value = new ConnectionElement(connection, e.data as BlockElement, null);
     flowDesigner.drawingConnection.value.endLocation = { x: e.mouseEvent.offsetX, y: e.mouseEvent.offsetY };
   });
 

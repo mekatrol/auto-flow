@@ -26,7 +26,10 @@ const loadBlock = (flow: Flow, elements: Record<string, any>, flowFunction: Flow
       location: { x: Math.floor(Math.random() * maxX), y: Math.floor(Math.random() * maxY) },
       size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
       icon: flowFunction.type.toUpperCase(),
-      zOrder: 1
+      selected: false,
+      zOrder: 1,
+      zBoost: 0,
+      z: 1
     };
   }
 
@@ -53,7 +56,7 @@ const loadBlock = (flow: Flow, elements: Record<string, any>, flowFunction: Flow
     elements[io.id] = inputOutputElement;
   }
 
-  layoutInputOutputs(blockElement);
+  layoutInputOutputs(blockElement.size, blockElement.io);
 };
 
 const loadConnection = (flow: Flow, elements: Record<string, any>, flowConnection: FlowConnection): void => {

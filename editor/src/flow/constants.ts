@@ -20,12 +20,12 @@ export const BLOCK_MOUSE_LEAVE = 'blockMouseLeave';
 export const BLOCK_MOUSE_DOWN = 'blockMouseDown';
 export const BLOCK_MOUSE_UP = 'blockMouseUp';
 
-export const BLOCK_IO_MOUSE_MOVE = 'blockConnectorMouseMove';
-export const BLOCK_IO_MOUSE_OVER = 'blockConnectorMouseOver';
-export const BLOCK_IO_MOUSE_ENTER = 'blockConnectorMouseEnter';
-export const BLOCK_IO_MOUSE_LEAVE = 'blockConnectorMouseLeave';
-export const BLOCK_IO_MOUSE_DOWN = 'blockConnectorMouseDown';
-export const BLOCK_IO_MOUSE_UP = 'blockConnectorMouseUp';
+export const BLOCK_IO_MOUSE_MOVE = 'blockIOMouseMove';
+export const BLOCK_IO_MOUSE_OVER = 'blockIOMouseOver';
+export const BLOCK_IO_MOUSE_ENTER = 'blockIOMouseEnter';
+export const BLOCK_IO_MOUSE_LEAVE = 'blockIOMouseLeave';
+export const BLOCK_IO_MOUSE_DOWN = 'blockIOMouseDown';
+export const BLOCK_IO_MOUSE_UP = 'blockIOMouseUp';
 
 export const CONNECTION_MOUSE_MOVE = 'connectionMouseMove';
 export const CONNECTION_MOUSE_OVER = 'connectionMouseOver';

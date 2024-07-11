@@ -9,18 +9,19 @@ import { configureFlowMouseEvents } from '../../utils/event-emitter';
 import type { FlowConnection } from '../persistence/FlowConnection';
 import { v4 as uuidv4 } from 'uuid';
 import type { Size } from './Size';
+import type { FlowBlockElement } from '../persistence/FlowBlockElement';
 
 export class FlowDesigner {
   private _viewSize: Ref<{ width: number; height: number }>;
-  private _blocks: Ref<BlockElement[]>;
+  private _blocks: Ref<FlowBlockElement[]>;
   private _connections: Ref<ConnectionElement[]>;
   private _zOrder: ZOrder;
   private _gridSize: Ref<number>;
   private _drawingConnection = ref<ConnectionElement | undefined>(undefined);
   private _drawingConnectionEndConnector = ref<InputOutputElement | undefined>(undefined);
   private _selectedConnection = ref<ConnectionElement | undefined>(undefined);
-  private _selectedBlock = ref<BlockElement | undefined>(undefined);
-  private _dragBlock = ref<BlockElement | undefined>(undefined);
+  private _selectedBlock = ref<FlowBlockElement | undefined>(undefined);
+  private _dragBlock = ref<FlowBlockElement | undefined>(undefined);
   private _dragBlockOffset = ref<Offset>({ x: 0, y: 0 });
   private _dragBlockOriginalPosition = ref<Offset>({ x: 0, y: 0 });
 
@@ -32,7 +33,7 @@ export class FlowDesigner {
     this._zOrder = new ZOrder(this._blocks);
   }
 
-  public get blocks(): Ref<BlockElement[]> {
+  public get blocks(): Ref<FlowBlockElement[]> {
     return this._blocks;
   }
 
@@ -44,7 +45,7 @@ export class FlowDesigner {
     return this._viewSize;
   }
 
-  public get dragBlock(): Ref<BlockElement | undefined> {
+  public get dragBlock(): Ref<FlowBlockElement | undefined> {
     return this._dragBlock;
   }
 
@@ -64,11 +65,11 @@ export class FlowDesigner {
     return this._drawingConnectionEndConnector;
   }
 
-  public get selectedBlock(): BlockElement | undefined {
+  public get selectedBlock(): FlowBlockElement | undefined {
     return this._selectedBlock.value;
   }
 
-  public set selectedBlock(block: BlockElement | undefined) {
+  public set selectedBlock(block: FlowBlockElement | undefined) {
     // Clear any existing selections
     this.clearSelectedBlock();
 
@@ -132,7 +133,7 @@ export class FlowDesigner {
     }
 
     // Make sure all are deselected
-    this._blocks.value.forEach((n) => (n.selected = false));
+    this._blocks.value.forEach((b) => (b.selected = false));
   };
 
   public moveBlockZOrder = (action: string): void => {
@@ -270,7 +271,7 @@ export class FlowDesigner {
       const blockRelativeOffset: Offset = { x: e.offsetX - block.location.x, y: e.offsetY - block.location.y };
 
       // Are any input/output hit?
-      block.io.forEach((io) => {
+      (block as BlockElement).io.forEach((io) => {
         const boundingBox = this.getBoundingBox(io.location, io.size);
         if (this.boundingBoxContainsOffset(boundingBox, blockRelativeOffset)) {
           hitInputOutputs.push(io);
@@ -374,7 +375,7 @@ export class FlowDesigner {
     this.clearSelectedItems();
   };
 
-  public deleteBlock = (block: BlockElement): void => {
+  public deleteBlock = (block: FlowBlockElement): void => {
     // We must also delete any connections that connect to the node
     const connections = this._connections.value.filter((c) => c.startBlock === block || c.endBlock === block);
     connections.forEach((c) => this.deleteConnection(c));

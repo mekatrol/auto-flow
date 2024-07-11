@@ -1,10 +1,10 @@
 import type { Ref } from 'vue';
-import type { BlockElement } from './BlockElement';
+import type { FlowBlockElement } from '../persistence/FlowBlockElement';
 
 export class ZOrder {
-  private _blocks: Ref<BlockElement[]>;
+  private _blocks: Ref<FlowBlockElement[]>;
 
-  constructor(blocks: Ref<BlockElement[]>) {
+  constructor(blocks: Ref<FlowBlockElement[]>) {
     this._blocks = blocks;
   }
 
@@ -17,11 +17,11 @@ export class ZOrder {
   };
 
   public sort = (): void => {
-    this._blocks.value.sort((a: BlockElement, b: BlockElement) => a.z + a.zBoost - (b.z + b.zBoost));
+    this._blocks.value.sort((a: FlowBlockElement, b: FlowBlockElement) => a.z + a.zBoost - (b.z + b.zBoost));
     this.sequenceZOrder();
   };
 
-  private moveToFront = (selected: BlockElement): void => {
+  private moveToFront = (selected: FlowBlockElement): void => {
     if (!selected || !this._blocks || !this._blocks.value) {
       return;
     }
@@ -38,7 +38,7 @@ export class ZOrder {
     this.sort();
   };
 
-  private moveForward = (selected: BlockElement): void => {
+  private moveForward = (selected: FlowBlockElement): void => {
     if (!selected || !this._blocks || !this._blocks.value) {
       return;
     }
@@ -53,7 +53,7 @@ export class ZOrder {
     }
   };
 
-  private moveBackward = (selected: BlockElement): void => {
+  private moveBackward = (selected: FlowBlockElement): void => {
     if (!selected || !this._blocks || !this._blocks.value) {
       return;
     }
@@ -68,7 +68,7 @@ export class ZOrder {
     }
   };
 
-  private moveToBack = (selected: BlockElement): void => {
+  private moveToBack = (selected: FlowBlockElement): void => {
     if (!selected || !this._blocks || !this._blocks.value) {
       return;
     }
@@ -85,7 +85,7 @@ export class ZOrder {
     this.sort();
   };
 
-  public moveBlockZOrder = (action: string, selected: BlockElement): void => {
+  public moveBlockZOrder = (action: string, selected: FlowBlockElement): void => {
     switch (action) {
       case 'moveToFront':
         this.moveToFront(selected);

@@ -25,7 +25,7 @@
 
     <!-- Block icon -->
     <SvgIcon
-      :icon-name="block.flowFunction.type.toLowerCase()"
+      :icon-name="(block as BlockElement).flowFunction.type.toLowerCase()"
       :x="0"
       :y="0"
       :backgroundCornerRadius="theme.blockStyles.radius"
@@ -52,7 +52,7 @@
     <LabelControl
       :x="iconSize + textGapX"
       :y="block.size.height / 2"
-      :text="block.flowFunction.type.toUpperCase()"
+      :text="(block as BlockElement).flowFunction.type.toUpperCase()"
       vertical-alignment="middle"
       :color="theme.blockFunctionLabelStyles.color"
     />
@@ -61,7 +61,7 @@
     <LabelControl
       :x="0"
       :y="block.size.height + textGapY"
-      :text="block.flowFunction.label ?? ''"
+      :text="(block as BlockElement).flowFunction.label ?? ''"
       :color="theme.blockLabelStyles.color"
     />
 
@@ -79,13 +79,13 @@
 
     <!-- Block io -->
     <InputOutputControl
-      v-for="ioElement in block.io"
+      v-for="ioElement in io"
       :key="ioElement.io.id"
       :block="block"
       :inputOutput="ioElement"
-      :fill-color="theme.blockConnectorStyles.fill"
-      :stroke-color="theme.blockConnectorStyles.stroke"
-      :stroke-width="theme.blockConnectorStyles.strokeWidth"
+      :fill-color="theme.blockIOStyles.fill"
+      :stroke-color="theme.blockIOStyles.stroke"
+      :stroke-width="theme.blockIOStyles.strokeWidth"
     />
   </g>
 </template>
@@ -111,15 +111,26 @@ import {
   BLOCK_MOUSE_UP
 } from '../constants';
 import { useThemeStore } from '../stores/themeStore';
+import { InputOutputElement } from '../types/ui/InputOutputElement';
+import { InputOutputDirection } from '../types/InputOutputDirection';
+import { BlockSide } from '../types/ui/BlockSide';
+import { layoutInputOutputs } from '../utils/flow-element-helpers';
+import type { FlowBlockElement } from '../types/persistence/FlowBlockElement';
 
 const textGapX = 10;
 const textGapY = 5;
 
 interface Props {
-  block: BlockElement;
+  block: FlowBlockElement;
 }
 
 const props = defineProps<Props>();
+
+const io = (props.block as BlockElement).flowFunction.io.map(
+  (io) => new InputOutputElement(props.block as BlockElement, io.direction === InputOutputDirection.Input ? BlockSide.Left : BlockSide.Right, io)
+);
+
+layoutInputOutputs(props.block.size, io);
 
 // Make the icon size same as block height (less border size) so that it is displayed as a square.
 // Using height works because the aspect ratio of the block is always width > height
@@ -130,7 +141,7 @@ const emitter = useEmitter();
 const emit = (event: keyof FlowEvents, e: MouseEvent): boolean => {
   if (props.block) {
     emitter.emit(event, {
-      data: props.block,
+      data: props.block as BlockElement,
       mouseEvent: e
     });
   }
@@ -145,9 +156,9 @@ const markers = computed(() => {
   }
 
   return [
-    new MarkerShape('circle', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 1, MARKER_OFFSET_Y, props.block, 'black', 'yellow'),
-    new MarkerShape('triangle', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 2, MARKER_OFFSET_Y, props.block, 'darkred', 'coral'),
-    new MarkerShape('square', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 3, MARKER_OFFSET_Y, props.block, 'green', 'white')
+    new MarkerShape('circle', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 1, MARKER_OFFSET_Y, 'black', 'yellow'),
+    new MarkerShape('triangle', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 2, MARKER_OFFSET_Y, 'darkred', 'coral'),
+    new MarkerShape('square', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 3, MARKER_OFFSET_Y, 'green', 'white')
   ];
 });
 

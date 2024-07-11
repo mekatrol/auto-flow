@@ -142,21 +142,30 @@ export const useMockStore = defineStore('mock', () => {
           location: { x: 300, y: 100 },
           size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
           icon: '',
-          zOrder: 1
+          selected: false,
+          zOrder: 1,
+          zBoost: 0,
+          z: 1
         },
         {
           functionId: function2Id,
           location: { x: 700, y: 200 },
           size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
           icon: '',
-          zOrder: 1
+          selected: false,
+          zOrder: 1,
+          zBoost: 0,
+          z: 1
         },
         {
           functionId: function3Id,
           location: { x: 180, y: 200 },
           size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
           icon: '',
-          zOrder: 1
+          selected: false,
+          zOrder: 1,
+          zBoost: 0,
+          z: 1
         }
       ],
       connections: []

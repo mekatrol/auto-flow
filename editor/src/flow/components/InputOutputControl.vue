@@ -22,7 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import type { BlockElement } from '../types/ui/BlockElement';
 import type { InputOutputElement } from '../types/ui/InputOutputElement';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
 import {
@@ -33,9 +32,10 @@ import {
   BLOCK_IO_MOUSE_DOWN,
   BLOCK_IO_MOUSE_UP
 } from '../constants';
+import type { FlowBlockElement } from '../types/persistence/FlowBlockElement';
 
 interface Props {
-  block: BlockElement;
+  block: FlowBlockElement;
   inputOutput: InputOutputElement;
   fillColor?: string;
   strokeColor?: string;
