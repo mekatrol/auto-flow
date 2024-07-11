@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
-import { FunctionType } from '../types/FunctionType';
 import { InputOutputSignalType } from '../types/InputOutputSignalType';
 import { InputOutputDirection } from '../types/InputOutputDirection';
 import type { Flow } from '../types/Flow';
@@ -21,12 +20,6 @@ export const useMockStore = defineStore('mock', () => {
   const function2Id = uuidv4();
   const function3Id = uuidv4();
 
-  const function1OutputId = uuidv4();
-  const function2Input1Id = uuidv4();
-  const function2Input2Id = uuidv4();
-  const function3InputId = uuidv4();
-  const function3OutputId = uuidv4();
-
   const f = {
     functionality: {
       blocks: [
@@ -34,81 +27,19 @@ export const useMockStore = defineStore('mock', () => {
           id: function1Id,
           label: 'Block 1',
           description: 'Block 1 description',
-          type: FunctionType.And,
-          io: [
-            {
-              id: uuidv4(),
-              label: 'Input 1',
-              description: 'AND gate input 1',
-              type: InputOutputSignalType.Digital,
-              direction: InputOutputDirection.Input
-            },
-            {
-              id: uuidv4(),
-              label: 'Input 2',
-              description: 'AND gate input 2',
-              type: InputOutputSignalType.Digital,
-              direction: InputOutputDirection.Input
-            },
-            {
-              id: function1OutputId,
-              label: 'Output',
-              description: 'AND gate output',
-              type: InputOutputSignalType.Digital,
-              direction: InputOutputDirection.Output
-            }
-          ]
+          functionType: 'AND'
         } as FlowFunction,
         {
           id: function2Id,
           label: 'Block 2',
           description: 'Block 2 description',
-          type: FunctionType.Or,
-          io: [
-            {
-              id: function2Input1Id,
-              label: 'Input 1',
-              description: 'OR gate input 1',
-              type: InputOutputSignalType.Digital,
-              direction: InputOutputDirection.Input
-            },
-            {
-              id: function2Input2Id,
-              label: 'Input 2',
-              description: 'OR gate input 2',
-              type: InputOutputSignalType.Digital,
-              direction: InputOutputDirection.Input
-            },
-            {
-              id: uuidv4(),
-              label: 'Output',
-              description: 'OR gate output',
-              type: InputOutputSignalType.Digital,
-              direction: InputOutputDirection.Output
-            }
-          ]
+          functionType: 'OR'
         } as FlowFunction,
         {
           id: function3Id,
           label: 'Block 3',
           description: 'Block 3 description',
-          type: FunctionType.Invert,
-          io: [
-            {
-              id: function3InputId,
-              label: 'Input',
-              description: 'NOT gate input',
-              type: InputOutputSignalType.Digital,
-              direction: InputOutputDirection.Input
-            },
-            {
-              id: function3OutputId,
-              label: 'Output',
-              description: 'NOT gate output',
-              type: InputOutputSignalType.Digital,
-              direction: InputOutputDirection.Output
-            }
-          ]
+          functionType: 'NOT'
         } as FlowFunction
       ],
       connections: [
@@ -116,22 +47,28 @@ export const useMockStore = defineStore('mock', () => {
           id: uuidv4(),
           label: null,
           description: null,
-          startInputOutputId: function1OutputId,
-          endInputOutputId: function2Input1Id
+          startBlockId: function1Id,
+          startPin: 3,
+          endBlockId: function2Id,
+          endPin: 1
         },
         {
           id: uuidv4(),
           label: null,
           description: null,
-          startInputOutputId: function3OutputId,
-          endInputOutputId: function2Input2Id
+          startBlockId: function3Id,
+          startPin: 2,
+          endBlockId: function2Id,
+          endPin: 2
         },
         {
           id: uuidv4(),
           label: null,
           description: null,
-          startInputOutputId: function1OutputId,
-          endInputOutputId: function3InputId
+          startBlockId: function1Id,
+          startPin: 3,
+          endBlockId: function3Id,
+          endPin: 1
         }
       ]
     } as FlowFunctionality,

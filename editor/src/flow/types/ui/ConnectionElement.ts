@@ -27,12 +27,12 @@ export class ConnectionElement {
     return this._startBlock;
   }
 
-  public get startBlockInputOutputId(): string {
-    return this._connection.startInputOutputId;
+  public get startPin(): number {
+    return this._connection.startPin;
   }
 
   public getStartOffset(): Offset {
-    const startInputOutput = this._startBlock.io.find((c) => c.io.id == this.startBlockInputOutputId)!;
+    const startInputOutput = this._startBlock.io.find((c) => c.io.pin == this.startPin)!;
     return {
       x: this._startBlock.location.x + startInputOutput.location.x,
       y: this._startBlock.location.y + startInputOutput.location.y + startInputOutput.size.height / 2
@@ -40,12 +40,12 @@ export class ConnectionElement {
   }
 
   public getStartSide(): BlockSide {
-    const startConnector = this._startBlock.io.find((c) => c.io.id == this.startBlockInputOutputId)!;
+    const startConnector = this._startBlock.io.find((c) => c.io.pin == this.startPin)!;
     return startConnector.side;
   }
 
   public getStartInputOutput(): InputOutputElement {
-    return this._startBlock.io.find((c) => c.io.id === this.startBlockInputOutputId)!;
+    return this._startBlock.io.find((c) => c.io.pin === this.startPin)!;
   }
 
   public getEndInputOutput(): InputOutputElement | undefined {
@@ -54,7 +54,7 @@ export class ConnectionElement {
       return undefined;
     }
 
-    return this._endBlock.io.find((c) => c.io.id === this.endBlockInputOutputId)!;
+    return this._endBlock.io.find((c) => c.io.pin === this.endPin)!;
   }
 
   public get endBlock(): BlockElement | undefined {
@@ -66,8 +66,8 @@ export class ConnectionElement {
     return this._endBlock;
   }
 
-  public get endBlockInputOutputId(): string | undefined {
-    return this._connection.endInputOutputId;
+  public get endPin(): number | undefined {
+    return this._connection.endPin;
   }
 
   public getEndOffset(): Offset | undefined {
@@ -78,7 +78,7 @@ export class ConnectionElement {
       return this.endLocation;
     }
 
-    const endInputOutput = this._endBlock.io.find((c) => c.io.id == this.endBlockInputOutputId)!;
+    const endInputOutput = this._endBlock.io.find((c) => c.io.pin == this.endPin)!;
     return {
       x: this._endBlock.location.x + endInputOutput.location.x,
       y: this._endBlock.location.y + endInputOutput.location.y + endInputOutput.size.height / 2
@@ -86,7 +86,7 @@ export class ConnectionElement {
   }
 
   public getEndSide(): BlockSide | undefined {
-    const endConnector = this.endBlock?.io.find((c) => c.io.id == this.endBlockInputOutputId);
+    const endConnector = this.endBlock?.io.find((c) => c.io.pin == this.endPin);
     return endConnector?.side;
   }
 }

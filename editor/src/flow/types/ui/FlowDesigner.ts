@@ -201,16 +201,16 @@ export class FlowDesigner {
     }
 
     const startBlock = this._drawingConnection.value.startBlock;
-    const startBlockId = this._drawingConnection.value?.startBlockInputOutputId;
+    const startBlockId = this._drawingConnection.value?.startPin;
     const endBlock = this._drawingConnectionEndConnector.value?.parent! as BlockElement;
-    const endBlockId = this._drawingConnectionEndConnector.value.io.id;
+    const endBlockId = this._drawingConnectionEndConnector.value.io.pin;
 
     const connection = {
       id: uuidv4(),
       label: null,
       description: null,
-      startInputOutputId: startBlockId,
-      endInputOutputId: endBlockId
+      startPin: startBlockId,
+      endPin: endBlockId
     } as FlowConnection;
 
     const connectionElement = new ConnectionElement(connection, startBlock, endBlock);

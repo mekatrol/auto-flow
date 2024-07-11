@@ -1,5 +1,3 @@
-import { FunctionType } from '../../FunctionType';
-
 export interface ElementStyles {
   color: string;
   fill: string;
@@ -91,53 +89,53 @@ export const defaultTheme: ThemeDefinition = {
   }
 };
 
-export const getBlockTheme = (type: FunctionType): ThemeDefinition => {
-  switch (type) {
-    case FunctionType.And:
+export const getBlockTheme = (functionType: string): ThemeDefinition => {
+  switch (functionType) {
+    case 'And':
       return defaultTheme;
-    case FunctionType.Average:
+    case 'Average':
       return defaultTheme;
-    case FunctionType.Calculator:
+    case 'Calculator':
       return defaultTheme;
-    case FunctionType.Calendar:
+    case 'Calendar':
       return defaultTheme;
-    case FunctionType.Clamp:
+    case 'Clamp':
       return defaultTheme;
-    case FunctionType.Comparator:
+    case 'Comparator':
       return defaultTheme;
-    case FunctionType.Delay:
+    case 'Delay':
       return defaultTheme;
-    case FunctionType.If:
+    case 'If':
       return defaultTheme;
-    case FunctionType.Invert:
+    case 'Invert':
       return defaultTheme;
-    case FunctionType.Max:
+    case 'Max':
       return defaultTheme;
-    case FunctionType.Min:
+    case 'Min':
       return defaultTheme;
-    case FunctionType.Or:
+    case 'Or':
       return defaultTheme;
-    case FunctionType.Override:
+    case 'Override':
       return defaultTheme;
-    case FunctionType.Pid:
+    case 'Pid':
       return defaultTheme;
-    case FunctionType.Pulse:
+    case 'Pulse':
       return defaultTheme;
-    case FunctionType.Schedule:
+    case 'Schedule':
       return defaultTheme;
-    case FunctionType.Selector:
+    case 'Selector':
       return defaultTheme;
-    case FunctionType.Sequence:
+    case 'Sequence':
       return defaultTheme;
-    case FunctionType.Span:
+    case 'Span':
       return defaultTheme;
-    case FunctionType.Split:
+    case 'Split':
       return defaultTheme;
-    case FunctionType.Timer:
+    case 'Timer':
       return defaultTheme;
-    case FunctionType.Xnor:
+    case 'Xnor':
       return defaultTheme;
-    case FunctionType.Xor:
+    case 'Xor':
       return defaultTheme;
     default:
       return defaultTheme;

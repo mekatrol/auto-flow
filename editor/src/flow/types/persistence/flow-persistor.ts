@@ -9,6 +9,7 @@ import { BlockSide } from '../ui/BlockSide';
 import { ConnectionElement } from '../ui/ConnectionElement';
 import { layoutInputOutputs } from '@/flow/utils/flow-element-helpers';
 import { BLOCK_HEIGHT, BLOCK_WIDTH } from '@/flow/constants';
+import { useFlowStore } from '@/flow/stores/flowStore';
 
 // Loaded functions and connections that do no have a matching element definition with have their location
 // randomized such that (0, 0) <= (x,y) <= (maxX, maxY)
@@ -25,7 +26,7 @@ const loadBlock = (flow: Flow, elements: Record<string, any>, flowFunction: Flow
       functionId: flowFunction.id,
       location: { x: Math.floor(Math.random() * maxX), y: Math.floor(Math.random() * maxY) },
       size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
-      icon: flowFunction.type.toUpperCase(),
+      icon: flowFunction.functionType.toUpperCase(),
       selected: false,
       zOrder: 1,
       zBoost: 0,
@@ -33,8 +34,20 @@ const loadBlock = (flow: Flow, elements: Record<string, any>, flowFunction: Flow
     };
   }
 
+  const { functionConfigurations } = useFlowStore();
+  const config = functionConfigurations.find((f) => f.type === flowFunction.functionType);
+
+  if (!config) {
+    throw new Error(
+      `The flow function with ID '${flowFunction.id}' references the block configuration type '${flowFunction.functionType}' which does not exist.`
+    );
+  }
+
+  // Populate function with copy of IO values
+  flowFunction.io = config.io.map((io) => ({ ...io }));
+
   // Create a block element for the flow function
-  const blockElement = new BlockElement(loadedFlowElement, flowFunction.type, flowFunction);
+  const blockElement = new BlockElement(loadedFlowElement, config.type.toLowerCase(), flowFunction);
 
   // Add to dictionary of keyed elements
   elements[flowFunction.id] = blockElement;
@@ -53,18 +66,15 @@ const loadBlock = (flow: Flow, elements: Record<string, any>, flowFunction: Flow
     inputOutputElement.parent = blockElement;
 
     // Add to dictionary of keyed elements
-    elements[io.id] = inputOutputElement;
+    elements[io.pin] = inputOutputElement;
   }
 
   layoutInputOutputs(blockElement.size, blockElement.io);
 };
 
 const loadConnection = (flow: Flow, elements: Record<string, any>, flowConnection: FlowConnection): void => {
-  const startInputOutput = elements[flowConnection.startInputOutputId];
-  const endInputOutput = elements[flowConnection.endInputOutputId];
-
-  const startBlock = startInputOutput.parent! as BlockElement;
-  const endBlock = endInputOutput.parent! as BlockElement;
+  const startBlock = elements[flowConnection.startBlockId] as BlockElement;
+  const endBlock = elements[flowConnection.endBlockId] as BlockElement;
 
   const connectionElement = new ConnectionElement(flowConnection, startBlock, endBlock);
 

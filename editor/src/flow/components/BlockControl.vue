@@ -25,11 +25,10 @@
 
     <!-- Block icon -->
     <SvgIcon
-      :icon-name="block.flowFunction.type.toLowerCase()"
+      :icon="props.block.icon"
       :x="0"
       :y="0"
       :backgroundCornerRadius="theme.blockStyles.radius"
-      :icon="props.block.icon"
       :size="iconSize"
       :svg-fill="theme.blockIconStyles.svg.fill"
       :svg-fill-opacity="theme.blockIconStyles.svg.opacity"
@@ -52,7 +51,7 @@
     <LabelControl
       :x="iconSize + textGapX"
       :y="block.size.height / 2"
-      :text="block.flowFunction.type.toUpperCase()"
+      :text="block.flowFunction.functionType.toUpperCase()"
       vertical-alignment="middle"
       :color="theme.blockFunctionLabelStyles.color"
     />
@@ -80,7 +79,7 @@
     <!-- Block io -->
     <InputOutputControl
       v-for="ioElement in io"
-      :key="ioElement.io.id"
+      :key="ioElement.io.pin"
       :block="block"
       :inputOutput="ioElement"
       :fill-color="theme.blockIOStyles.fill"

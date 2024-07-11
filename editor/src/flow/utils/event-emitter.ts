@@ -154,8 +154,8 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
       id: uuidv4(),
       label: null,
       description: null,
-      startInputOutputId: e.inputOutput.io.id,
-      endInputOutputId: ''
+      startPin: e.inputOutput.io.pin,
+      endPin: 0
     } as FlowConnection;
 
     flowDesigner.drawingConnection.value = new ConnectionElement(connection, e.data as BlockElement, null);

@@ -8,9 +8,15 @@ export interface FlowConnection {
   // The connection description (if defined)
   description: string | null;
 
-  // The ID of the input/output that this connection starts from
-  startInputOutputId: string;
+  // ID of the block the connection starts from
+  startBlockId: string;
 
-  // The ID of the input/output that this connection ends at
-  endInputOutputId: string;
+  // The pin number of the input/output that this connection starts from
+  startPin: number;
+
+  // ID of the block the connection ends at
+  endBlockId: string;
+
+  // The pin number of the input/output that this connection ends at
+  endPin: number;
 }

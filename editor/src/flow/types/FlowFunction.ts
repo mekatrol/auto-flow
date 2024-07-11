@@ -1,4 +1,3 @@
-import type { FunctionType } from './FunctionType';
 import type { InputOutput } from './InputOutput';
 
 export interface FlowFunction {
@@ -11,8 +10,8 @@ export interface FlowFunction {
   // The block description (if defined)
   description: string;
 
-  // The block function type
-  type: FunctionType;
+  // The block function configuration type
+  functionType: string;
 
   // The input / outputs for this block
   io: InputOutput[];

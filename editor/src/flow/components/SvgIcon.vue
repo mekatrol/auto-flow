@@ -31,7 +31,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 
 interface Props {
-  iconName: string;
+  icon: string;
   iconScale?: number;
   x: number;
   y: number;
@@ -68,7 +68,7 @@ const props = withDefaults(defineProps<Props>(), {
 const icon = ref(null);
 
 const fetchIcon = async () => {
-  const iconUri = `/function-icons/${props.iconName}.svg`;
+  const iconUri = `/function-icons/${props.icon}.svg`;
   fetch(iconUri)
     .then((response) => response.text())
     .then((htmlText) => {
@@ -112,7 +112,7 @@ const iconTranslateOffset = computed(() => {
 });
 
 watch(
-  () => props.iconName,
+  () => props.icon,
   async () => {
     await fetchIcon();
   }

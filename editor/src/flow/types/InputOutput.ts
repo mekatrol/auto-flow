@@ -1,9 +1,10 @@
 import type { InputOutputDirection } from './InputOutputDirection';
 import type { InputOutputSignalType } from './InputOutputSignalType';
+import type { BlockSide } from './ui/BlockSide';
 
 export interface InputOutput {
-  // The unique ID of this input/output
-  id: string;
+  // The unique pin number of this input/output for a given function block
+  pin: number;
 
   // The input/output label (if defined)
   label: string | null;
@@ -16,4 +17,7 @@ export interface InputOutput {
 
   // The direction for this input/output relative to the block it belongs to
   direction: InputOutputDirection;
+
+  // Indicates the side of the block that this IO should be displayed.
+  side: BlockSide;
 }

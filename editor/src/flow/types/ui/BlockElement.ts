@@ -1,5 +1,4 @@
 import { ElementType } from './ElementType';
-import { FunctionType } from '../FunctionType';
 import { BlockSide } from './BlockSide';
 import { InputOutputElement } from './InputOutputElement';
 import { InputOutputDirection } from '../InputOutputDirection';
@@ -25,8 +24,8 @@ export class BlockElement implements FlowBlockElement {
 
   public selected: boolean = false;
 
-  constructor(element: FlowBlockElement, functionType: FunctionType, flowFunction: FlowFunction) {
-    this.icon = functionType.toLowerCase();
+  constructor(element: FlowBlockElement, icon: string, flowFunction: FlowFunction) {
+    this.icon = icon;
     this.flowFunction = flowFunction;
     this.functionId = flowFunction.id;
     this.type = ElementType.Block;
