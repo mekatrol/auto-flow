@@ -162,7 +162,6 @@ const f = {
 } as IFlow;
 
 const flow: IFlow = loadFlowFromJson(JSON.stringify(f));
-console.log(flow);
 
 // Must be done before constructing any blocks or connections
 const flowDesigner = initFlowDesignController(screenSize, gridSize);
