@@ -137,17 +137,23 @@ export const useMockStore = defineStore('mock', () => {
         {
           functionId: function1Id,
           location: { x: 300, y: 100 },
-          size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT }
+          size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
+          icon: '',
+          zOrder: 1
         },
         {
           functionId: function2Id,
           location: { x: 700, y: 200 },
-          size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT }
+          size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
+          icon: '',
+          zOrder: 1
         },
         {
           functionId: function3Id,
           location: { x: 180, y: 200 },
-          size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT }
+          size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
+          icon: '',
+          zOrder: 1
         }
       ],
       connections: []

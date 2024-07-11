@@ -39,7 +39,7 @@
       :background-opacity="theme.blockIconStyles.background.opacity"
     />
 
-    <!-- icon right border -->
+    <!-- Icon right border -->
     <path
       :d="`M ${iconSize - 0.5} ${0.5} l 0 ${iconSize - 1}`"
       class="separator"
@@ -52,7 +52,7 @@
     <LabelControl
       :x="iconSize + textGapX"
       :y="block.size.height / 2"
-      :text="block.flowFunction.label ?? ''"
+      :text="block.flowFunction.type.toUpperCase()"
       vertical-alignment="middle"
       :color="theme.blockFunctionLabelStyles.color"
     />
@@ -61,11 +61,11 @@
     <LabelControl
       :x="0"
       :y="block.size.height + textGapY"
-      :text="block.label ?? ''"
+      :text="block.flowFunction.label ?? ''"
       :color="theme.blockLabelStyles.color"
     />
 
-    <!-- block markers -->
+    <!-- Block markers -->
     <MarkerControl
       v-for="(marker, i) in markers"
       :key="i"
@@ -77,9 +77,9 @@
       :stroke-color="marker.strokeColor"
     />
 
-    <!-- block io -->
+    <!-- Block io -->
     <InputOutputControl
-      v-for="ioElement in alignedInputOutputs"
+      v-for="ioElement in block.io"
       :key="ioElement.io.id"
       :block="block"
       :inputOutput="ioElement"
@@ -95,16 +95,11 @@ import LabelControl from './LabelControl.vue';
 import MarkerControl from './MarkerControl.vue';
 import InputOutputControl from './InputOutputControl.vue';
 import SvgIcon from './SvgIcon.vue';
-import { type EnumDictionary } from '../types/EnumDictionary';
 import { BlockElement } from '../types/ui/BlockElement';
 import { MarkerShape } from '../types/ui/MarkerShape';
-import { InputOutputElement } from '../types/ui/InputOutputElement';
 import { computed } from 'vue';
-import { BlockSide } from '../types/ui/BlockSide';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
 import {
-  BLOCK_IO_OFFSET,
-  BLOCK_IO_SIZE,
   MARKER_OFFSET_X,
   MARKER_OFFSET_Y,
   MARKER_SIZE,
@@ -116,7 +111,6 @@ import {
   BLOCK_MOUSE_UP
 } from '../constants';
 import { useThemeStore } from '../stores/themeStore';
-import type { Offset } from '../types/ui/Offset';
 
 const textGapX = 10;
 const textGapY = 5;
@@ -155,49 +149,6 @@ const markers = computed(() => {
     new MarkerShape('triangle', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 2, MARKER_OFFSET_Y, props.block, 'darkred', 'coral'),
     new MarkerShape('square', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 3, MARKER_OFFSET_Y, props.block, 'green', 'white')
   ];
-});
-
-const getConnectorOffsets = (block: BlockElement, offset: number): EnumDictionary<BlockSide, Offset> => {
-  const ioOffsets: EnumDictionary<BlockSide, Offset> = {
-    [BlockSide.Left]: { x: -(BLOCK_IO_SIZE - BLOCK_IO_OFFSET), y: offset },
-    [BlockSide.Top]: { x: offset, y: -BLOCK_IO_OFFSET },
-    [BlockSide.Right]: { x: block.size.width - BLOCK_IO_OFFSET, y: offset },
-    [BlockSide.Bottom]: { x: offset, y: block.size.height - BLOCK_IO_OFFSET }
-  };
-
-  return ioOffsets;
-};
-
-const transformConnectors = (side: BlockSide): InputOutputElement[] => {
-  if (!props.block) {
-    return [];
-  }
-
-  const io = props.block.io.filter((x) => x.side === side);
-
-  const ioOffsets = getConnectorOffsets(props.block, 5);
-
-  let shift = 0;
-  io.forEach((c) => {
-    const shiftHorizontal = c.side === BlockSide.Top || c.side === BlockSide.Bottom;
-    const offset = ioOffsets[side];
-    c.location.x = offset.x + (shiftHorizontal ? shift : 0);
-    c.location.y = offset.y + (!shiftHorizontal ? shift : 0);
-    shift += BLOCK_IO_SIZE + (BLOCK_IO_SIZE >> 1);
-  });
-
-  return io;
-};
-
-const alignedInputOutputs = computed((): InputOutputElement[] => {
-  const io = [];
-
-  io.push(...transformConnectors(BlockSide.Left));
-  io.push(...transformConnectors(BlockSide.Top));
-  io.push(...transformConnectors(BlockSide.Right));
-  io.push(...transformConnectors(BlockSide.Bottom));
-
-  return io;
 });
 
 const { theme } = useThemeStore();

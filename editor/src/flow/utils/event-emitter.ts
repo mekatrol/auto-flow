@@ -25,7 +25,6 @@ import {
   CONNECTION_MOUSE_UP,
   ELEMENT_CHANGED
 } from '../constants';
-import type { FlowElement } from '../types/ui/FlowElement';
 import type { IFlowConnection } from '../types/persistence/types';
 
 export interface FlowMouseEvent<T> {
@@ -34,7 +33,7 @@ export interface FlowMouseEvent<T> {
 }
 
 export interface ElementChangedEvent {
-  element: FlowElement;
+  element: any;
 }
 
 // An event from a flow block
@@ -163,7 +162,7 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
     } as IFlowConnection;
 
     flowDesigner.drawingConnection.value = new ConnectionElement(connection, e.data, null);
-    flowDesigner.drawingConnection.value.location = { x: e.mouseEvent.offsetX, y: e.mouseEvent.offsetY };
+    flowDesigner.drawingConnection.value.endLocation = { x: e.mouseEvent.offsetX, y: e.mouseEvent.offsetY };
   });
 
   emitter.on(CONNECTION_MOUSE_MOVE, (_e) => {

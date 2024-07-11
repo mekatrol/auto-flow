@@ -2,17 +2,21 @@ import type { BlockSide } from './BlockSide';
 import { type Offset } from './Offset';
 import { BlockElement } from './BlockElement';
 import { InputOutputElement } from './InputOutputElement';
-import { LabelledElement } from './LabelledElement';
 import { ElementType } from './ElementType';
 import type { FlowConnection } from '../function/FlowConnection';
 
-export class ConnectionElement extends LabelledElement {
+export class ConnectionElement {
+  public type: ElementType;
+
   public _connection: FlowConnection;
   public _startBlock: BlockElement;
   public _endBlock: BlockElement | null;
+  public selected: boolean = false;
+
+  public endLocation: Offset | undefined = undefined;
 
   constructor(connection: FlowConnection, startBlock: BlockElement, endBlock: BlockElement | null) {
-    super(connection.label, connection.description, ElementType.Connection, { x: 0, y: 0 }, { width: 0, height: 0 }); // Start with no size, will calculate later
+    this.type = ElementType.Connection;
     this._connection = connection;
     this._startBlock = startBlock;
     this._endBlock = endBlock;
@@ -70,7 +74,7 @@ export class ConnectionElement extends LabelledElement {
     if (!this._endBlock) {
       // If no end block then we must be creating a connection so return
       // location (which is set to end off connection offset)
-      return this.location;
+      return this.endLocation;
     }
 
     const endInputOutput = this._endBlock.io.find((c) => c.io.id == this.endBlockInputOutputId)!;

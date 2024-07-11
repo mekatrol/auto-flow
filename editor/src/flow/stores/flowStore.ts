@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
-import type { FlowElement } from '../types/ui/FlowElement';
 
-const flowElements: Record<string, FlowElement> = {};
+const flowElements: Record<string, any> = {};
 
 const clearElements = (): void => {
   for (const key in flowElements) {
