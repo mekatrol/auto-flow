@@ -12,6 +12,7 @@ export class ConnectionElement {
   public _startBlock: BlockElement;
   public _endBlock: BlockElement | null;
   public selected: boolean = false;
+  public cssClasses: string = '';
 
   public endLocation: Offset | undefined = undefined;
 

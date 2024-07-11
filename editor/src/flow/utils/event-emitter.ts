@@ -22,8 +22,7 @@ import {
   CONNECTION_MOUSE_LEAVE,
   CONNECTION_MOUSE_MOVE,
   CONNECTION_MOUSE_OVER,
-  CONNECTION_MOUSE_UP,
-  ELEMENT_CHANGED
+  CONNECTION_MOUSE_UP
 } from '../constants';
 import type { IFlowConnection } from '../types/persistence/types';
 
@@ -89,10 +88,6 @@ const emitter: Emitter<FlowEvents> = mitt<FlowEvents>();
 
 export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
   const emitter = useEmitter();
-
-  emitter.on(ELEMENT_CHANGED, (e: ElementChangedEvent) => {
-    flowDesigner.update(e.element);
-  });
 
   emitter.on(BLOCK_MOUSE_ENTER, (_e: FlowBlockMouseEvent) => {
     // console.log(`block mouse enter: ${e.data.id}`, e);
