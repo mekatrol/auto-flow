@@ -1,26 +1,28 @@
 import { computed, type Ref, ref } from 'vue';
-import { UIBlockConnectorElement } from './UIBlockConnectorElement';
-import { UIConnectionElement } from './UIConnectionElement';
-import { UIElement } from './UIElement';
+import { InputOutputElement } from './InputOutputElement';
+import { ConnectionElement } from './ConnectionElement';
+import { FlowElement } from './FlowElement';
 import type { Offset } from './Offset';
-import { UIBlockElement } from './UIBlockElement';
+import { BlockElement } from './BlockElement';
 import { ZOrder } from './ZOrder';
 import type { Line } from './Line';
-import type { UILabelledElement } from './UILabelledElement';
+import type { LabelledElement } from './LabelledElement';
 import { configureFlowMouseEvents } from '../../utils/event-emitter';
-import { UIElementType } from './UIElementType';
+import { ElementType } from './ElementType';
+import type { IFlowConnection } from '../persistence/types';
+import { v4 as uuidv4 } from 'uuid';
 
 export class FlowDesigner {
   private _viewSize: Ref<{ width: number; height: number }>;
-  private _blocks: Ref<UIBlockElement[]>;
-  private _connections: Ref<UIConnectionElement[]>;
+  private _blocks: Ref<BlockElement[]>;
+  private _connections: Ref<ConnectionElement[]>;
   private _zOrder: ZOrder;
   private _gridSize: Ref<number>;
-  private _drawingConnection = ref<UIConnectionElement | undefined>(undefined);
-  private _drawingConnectionEndConnector = ref<UIBlockConnectorElement | undefined>(undefined);
-  private _selectedConnection = ref<UIConnectionElement | undefined>(undefined);
-  private _selectedBlock = ref<UIBlockElement | undefined>(undefined);
-  private _dragBlock = ref<UIBlockElement | undefined>(undefined);
+  private _drawingConnection = ref<ConnectionElement | undefined>(undefined);
+  private _drawingConnectionEndConnector = ref<InputOutputElement | undefined>(undefined);
+  private _selectedConnection = ref<ConnectionElement | undefined>(undefined);
+  private _selectedBlock = ref<BlockElement | undefined>(undefined);
+  private _dragBlock = ref<BlockElement | undefined>(undefined);
   private _dragBlockOffset = ref<Offset>({ x: 0, y: 0 });
   private _dragBlockOriginalPosition = ref<Offset>({ x: 0, y: 0 });
 
@@ -32,13 +34,13 @@ export class FlowDesigner {
     this._zOrder = new ZOrder(this._blocks);
   }
 
-  public update(_element: UIElement) {}
+  public update(_element: FlowElement) {}
 
-  public get blocks(): Ref<UIBlockElement[]> {
+  public get blocks(): Ref<BlockElement[]> {
     return this._blocks;
   }
 
-  public get connections(): Ref<UIConnectionElement[]> {
+  public get connections(): Ref<ConnectionElement[]> {
     return this._connections;
   }
 
@@ -46,7 +48,7 @@ export class FlowDesigner {
     return this._viewSize;
   }
 
-  public get dragBlock(): Ref<UIBlockElement | undefined> {
+  public get dragBlock(): Ref<BlockElement | undefined> {
     return this._dragBlock;
   }
 
@@ -58,19 +60,19 @@ export class FlowDesigner {
     return this._dragBlockOffset;
   }
 
-  public get drawingConnection(): Ref<UIConnectionElement | undefined> {
+  public get drawingConnection(): Ref<ConnectionElement | undefined> {
     return this._drawingConnection;
   }
 
-  public get drawingConnectionEndConnector(): Ref<UIBlockConnectorElement | undefined> {
+  public get drawingConnectionEndConnector(): Ref<InputOutputElement | undefined> {
     return this._drawingConnectionEndConnector;
   }
 
-  public get selectedBlock(): UIBlockElement | undefined {
+  public get selectedBlock(): BlockElement | undefined {
     return this._selectedBlock.value;
   }
 
-  public set selectedBlock(node: UIBlockElement | undefined) {
+  public set selectedBlock(node: BlockElement | undefined) {
     // Clear any existing selections
     this.clearSelectedBlock();
 
@@ -82,11 +84,11 @@ export class FlowDesigner {
     this._selectedBlock.value = node;
   }
 
-  public get selectedConnection(): UIConnectionElement | undefined {
+  public get selectedConnection(): ConnectionElement | undefined {
     return this._selectedConnection.value;
   }
 
-  public set selectedConnection(connection: UIConnectionElement | undefined) {
+  public set selectedConnection(connection: ConnectionElement | undefined) {
     // Clear any existing selections
     this.clearSelectedConnection();
 
@@ -137,8 +139,8 @@ export class FlowDesigner {
     this._blocks.value.forEach((n) => (n.selected = false));
   };
 
-  public getAllElements = (): UILabelledElement[] => {
-    const elements: UILabelledElement[] = [...this._connections.value, ...this._blocks.value] as UILabelledElement[];
+  public getAllElements = (): LabelledElement[] => {
+    const elements: LabelledElement[] = [...this._connections.value, ...this._blocks.value] as LabelledElement[];
     return elements;
   };
 
@@ -183,25 +185,25 @@ export class FlowDesigner {
   public dragConnectionMove = (e: MouseEvent): void => {
     if (!flowDesigner.drawingConnection.value) return;
 
-    // Get starting connector
-    const startConnector = flowDesigner.drawingConnection.value.getStartConnector();
+    // Get starting io
+    const startInputOutput = flowDesigner.drawingConnection.value.getStartInputOutput();
 
     // Is there an element at the mouse position (that is not the drawing connection)
     const hitElements = this.getHitElements(e);
     const hitConnectors = hitElements.filter(
       (flowElement) =>
-        // Must be a block connector
-        flowElement.type === UIElementType.BlockConnector &&
+        // Must be a block io
+        flowElement.type === ElementType.BlockInputOutput &&
         // Don't hit test connection being connected
         flowElement !== flowDesigner.drawingConnection.value &&
-        // Don't hit test the starting connector
-        flowElement != startConnector
+        // Don't hit test the starting io
+        flowElement != startInputOutput
     );
 
-    // Set css extra if is hovering over valid connector (hit connector and connector is a compatible type)
-    const connector = hitConnectors.length > 0 ? (hitConnectors[0] as UIBlockConnectorElement) : undefined;
-    flowDesigner.drawingConnection.value.cssClasses = connector && this.canConnect(connector, startConnector) ? 'valid-end-point' : '';
-    this._drawingConnectionEndConnector.value = connector;
+    // Set css extra if is hovering over valid io (connection is compatible for io types)
+    const inputOutput = hitConnectors.length > 0 ? (hitConnectors[0] as InputOutputElement) : undefined;
+    flowDesigner.drawingConnection.value.cssClasses = inputOutput && this.canConnect(inputOutput, startInputOutput) ? 'valid-end-point' : '';
+    this._drawingConnectionEndConnector.value = inputOutput;
 
     // Update end offset to mouse offset
     flowDesigner.drawingConnection.value.location = { x: e.offsetX, y: e.offsetY };
@@ -213,22 +215,30 @@ export class FlowDesigner {
     }
 
     const startBlock = this._drawingConnection.value.startBlock;
-    const startBlockId = this._drawingConnection.value?.startBlockConnectorId;
-    const endBlock = this._drawingConnectionEndConnector.value?.parent! as UIBlockElement;
-    const endBlockId = this._drawingConnectionEndConnector.value.connector.id;
+    const startBlockId = this._drawingConnection.value?.startBlockInputOutputId;
+    const endBlock = this._drawingConnectionEndConnector.value?.parent! as BlockElement;
+    const endBlockId = this._drawingConnectionEndConnector.value.io.id;
 
-    const connection = new UIConnectionElement('Connection', '', startBlock, startBlockId, endBlock, endBlockId);
-    this._connections.value.push(connection);
+    const connection = {
+      id: uuidv4(),
+      label: null,
+      description: null,
+      startInputOutputId: startBlockId,
+      endInputOutputId: endBlockId
+    } as IFlowConnection;
+
+    const connectionElement = new ConnectionElement(connection, startBlock, endBlock);
+    this._connections.value.push(connectionElement);
   };
 
-  public canConnect = (from: UIBlockConnectorElement, to: UIBlockConnectorElement): boolean => {
-    // Connection must be between connectors is opposite direction
-    if (from.connector.io.signalDirection === to.connector.io.signalDirection) {
+  public canConnect = (from: InputOutputElement, to: InputOutputElement): boolean => {
+    // Connection must be between io is opposite direction
+    if (from.io.signalDirection === to.io.signalDirection) {
       return false;
     }
 
     // Connectors must have logic type match (eg, analogue / digital compatibility)
-    if (from.connector.io.signalType != to.connector.io.signalType) {
+    if (from.io.signalType != to.io.signalType) {
       return false;
     }
 
@@ -240,10 +250,10 @@ export class FlowDesigner {
     return true;
   };
 
-  public isConnectorConnected = (connector: UIBlockConnectorElement): boolean => {
+  public isConnectorConnected = (inputOutput: InputOutputElement): boolean => {
     let isConnected = false;
     this._connections.value.forEach((c) => {
-      if (c.getStartConnector() === connector || c.getEndConnector() === connector) {
+      if (c.getStartInputOutput() === inputOutput || c.getEndInputOutput() === inputOutput) {
         isConnected = true;
         return;
       }
@@ -252,8 +262,8 @@ export class FlowDesigner {
     return isConnected;
   };
 
-  public getHitElements = (e: MouseEvent): UIElement[] => {
-    const hitElements = [] as UIElement[];
+  public getHitElements = (e: MouseEvent): FlowElement[] => {
+    const hitElements = [] as FlowElement[];
     const offset = { x: e.offsetX, y: e.offsetY } as Offset;
 
     this._blocks.value.forEach((block) => {
@@ -368,7 +378,7 @@ export class FlowDesigner {
     this.clearSelectedItems();
   };
 
-  public deleteBlock = (block: UIBlockElement): void => {
+  public deleteBlock = (block: BlockElement): void => {
     // We must also delete any connections that connect to the node
     const connections = this._connections.value.filter((c) => c.startBlock === block || c.endBlock === block);
     connections.forEach((c) => this.deleteConnection(c));
@@ -377,7 +387,7 @@ export class FlowDesigner {
     this._blocks.value = this._blocks.value.filter((b) => b != block);
   };
 
-  public deleteConnection = (connection: UIConnectionElement): void => {
+  public deleteConnection = (connection: ConnectionElement): void => {
     // Filter connections to the set without the connection
     this._connections.value = this._connections.value.filter((c) => c != connection);
   };

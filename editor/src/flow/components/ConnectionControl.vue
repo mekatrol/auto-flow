@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { addOffsets } from '../utils/type-helper';
 import { type Offset } from '../types/ui/Offset';
-import { UIConnectionElement } from '../types/ui/UIConnectionElement';
+import { ConnectionElement } from '../types/ui/ConnectionElement';
 import { BlockSide } from '../types/ui/BlockSide';
 import { generateCubicBezierPoints } from '../utils/cubic-spline';
 import { cubicBezierToSvg } from '../utils/svg';
@@ -33,14 +33,14 @@ import {
   CONNECTION_MOUSE_LEAVE,
   CONNECTION_MOUSE_DOWN,
   CONNECTION_MOUSE_UP,
-  BLOCK_CONNECTOR_SIZE
+  BLOCK_IO_SIZE
 } from '../constants';
 import { useThemeStore } from '../store/themeStore';
 
 interface Props {
   show?: boolean;
 
-  connection: UIConnectionElement;
+  connection: ConnectionElement;
 
   showPoints?: boolean;
 
@@ -66,15 +66,15 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const svg = computed(() => {
-  const startConnector = props.connection.startBlock.connectors.find((c) => c.connector.id === props.connection.startBlockConnectorId)!;
+  const startConnector = props.connection.startBlock.io.find((c) => c.io.id === props.connection.startBlockInputOutputId)!;
 
-  const halfOffset: Offset = { x: BLOCK_CONNECTOR_SIZE / 2, y: BLOCK_CONNECTOR_SIZE / 2 };
+  const halfOffset: Offset = { x: BLOCK_IO_SIZE / 2, y: BLOCK_IO_SIZE / 2 };
 
   let endOffset: Offset = { x: 0, y: 0 };
   if (!props.connection.endBlock) {
     endOffset = props.connection.getEndOffset()!;
   } else {
-    const endConnector = props.connection.endBlock.connectors.find((c) => c.connector.id === props.connection.endBlockConnectorId);
+    const endConnector = props.connection.endBlock.io.find((c) => c.io.id === props.connection.endBlockInputOutputId);
     endOffset = addOffsets([props.connection.endBlock.location, endConnector!.location, halfOffset]);
   }
 

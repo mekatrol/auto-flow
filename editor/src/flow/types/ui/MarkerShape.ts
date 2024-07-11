@@ -1,16 +1,16 @@
 import { MARKER_SIZE } from '../../constants';
-import { UIElement } from './UIElement';
-import { UIElementType } from './UIElementType';
+import { FlowElement } from './FlowElement';
+import { ElementType } from './ElementType';
 import type { Shape } from './Shape';
 
-export class MarkerShape extends UIElement {
+export class MarkerShape extends FlowElement {
   private _shape: Shape;
 
   strokeColor: string;
   fillColor: string;
 
-  constructor(shape: Shape, x: number, y: number, parent: UIElement, strokeColor: string = 'black', fillColor: string = 'white') {
-    super(UIElementType.Marker, { x: 0, y: 0 }, { width: MARKER_SIZE, height: MARKER_SIZE }, parent);
+  constructor(shape: Shape, x: number, y: number, parent: FlowElement, strokeColor: string = 'black', fillColor: string = 'white') {
+    super(ElementType.Marker, { x: 0, y: 0 }, { width: MARKER_SIZE, height: MARKER_SIZE }, parent);
     this._shape = shape;
     this.location.x = x;
     this.location.y = y;

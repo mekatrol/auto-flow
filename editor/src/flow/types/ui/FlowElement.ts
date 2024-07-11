@@ -1,18 +1,18 @@
-import type { UIElementType } from './UIElementType';
+import type { ElementType } from './ElementType';
 import type { Offset } from './Offset';
 import type { Size } from './Size';
 import { useEmitter } from '../../utils/event-emitter';
 import { ELEMENT_CHANGED } from '../../constants';
 
-export abstract class UIElement {
-  public _type: UIElementType;
-  public _parent: UIElement | undefined;
+export abstract class FlowElement {
+  public _type: ElementType;
+  public _parent: FlowElement | undefined;
   public _selected: boolean;
   public _location: Offset;
   public _size: Size;
   public _cssClasses: string;
 
-  constructor(type: UIElementType, location: Offset, size: Size, parent: UIElement | undefined = undefined) {
+  constructor(type: ElementType, location: Offset, size: Size, parent: FlowElement | undefined = undefined) {
     this._type = type;
     this._parent = parent;
     this._selected = false;
@@ -29,7 +29,7 @@ export abstract class UIElement {
     return this._parent;
   }
 
-  public set parent(parent: UIElement | undefined) {
+  public set parent(parent: FlowElement | undefined) {
     this._parent = parent;
     this.fireUpdate();
   }
@@ -70,7 +70,7 @@ export abstract class UIElement {
     this.fireUpdate();
   }
 
-  public getHitElement(offset: Offset): UIElement | undefined {
+  public getHitElement(offset: Offset): FlowElement | undefined {
     const hitElement = this.containsOffset(offset) ? this : undefined;
     return hitElement;
   }

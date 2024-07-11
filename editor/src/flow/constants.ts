@@ -1,8 +1,8 @@
 export const BLOCK_HEIGHT = 40;
 export const BLOCK_WIDTH = 150;
-export const BLOCK_CONNECTOR_OFFSET = 2;
+export const BLOCK_IO_OFFSET = 2;
 export const BLOCK_BORDER_RADIUS = 2;
-export const BLOCK_CONNECTOR_SIZE = 10;
+export const BLOCK_IO_SIZE = 10;
 export const MARKER_SIZE = 15;
 export const MARKER_OFFSET_X = 5;
 export const MARKER_OFFSET_Y = -8;
@@ -20,12 +20,12 @@ export const BLOCK_MOUSE_LEAVE = 'blockMouseLeave';
 export const BLOCK_MOUSE_DOWN = 'blockMouseDown';
 export const BLOCK_MOUSE_UP = 'blockMouseUp';
 
-export const BLOCK_CONNECTOR_MOUSE_MOVE = 'blockConnectorMouseMove';
-export const BLOCK_CONNECTOR_MOUSE_OVER = 'blockConnectorMouseOver';
-export const BLOCK_CONNECTOR_MOUSE_ENTER = 'blockConnectorMouseEnter';
-export const BLOCK_CONNECTOR_MOUSE_LEAVE = 'blockConnectorMouseLeave';
-export const BLOCK_CONNECTOR_MOUSE_DOWN = 'blockConnectorMouseDown';
-export const BLOCK_CONNECTOR_MOUSE_UP = 'blockConnectorMouseUp';
+export const BLOCK_IO_MOUSE_MOVE = 'blockConnectorMouseMove';
+export const BLOCK_IO_MOUSE_OVER = 'blockConnectorMouseOver';
+export const BLOCK_IO_MOUSE_ENTER = 'blockConnectorMouseEnter';
+export const BLOCK_IO_MOUSE_LEAVE = 'blockConnectorMouseLeave';
+export const BLOCK_IO_MOUSE_DOWN = 'blockConnectorMouseDown';
+export const BLOCK_IO_MOUSE_UP = 'blockConnectorMouseUp';
 
 export const CONNECTION_MOUSE_MOVE = 'connectionMouseMove';
 export const CONNECTION_MOUSE_OVER = 'connectionMouseOver';

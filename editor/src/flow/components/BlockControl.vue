@@ -52,7 +52,7 @@
     <LabelControl
       :x="iconSize + textGapX"
       :y="block.size.height / 2"
-      :text="block.flowFunction.label"
+      :text="block.flowFunction.label ?? ''"
       vertical-alignment="middle"
       :color="theme.blockFunctionLabelStyles.color"
     />
@@ -61,7 +61,7 @@
     <LabelControl
       :x="0"
       :y="block.size.height + textGapY"
-      :text="block.label"
+      :text="block.label ?? ''"
       :color="theme.blockLabelStyles.color"
     />
 
@@ -77,12 +77,12 @@
       :stroke-color="marker.strokeColor"
     />
 
-    <!-- block connectors -->
-    <ConnectorControl
-      v-for="connectorElement in alignedConnectors"
-      :key="connectorElement.connector.id"
+    <!-- block io -->
+    <InputOutputControl
+      v-for="ioElement in alignedInputOutputs"
+      :key="ioElement.io.id"
       :block="block"
-      :connector="connectorElement"
+      :inputOutput="ioElement"
       :fill-color="theme.blockConnectorStyles.fill"
       :stroke-color="theme.blockConnectorStyles.stroke"
       :stroke-width="theme.blockConnectorStyles.strokeWidth"
@@ -93,18 +93,18 @@
 <script setup lang="ts">
 import LabelControl from './LabelControl.vue';
 import MarkerControl from './MarkerControl.vue';
-import ConnectorControl from './ConnectorControl.vue';
+import InputOutputControl from './InputOutputControl.vue';
 import SvgIcon from './SvgIcon.vue';
 import { type EnumDictionary } from '../types/EnumDictionary';
-import { UIBlockElement } from '../types/ui/UIBlockElement';
+import { BlockElement } from '../types/ui/BlockElement';
 import { MarkerShape } from '../types/ui/MarkerShape';
-import { UIBlockConnectorElement } from '../types/ui/UIBlockConnectorElement';
+import { InputOutputElement } from '../types/ui/InputOutputElement';
 import { computed } from 'vue';
 import { BlockSide } from '../types/ui/BlockSide';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
 import {
-  BLOCK_CONNECTOR_OFFSET,
-  BLOCK_CONNECTOR_SIZE,
+  BLOCK_IO_OFFSET,
+  BLOCK_IO_SIZE,
   MARKER_OFFSET_X,
   MARKER_OFFSET_Y,
   MARKER_SIZE,
@@ -122,7 +122,7 @@ const textGapX = 10;
 const textGapY = 5;
 
 interface Props {
-  block: UIBlockElement;
+  block: BlockElement;
 }
 
 const props = defineProps<Props>();
@@ -157,47 +157,47 @@ const markers = computed(() => {
   ];
 });
 
-const getConnectorOffsets = (block: UIBlockElement, offset: number): EnumDictionary<BlockSide, Offset> => {
-  const connectorOffsets: EnumDictionary<BlockSide, Offset> = {
-    [BlockSide.Left]: { x: -(BLOCK_CONNECTOR_SIZE - BLOCK_CONNECTOR_OFFSET), y: offset },
-    [BlockSide.Top]: { x: offset, y: -BLOCK_CONNECTOR_OFFSET },
-    [BlockSide.Right]: { x: block.size.width - BLOCK_CONNECTOR_OFFSET, y: offset },
-    [BlockSide.Bottom]: { x: offset, y: block.size.height - BLOCK_CONNECTOR_OFFSET }
+const getConnectorOffsets = (block: BlockElement, offset: number): EnumDictionary<BlockSide, Offset> => {
+  const ioOffsets: EnumDictionary<BlockSide, Offset> = {
+    [BlockSide.Left]: { x: -(BLOCK_IO_SIZE - BLOCK_IO_OFFSET), y: offset },
+    [BlockSide.Top]: { x: offset, y: -BLOCK_IO_OFFSET },
+    [BlockSide.Right]: { x: block.size.width - BLOCK_IO_OFFSET, y: offset },
+    [BlockSide.Bottom]: { x: offset, y: block.size.height - BLOCK_IO_OFFSET }
   };
 
-  return connectorOffsets;
+  return ioOffsets;
 };
 
-const transformConnectors = (side: BlockSide): UIBlockConnectorElement[] => {
+const transformConnectors = (side: BlockSide): InputOutputElement[] => {
   if (!props.block) {
     return [];
   }
 
-  const connectors = props.block.connectors.filter((x) => x.side === side);
+  const io = props.block.io.filter((x) => x.side === side);
 
-  const connectorOffsets = getConnectorOffsets(props.block, 5);
+  const ioOffsets = getConnectorOffsets(props.block, 5);
 
   let shift = 0;
-  connectors.forEach((c) => {
+  io.forEach((c) => {
     const shiftHorizontal = c.side === BlockSide.Top || c.side === BlockSide.Bottom;
-    const offset = connectorOffsets[side];
+    const offset = ioOffsets[side];
     c.location.x = offset.x + (shiftHorizontal ? shift : 0);
     c.location.y = offset.y + (!shiftHorizontal ? shift : 0);
-    shift += BLOCK_CONNECTOR_SIZE + (BLOCK_CONNECTOR_SIZE >> 1);
+    shift += BLOCK_IO_SIZE + (BLOCK_IO_SIZE >> 1);
   });
 
-  return connectors;
+  return io;
 };
 
-const alignedConnectors = computed((): UIBlockConnectorElement[] => {
-  const connectors = [];
+const alignedInputOutputs = computed((): InputOutputElement[] => {
+  const io = [];
 
-  connectors.push(...transformConnectors(BlockSide.Left));
-  connectors.push(...transformConnectors(BlockSide.Top));
-  connectors.push(...transformConnectors(BlockSide.Right));
-  connectors.push(...transformConnectors(BlockSide.Bottom));
+  io.push(...transformConnectors(BlockSide.Left));
+  io.push(...transformConnectors(BlockSide.Top));
+  io.push(...transformConnectors(BlockSide.Right));
+  io.push(...transformConnectors(BlockSide.Bottom));
 
-  return connectors;
+  return io;
 });
 
 const { theme } = useThemeStore();

@@ -1,9 +1,9 @@
-export enum UIElementType {
+export enum ElementType {
   // A flow block
   Block = 'Block',
 
-  // A connector for a node
-  BlockConnector = 'BlockConnector',
+  // An input/output for a block
+  BlockInputOutput = 'InputOutput',
 
   // A connection
   Connection = 'Connection',

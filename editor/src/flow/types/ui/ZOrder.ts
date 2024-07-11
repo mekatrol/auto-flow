@@ -1,10 +1,10 @@
 import type { Ref } from 'vue';
-import type { UIBlockElement } from './UIBlockElement';
+import type { BlockElement } from './BlockElement';
 
 export class ZOrder {
-  private _blocks: Ref<UIBlockElement[]>;
+  private _blocks: Ref<BlockElement[]>;
 
-  constructor(blocks: Ref<UIBlockElement[]>) {
+  constructor(blocks: Ref<BlockElement[]>) {
     this._blocks = blocks;
   }
 
@@ -17,11 +17,11 @@ export class ZOrder {
   };
 
   public sort = (): void => {
-    this._blocks.value.sort((a: UIBlockElement, b: UIBlockElement) => a.z + a.zBoost - (b.z + b.zBoost));
+    this._blocks.value.sort((a: BlockElement, b: BlockElement) => a.z + a.zBoost - (b.z + b.zBoost));
     this.sequenceZOrder();
   };
 
-  private moveToFront = (selected: UIBlockElement): void => {
+  private moveToFront = (selected: BlockElement): void => {
     if (!selected || !this._blocks || !this._blocks.value) {
       return;
     }
@@ -38,7 +38,7 @@ export class ZOrder {
     this.sort();
   };
 
-  private moveForward = (selected: UIBlockElement): void => {
+  private moveForward = (selected: BlockElement): void => {
     if (!selected || !this._blocks || !this._blocks.value) {
       return;
     }
@@ -53,7 +53,7 @@ export class ZOrder {
     }
   };
 
-  private moveBackward = (selected: UIBlockElement): void => {
+  private moveBackward = (selected: BlockElement): void => {
     if (!selected || !this._blocks || !this._blocks.value) {
       return;
     }
@@ -68,7 +68,7 @@ export class ZOrder {
     }
   };
 
-  private moveToBack = (selected: UIBlockElement): void => {
+  private moveToBack = (selected: BlockElement): void => {
     if (!selected || !this._blocks || !this._blocks.value) {
       return;
     }
@@ -85,7 +85,7 @@ export class ZOrder {
     this.sort();
   };
 
-  public moveBlockZOrder = (action: string, selected: UIBlockElement): void => {
+  public moveBlockZOrder = (action: string, selected: BlockElement): void => {
     switch (action) {
       case 'moveToFront':
         this.moveToFront(selected);

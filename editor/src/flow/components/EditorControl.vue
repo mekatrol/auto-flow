@@ -46,46 +46,143 @@
 
 <script setup lang="ts">
 import ConnectionControl from './ConnectionControl.vue';
-import { UIBlockElement } from '../types/ui/UIBlockElement';
-import { UIConnectionElement } from '../types/ui/UIConnectionElement';
-import { ref, type Ref } from 'vue';
+import { ref } from 'vue';
 import { useScreenSize } from 'vue-boosted';
 import BlockControl from './BlockControl.vue';
-import { FunctionType } from '../types/function/FunctionType';
 import { initFlowDesignController } from '../types/ui/FlowDesigner';
+import { loadFlowFromJson } from '../types/persistence/flow-persistor';
+import type { IFlow, IFlowBlock, IFlowElements, IFlowFunctionality } from '../types/persistence/types';
+import { v4 as uuidv4 } from 'uuid';
+import { FunctionType } from '../types/function/FunctionType';
+import { useFlowStore } from '../store/flowStore';
+import { ElementType } from '../types/ui/ElementType';
+import { BlockElement } from '../types/ui/BlockElement';
+import { ConnectionElement } from '../types/ui/ConnectionElement';
+import { BLOCK_HEIGHT, BLOCK_WIDTH } from '../constants';
+import { InputOutputSignalType } from '../types/function/InputOutputSignalType';
+import { InputOutputDirection } from '../types/function/InputOutputDirection';
 
 const gridSize = ref(20);
 const screenSize = useScreenSize();
+const { elements } = useFlowStore();
+
+const function1Id = uuidv4();
+const function2Id = uuidv4();
+
+const function1OutputId = uuidv4();
+const function2InputId = uuidv4();
+
+const f = {
+  functionality: {
+    blocks: [
+      {
+        id: function1Id,
+        label: 'Block 1',
+        description: 'Block 1 description',
+        type: FunctionType.And,
+        io: [
+          {
+            id: uuidv4(),
+            label: 'Input 1',
+            description: 'AND gate input 1',
+            signalType: InputOutputSignalType.Digital,
+            direction: InputOutputDirection.Input
+          },
+          {
+            id: uuidv4(),
+            label: 'Input 2',
+            description: 'AND gate input 2',
+            signalType: InputOutputSignalType.Digital,
+            direction: InputOutputDirection.Input
+          },
+          {
+            id: function1OutputId,
+            label: 'Output',
+            description: 'AND gate output',
+            signalType: InputOutputSignalType.Digital,
+            direction: InputOutputDirection.Output
+          }
+        ]
+      } as IFlowBlock,
+      {
+        id: function2Id,
+        label: 'Block 2',
+        description: 'Block 2 description',
+        type: FunctionType.Or,
+        io: [
+          {
+            id: function2InputId,
+            label: 'Input 1',
+            description: 'OR gate input 1',
+            signalType: InputOutputSignalType.Digital,
+            direction: InputOutputDirection.Input
+          },
+          {
+            id: uuidv4(),
+            label: 'Input 2',
+            description: 'OR gate input 2',
+            signalType: InputOutputSignalType.Digital,
+            direction: InputOutputDirection.Input
+          },
+          {
+            id: uuidv4(),
+            label: 'Output',
+            description: 'OR gate output',
+            signalType: InputOutputSignalType.Digital,
+            direction: InputOutputDirection.Output
+          }
+        ]
+      } as IFlowBlock
+    ],
+    connections: [
+      {
+        id: uuidv4(),
+        label: null,
+        description: null,
+        startInputOutputId: function1OutputId,
+        endInputOutputId: function2InputId
+      }
+    ]
+  } as IFlowFunctionality,
+  elements: {
+    blocks: [
+      {
+        functionId: function1Id,
+        location: { x: 200, y: 100 },
+        size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT }
+      },
+      {
+        functionId: function2Id,
+        location: { x: 400, y: 200 },
+        size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT }
+      }
+    ],
+    connections: []
+  } as IFlowElements
+} as IFlow;
+
+const flow: IFlow = loadFlowFromJson(JSON.stringify(f));
+console.log(flow);
 
 // Must be done before constructing any blocks or connections
 const flowDesigner = initFlowDesignController(screenSize, gridSize);
 const gridLines = flowDesigner.gridLines;
 
-const flowBlock1 = new UIBlockElement('Block 1', 'This is block 1.', FunctionType.And, { x: 100, y: 200 });
-const flowBlock2 = new UIBlockElement('Block 2', 'This is block 2.', FunctionType.Or, { x: 600, y: 100 });
-const flowBlock3 = new UIBlockElement('Block 3', 'This is block 3.', FunctionType.Xnor, { x: 600, y: 200 });
-const flowBlock4 = new UIBlockElement('Block 4', 'This is block 4.', FunctionType.Xor, { x: 900, y: 200 });
-const flowBlock5 = new UIBlockElement('Block 5', 'This is block 5.', FunctionType.Invert, { x: 200, y: 400 });
+const blocks: BlockElement[] = [];
+const connections: ConnectionElement[] = [];
 
-const connection1: UIConnectionElement = new UIConnectionElement(
-  'Connection 1',
-  'This is connection 1.',
-  flowBlock1,
-  flowBlock1.flowFunction.connectors[flowBlock1.flowFunction.connectors.length - 1].id,
-  flowBlock2,
-  flowBlock2.flowFunction.connectors[1].id
-);
-const connection2: UIConnectionElement = new UIConnectionElement(
-  'Connection 2',
-  'This is connection 2.',
-  flowBlock2,
-  flowBlock2.flowFunction.connectors[flowBlock2.flowFunction.connectors.length - 1].id,
-  flowBlock1,
-  flowBlock1.flowFunction.connectors[1].id
-);
+for (const key in elements) {
+  const element = elements[key];
 
-flowDesigner.blocks.value = [flowBlock1, flowBlock2, flowBlock3, flowBlock4, flowBlock5];
-flowDesigner.connections.value = [connection1, connection2];
+  if (element.type === ElementType.Block) {
+    blocks.push(element as BlockElement);
+  } else if (element.type === ElementType.Connection) {
+    connections.push(element as ConnectionElement);
+  }
+}
+
+flowDesigner.blocks.value = blocks;
+flowDesigner.connections.value = connections;
 
 const focusDesigner = (_e: FocusEvent): void => {
   // Do nothing, and SVG element won't raise keyboard events unless it has

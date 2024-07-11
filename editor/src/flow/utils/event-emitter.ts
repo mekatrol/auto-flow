@@ -1,15 +1,16 @@
 import mitt, { type Emitter } from 'mitt';
-import { type UIBlockElement } from '../types/ui/UIBlockElement';
+import { type BlockElement } from '../types/ui/BlockElement';
 import { type FlowDesigner } from '../types/ui/FlowDesigner';
-import { type UIBlockConnectorElement } from '../types/ui/UIBlockConnectorElement';
-import { UIConnectionElement } from '../types/ui/UIConnectionElement';
+import { type InputOutputElement } from '../types/ui/InputOutputElement';
+import { v4 as uuidv4 } from 'uuid';
+import { ConnectionElement } from '../types/ui/ConnectionElement';
 import {
-  BLOCK_CONNECTOR_MOUSE_DOWN,
-  BLOCK_CONNECTOR_MOUSE_ENTER,
-  BLOCK_CONNECTOR_MOUSE_LEAVE,
-  BLOCK_CONNECTOR_MOUSE_MOVE,
-  BLOCK_CONNECTOR_MOUSE_OVER,
-  BLOCK_CONNECTOR_MOUSE_UP,
+  BLOCK_IO_MOUSE_DOWN,
+  BLOCK_IO_MOUSE_ENTER,
+  BLOCK_IO_MOUSE_LEAVE,
+  BLOCK_IO_MOUSE_MOVE,
+  BLOCK_IO_MOUSE_OVER,
+  BLOCK_IO_MOUSE_UP,
   BLOCK_MOUSE_DOWN,
   BLOCK_MOUSE_ENTER,
   BLOCK_MOUSE_LEAVE,
@@ -24,7 +25,8 @@ import {
   CONNECTION_MOUSE_UP,
   ELEMENT_CHANGED
 } from '../constants';
-import type { UIElement } from '../types/ui/UIElement';
+import type { FlowElement } from '../types/ui/FlowElement';
+import type { IFlowConnection } from '../types/persistence/types';
 
 export interface FlowMouseEvent<T> {
   data: T;
@@ -32,19 +34,19 @@ export interface FlowMouseEvent<T> {
 }
 
 export interface ElementChangedEvent {
-  element: UIElement;
+  element: FlowElement;
 }
 
 // An event from a flow block
-export interface FlowBlockMouseEvent extends FlowMouseEvent<UIBlockElement> {}
+export interface FlowBlockMouseEvent extends FlowMouseEvent<BlockElement> {}
 
-// A mouse event from a flow block connector (includes the block that the connector is attached to)
+// A mouse event from a flow block io (includes the block that the io is attached to)
 export interface FlowNodeConnectorMouseEvent extends FlowBlockMouseEvent {
-  connector: UIBlockConnectorElement;
+  inputOutput: InputOutputElement;
 }
 
 // A mouse event from a flow connection
-export interface FlowConnectionMouseEvent extends FlowMouseEvent<UIConnectionElement> {}
+export interface FlowConnectionMouseEvent extends FlowMouseEvent<ConnectionElement> {}
 
 export type FlowEvents = {
   /*
@@ -63,7 +65,7 @@ export type FlowEvents = {
   blockMouseUp: FlowBlockMouseEvent;
 
   /*
-   * Block connector mouse events
+   * Block input/output mouse events
    */
   blockConnectorMouseMove: FlowNodeConnectorMouseEvent;
   blockConnectorMouseOver: FlowNodeConnectorMouseEvent;
@@ -129,30 +131,38 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
 
   emitter.on(BLOCK_MOUSE_OVER, (_e) => {});
 
-  emitter.on(BLOCK_CONNECTOR_MOUSE_MOVE, (_e) => {
-    // console.log(`BLOCK_CONNECTOR_MOUSE_MOVE: ${e.data.id}`, e);
+  emitter.on(BLOCK_IO_MOUSE_MOVE, (_e) => {
+    // console.log(`BLOCK_IO_MOUSE_MOVE: ${e.data.id}`, e);
   });
 
-  emitter.on(BLOCK_CONNECTOR_MOUSE_OVER, (_e) => {
-    // console.log(`BLOCK_CONNECTOR_MOUSE_OVER: ${e.data.id}`, e);
+  emitter.on(BLOCK_IO_MOUSE_OVER, (_e) => {
+    // console.log(`BLOCK_IO_MOUSE_OVER: ${e.data.id}`, e);
   });
 
-  emitter.on(BLOCK_CONNECTOR_MOUSE_ENTER, (_e) => {
-    // console.log(`BLOCK_CONNECTOR_MOUSE_ENTER: ${e.data.id}`, e);
+  emitter.on(BLOCK_IO_MOUSE_ENTER, (_e) => {
+    // console.log(`BLOCK_IO_MOUSE_ENTER: ${e.data.id}`, e);
   });
 
-  emitter.on(BLOCK_CONNECTOR_MOUSE_LEAVE, (_e) => {
-    // console.log(`BLOCK_CONNECTOR_MOUSE_LEAVE: ${e.data.id}`, e);
+  emitter.on(BLOCK_IO_MOUSE_LEAVE, (_e) => {
+    // console.log(`BLOCK_IO_MOUSE_LEAVE: ${e.data.id}`, e);
   });
 
-  emitter.on(BLOCK_CONNECTOR_MOUSE_UP, (_e) => {
+  emitter.on(BLOCK_IO_MOUSE_UP, (_e) => {
     flowDesigner.drawingConnection.value = undefined;
   });
 
-  emitter.on(BLOCK_CONNECTOR_MOUSE_DOWN, (e) => {
+  emitter.on(BLOCK_IO_MOUSE_DOWN, (e) => {
     flowDesigner.clearSelectedItems();
-    flowDesigner.drawingConnection.value = new UIConnectionElement('connecting', '', e.data, e.connector.connector.id);
 
+    const connection = {
+      id: uuidv4(),
+      label: null,
+      description: null,
+      startInputOutputId: e.inputOutput.io.id,
+      endInputOutputId: ''
+    } as IFlowConnection;
+
+    flowDesigner.drawingConnection.value = new ConnectionElement(connection, e.data, null);
     flowDesigner.drawingConnection.value.location = { x: e.mouseEvent.offsetX, y: e.mouseEvent.offsetY };
   });
 
@@ -173,7 +183,7 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
   });
 
   emitter.on(CONNECTION_MOUSE_UP, (_e) => {
-    // console.log(`BLOCK_CONNECTOR_MOUSE_UP: ${_e.data.id}`, _e);
+    // console.log(`BLOCK_IO_MOUSE_UP: ${_e.data.id}`, _e);
   });
 
   emitter.on(CONNECTION_MOUSE_DOWN, (e) => {
