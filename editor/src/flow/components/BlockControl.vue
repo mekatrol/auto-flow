@@ -79,7 +79,7 @@
     <!-- Block io -->
     <InputOutputControl
       v-for="ioElement in io"
-      :key="ioElement.io.pin"
+      :key="ioElement.pin"
       :block="block"
       :inputOutput="ioElement"
       :fill-color="theme.blockIOStyles.fill"
@@ -110,9 +110,6 @@ import {
   BLOCK_MOUSE_UP
 } from '../constants';
 import { useThemeStore } from '../stores/themeStore';
-import { InputOutputElement } from '../types/ui/InputOutputElement';
-import { InputOutputDirection } from '../types/InputOutputDirection';
-import { BlockSide } from '../types/ui/BlockSide';
 import { layoutInputOutputs } from '../utils/flow-element-helpers';
 
 const textGapX = 10;
@@ -124,9 +121,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const io = props.block.flowFunction.io.map(
-  (io) => new InputOutputElement(props.block, io.direction === InputOutputDirection.Input ? BlockSide.Left : BlockSide.Right, io)
-);
+const io = props.block.flowFunction.io;
 
 layoutInputOutputs(props.block.size, io);
 

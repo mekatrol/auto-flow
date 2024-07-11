@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import type { InputOutputElement } from '../types/ui/InputOutputElement';
+import type { InputOutput } from '../types/InputOutput';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
 import {
   BLOCK_IO_MOUSE_MOVE,
@@ -36,7 +36,7 @@ import type { BlockElement } from '../types/ui/BlockElement';
 
 interface Props {
   block: BlockElement;
-  inputOutput: InputOutputElement;
+  inputOutput: InputOutput;
   fillColor?: string;
   strokeColor?: string;
   strokeWidth?: string;

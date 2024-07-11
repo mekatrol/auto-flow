@@ -1,16 +1,14 @@
 import { ElementType } from './ElementType';
-import { BlockSide } from './BlockSide';
-import { InputOutputElement } from './InputOutputElement';
-import { InputOutputDirection } from '../InputOutputDirection';
 import type { FlowBlockElement } from '../FlowBlockElement';
 import type { FlowFunction } from '../FlowFunction';
 import type { Offset } from './Offset';
 import type { Size } from './Size';
+import type { InputOutput } from '../InputOutput';
 
 export class BlockElement implements FlowBlockElement {
   public functionId: string;
   public flowFunction: FlowFunction;
-  public io: InputOutputElement[];
+  public io: InputOutput[];
 
   public zBoost: number = 0;
   public zOrder: number = 0;
@@ -32,8 +30,6 @@ export class BlockElement implements FlowBlockElement {
     this.location = element.location;
     this.size = element.size;
 
-    this.io = this.flowFunction.io.map(
-      (io) => new InputOutputElement(this, io.direction === InputOutputDirection.Input ? BlockSide.Left : BlockSide.Right, io)
-    );
+    this.io = this.flowFunction.io.map((io) => ({ ...io }));
   }
 }

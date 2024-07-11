@@ -3,12 +3,11 @@ import type { Flow } from '../Flow';
 import type { FlowBlockElement } from '../FlowBlockElement';
 import type { FlowConnection } from '../FlowConnection';
 import type { FlowFunction } from '../FlowFunction';
-import { InputOutputElement } from '../ui/InputOutputElement';
 import { BlockElement } from '../ui/BlockElement';
 import { BlockSide } from '../ui/BlockSide';
 import { ConnectionElement } from '../ui/ConnectionElement';
 import { layoutInputOutputs } from '@/flow/utils/flow-element-helpers';
-import { BLOCK_HEIGHT, BLOCK_WIDTH } from '@/flow/constants';
+import { BLOCK_HEIGHT, BLOCK_IO_SIZE, BLOCK_WIDTH } from '@/flow/constants';
 import { useFlowStore } from '@/flow/stores/flowStore';
 
 // Loaded functions and connections that do no have a matching element definition with have their location
@@ -44,7 +43,7 @@ const loadBlock = (flow: Flow, elements: Record<string, any>, flowFunction: Flow
   }
 
   // Populate function with copy of IO values
-  flowFunction.io = config.io.map((io) => ({ ...io }));
+  flowFunction.io = config.io.map((io) => ({ ...io, size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE } }));
 
   // Create a block element for the flow function
   const blockElement = new BlockElement(loadedFlowElement, config.type.toLowerCase(), flowFunction);
@@ -56,17 +55,8 @@ const loadBlock = (flow: Flow, elements: Record<string, any>, flowFunction: Flow
     // Get deserialized IO
     const io = flowFunction.io[j];
 
-    // Determine block side based on input or output
-    const side = io.direction === InputOutputDirection.Input ? BlockSide.Left : BlockSide.Right;
-
-    // Create input/output element for input/output
-    const inputOutputElement = new InputOutputElement(blockElement, side, io);
-
-    // Set parent
-    inputOutputElement.parent = blockElement;
-
     // Add to dictionary of keyed elements
-    elements[io.pin] = inputOutputElement;
+    elements[io.pin] = io;
   }
 
   layoutInputOutputs(blockElement.size, blockElement.io);

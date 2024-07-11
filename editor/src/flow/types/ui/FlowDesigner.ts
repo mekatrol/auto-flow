@@ -1,5 +1,4 @@
 import { computed, type Ref, ref } from 'vue';
-import { InputOutputElement } from './InputOutputElement';
 import { ConnectionElement } from './ConnectionElement';
 import type { Offset } from './Offset';
 import { BlockElement } from './BlockElement';
@@ -9,6 +8,7 @@ import { configureFlowMouseEvents } from '../../utils/event-emitter';
 import type { FlowConnection } from '../FlowConnection';
 import { v4 as uuidv4 } from 'uuid';
 import type { Size } from './Size';
+import type { InputOutput } from '../InputOutput';
 
 export class FlowDesigner {
   private _viewSize: Ref<{ width: number; height: number }>;
@@ -17,7 +17,8 @@ export class FlowDesigner {
   private _zOrder: ZOrder;
   private _gridSize: Ref<number>;
   private _drawingConnection = ref<ConnectionElement | undefined>(undefined);
-  private _drawingConnectionEndConnector = ref<InputOutputElement | undefined>(undefined);
+  private _drawingConnectionEndBlock = ref<BlockElement | undefined>(undefined);
+  private _drawingConnectionEndPin = ref<number | undefined>(undefined);
   private _selectedConnection = ref<ConnectionElement | undefined>(undefined);
   private _selectedBlock = ref<BlockElement | undefined>(undefined);
   private _dragBlock = ref<BlockElement | undefined>(undefined);
@@ -58,10 +59,6 @@ export class FlowDesigner {
 
   public get drawingConnection(): Ref<ConnectionElement | undefined> {
     return this._drawingConnection;
-  }
-
-  public get drawingConnectionEndConnector(): Ref<InputOutputElement | undefined> {
-    return this._drawingConnectionEndConnector;
   }
 
   public get selectedBlock(): BlockElement | undefined {
@@ -108,7 +105,8 @@ export class FlowDesigner {
 
     // Clear drawing connection
     this.drawingConnection.value = undefined;
-    this.drawingConnectionEndConnector.value = undefined;
+    this._drawingConnectionEndBlock.value = undefined;
+    this._drawingConnectionEndPin.value = undefined;
   }
 
   public clearSelectedConnection = (): void => {
@@ -174,57 +172,70 @@ export class FlowDesigner {
   };
 
   public dragConnectionMove = (e: MouseEvent): void => {
-    if (!flowDesigner.drawingConnection.value) return;
+    if (!this.drawingConnection.value) return;
 
     // Get starting io
-    const startInputOutput = flowDesigner.drawingConnection.value.getStartInputOutput();
+    const startBlock = this.drawingConnection.value.startBlock;
+    const startInputOutput = this.drawingConnection.value.getStartInputOutput();
 
     // Is there an element at the mouse position (that is not the drawing connection)
     const hitInputOutputs = this.getHitInputOutputs(e).filter(
-      (io) =>
+      ([block, io]) =>
         // Don't hit test the starting io
-        io != startInputOutput
+        block != startBlock && io != startInputOutput
     );
 
-    // Set css extra if is hovering over valid io (connection is compatible for io types)
-    const inputOutput = hitInputOutputs.length > 0 ? (hitInputOutputs[0] as InputOutputElement) : undefined;
-    flowDesigner.drawingConnection.value.cssClasses = inputOutput && this.canConnect(inputOutput, startInputOutput) ? 'valid-end-point' : '';
-    this._drawingConnectionEndConnector.value = inputOutput;
+    // We only use the first entry
+    const [block, inputOutput] = hitInputOutputs.length > 0 ? hitInputOutputs[0] : [];
+
+    // Set values (may be undefined)
+    this._drawingConnectionEndBlock.value = block;
+    this._drawingConnectionEndPin.value = inputOutput?.pin;
 
     // Update end offset to mouse offset
-    flowDesigner.drawingConnection.value.endLocation = { x: e.offsetX, y: e.offsetY };
+    this.drawingConnection.value.endLocation = { x: e.offsetX, y: e.offsetY };
+
+    if (!block || !inputOutput) {
+      // Clear any existing styles / hit info
+      this.drawingConnection.value.cssClasses = '';
+
+      return;
+    }
+
+    // Set css extra if is hovering over valid io (connection is compatible for io types)
+    this.drawingConnection.value.cssClasses = inputOutput && this.canConnect(inputOutput, startInputOutput) ? 'valid-end-point' : '';
   };
 
   public dragConnectionCreateConnection = (): void => {
-    if (!this._drawingConnection.value || !this._drawingConnectionEndConnector.value) {
+    if (!this._drawingConnection.value || !this._drawingConnectionEndPin.value) {
       return;
     }
 
     const startBlock = this._drawingConnection.value.startBlock;
-    const startBlockId = this._drawingConnection.value?.startPin;
-    const endBlock = this._drawingConnectionEndConnector.value?.parent! as BlockElement;
-    const endBlockId = this._drawingConnectionEndConnector.value.io.pin;
+    const startBlockPin = this._drawingConnection.value?.startPin;
+    const endBlock = this._drawingConnectionEndBlock.value!;
+    const endBlockPin = this._drawingConnectionEndPin.value;
 
     const connection = {
       id: uuidv4(),
       label: null,
       description: null,
-      startPin: startBlockId,
-      endPin: endBlockId
+      startPin: startBlockPin,
+      endPin: endBlockPin
     } as FlowConnection;
 
     const connectionElement = new ConnectionElement(connection, startBlock, endBlock);
     this._connections.value.push(connectionElement);
   };
 
-  public canConnect = (from: InputOutputElement, to: InputOutputElement): boolean => {
+  public canConnect = (from: InputOutput, to: InputOutput): boolean => {
     // Connection must be between io is opposite direction
-    if (from.io.direction === to.io.direction) {
+    if (from.direction === to.direction) {
       return false;
     }
 
     // Connectors must have logic type match (eg, analogue / digital compatibility)
-    if (from.io.type != to.io.type) {
+    if (from.type != to.type) {
       return false;
     }
 
@@ -236,7 +247,7 @@ export class FlowDesigner {
     return true;
   };
 
-  public isConnectorConnected = (inputOutput: InputOutputElement): boolean => {
+  public isConnectorConnected = (inputOutput: InputOutput): boolean => {
     let isConnected = false;
     this._connections.value.forEach((c) => {
       if (c.getStartInputOutput() === inputOutput || c.getEndInputOutput() === inputOutput) {
@@ -262,8 +273,8 @@ export class FlowDesigner {
     return offset.x >= boundingBox.left && offset.x <= boundingBox.right && offset.y >= boundingBox.top && offset.y <= boundingBox.bottom;
   }
 
-  public getHitInputOutputs = (e: MouseEvent): InputOutputElement[] => {
-    const hitInputOutputs: InputOutputElement[] = [];
+  public getHitInputOutputs = (e: MouseEvent): [BlockElement, InputOutput][] => {
+    const hitInputOutputs: [BlockElement, InputOutput][] = [];
 
     this._blocks.value.forEach((block) => {
       // Convert mouse location to offset relative to block location for block input/output hit testing
@@ -273,7 +284,7 @@ export class FlowDesigner {
       (block as BlockElement).io.forEach((io) => {
         const boundingBox = this.getBoundingBox(io.location, io.size);
         if (this.boundingBoxContainsOffset(boundingBox, blockRelativeOffset)) {
-          hitInputOutputs.push(io);
+          hitInputOutputs.push([block, io]);
         }
       });
     });
@@ -301,7 +312,7 @@ export class FlowDesigner {
   };
 
   public mouseUp = (e: MouseEvent): void => {
-    if (this.drawingConnection.value && this.drawingConnectionEndConnector.value) {
+    if (this.drawingConnection.value && this._drawingConnectionEndPin.value) {
       this.dragConnectionCreateConnection();
     }
 

@@ -1,7 +1,6 @@
 import mitt, { type Emitter } from 'mitt';
 import { type BlockElement } from '../types/ui/BlockElement';
 import { type FlowDesigner } from '../types/ui/FlowDesigner';
-import { type InputOutputElement } from '../types/ui/InputOutputElement';
 import { v4 as uuidv4 } from 'uuid';
 import { ConnectionElement } from '../types/ui/ConnectionElement';
 import {
@@ -25,6 +24,7 @@ import {
   CONNECTION_MOUSE_UP
 } from '../constants';
 import type { FlowConnection } from '../types/FlowConnection';
+import type { InputOutput } from '../types/InputOutput';
 
 export interface FlowMouseEvent<T> {
   data: T;
@@ -40,7 +40,7 @@ export interface FlowBlockMouseEvent extends FlowMouseEvent<BlockElement> {}
 
 // A mouse event from a flow block io (includes the block that the io is attached to)
 export interface FlowBlockConnectorMouseEvent extends FlowBlockMouseEvent {
-  inputOutput: InputOutputElement;
+  inputOutput: InputOutput;
 }
 
 // A mouse event from a flow connection
@@ -154,7 +154,7 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
       id: uuidv4(),
       label: null,
       description: null,
-      startPin: e.inputOutput.io.pin,
+      startPin: e.inputOutput.pin,
       endPin: 0
     } as FlowConnection;
 

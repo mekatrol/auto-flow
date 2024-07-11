@@ -1,6 +1,8 @@
 import type { InputOutputDirection } from './InputOutputDirection';
 import type { InputOutputSignalType } from './InputOutputSignalType';
 import type { BlockSide } from './ui/BlockSide';
+import type { Offset } from './ui/Offset';
+import type { Size } from './ui/Size';
 
 export interface InputOutput {
   // The unique pin number of this input/output for a given function block
@@ -17,6 +19,12 @@ export interface InputOutput {
 
   // The direction for this input/output relative to the block it belongs to
   direction: InputOutputDirection;
+
+  // The location of this input/output (relative to any parent component)
+  location: Offset;
+
+  // The visual size of the input/output
+  size: Size;
 
   // Indicates the side of the block that this IO should be displayed.
   side: BlockSide;

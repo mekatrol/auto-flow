@@ -66,7 +66,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const svg = computed(() => {
-  const startConnector = props.connection.startBlock.io.find((c) => c.io.pin === props.connection.startPin)!;
+  const startConnector = props.connection.startBlock.io.find((io) => io.pin === props.connection.startPin)!;
 
   const halfOffset: Offset = { x: BLOCK_IO_SIZE / 2, y: BLOCK_IO_SIZE / 2 };
 
@@ -74,7 +74,7 @@ const svg = computed(() => {
   if (!props.connection.endBlock) {
     endOffset = props.connection.getEndOffset()!;
   } else {
-    const endConnector = props.connection.endBlock.io.find((c) => c.io.pin === props.connection.endPin);
+    const endConnector = props.connection.endBlock.io.find((io) => io.pin === props.connection.endPin);
     endOffset = addOffsets([props.connection.endBlock.location, endConnector!.location, halfOffset]);
   }
 
