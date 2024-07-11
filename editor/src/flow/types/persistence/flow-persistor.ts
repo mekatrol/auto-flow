@@ -83,12 +83,9 @@ const loadConnection = (flow: IFlow, elements: Record<string, FlowElement>, flow
   elements[flowConnection.id] = connectionElement;
 };
 
-export const loadFlowFromJson = (json: string): IFlow => {
+export const loadFlowFromJson = (json: string): Record<string, FlowElement> => {
   const flow = JSON.parse(json) as IFlow;
-  const { elements, clearElements } = useFlowStore();
-
-  // Clear all elements from store
-  clearElements();
+  const elements: Record<string, FlowElement> = {};
 
   // Load functionality blocks first
   for (let i = 0; i < flow.functionality.blocks.length; i++) {
@@ -102,7 +99,7 @@ export const loadFlowFromJson = (json: string): IFlow => {
     loadConnection(flow, elements, flow.functionality.connections[i]);
   }
 
-  return flow;
+  return elements;
 };
 
 export const flowToJson = (flow: IFlow): string => {
