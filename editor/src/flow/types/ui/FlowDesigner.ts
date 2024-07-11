@@ -6,10 +6,10 @@ import { BlockElement } from './BlockElement';
 import { ZOrder } from './ZOrder';
 import type { Line } from './Line';
 import { configureFlowMouseEvents } from '../../utils/event-emitter';
-import type { FlowConnection } from '../persistence/FlowConnection';
+import type { FlowConnection } from '../FlowConnection';
 import { v4 as uuidv4 } from 'uuid';
 import type { Size } from './Size';
-import type { FlowBlockElement } from '../persistence/FlowBlockElement';
+import type { FlowBlockElement } from '../FlowBlockElement';
 
 export class FlowDesigner {
   private _viewSize: Ref<{ width: number; height: number }>;

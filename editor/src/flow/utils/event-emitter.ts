@@ -24,8 +24,8 @@ import {
   CONNECTION_MOUSE_OVER,
   CONNECTION_MOUSE_UP
 } from '../constants';
-import type { FlowConnection } from '../types/persistence/FlowConnection';
-import type { FlowBlockElement } from '../types/persistence/FlowBlockElement';
+import type { FlowConnection } from '../types/FlowConnection';
+import type { FlowBlockElement } from '../types/FlowBlockElement';
 
 export interface FlowMouseEvent<T> {
   data: T;

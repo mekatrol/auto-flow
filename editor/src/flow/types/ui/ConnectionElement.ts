@@ -3,7 +3,7 @@ import { type Offset } from './Offset';
 import { BlockElement } from './BlockElement';
 import { InputOutputElement } from './InputOutputElement';
 import { ElementType } from './ElementType';
-import type { FlowConnection } from '../persistence/FlowConnection';
+import type { FlowConnection } from '../FlowConnection';
 
 export class ConnectionElement {
   public type: ElementType;

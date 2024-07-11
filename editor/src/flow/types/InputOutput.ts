@@ -1,5 +1,5 @@
-import type { InputOutputDirection } from '../InputOutputDirection';
-import type { InputOutputSignalType } from '../InputOutputSignalType';
+import type { InputOutputDirection } from './InputOutputDirection';
+import type { InputOutputSignalType } from './InputOutputSignalType';
 
 export interface InputOutput {
   // The unique ID of this input/output

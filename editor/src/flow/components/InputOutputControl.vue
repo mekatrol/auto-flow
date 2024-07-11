@@ -32,7 +32,7 @@ import {
   BLOCK_IO_MOUSE_DOWN,
   BLOCK_IO_MOUSE_UP
 } from '../constants';
-import type { FlowBlockElement } from '../types/persistence/FlowBlockElement';
+import type { FlowBlockElement } from '../types/FlowBlockElement';
 
 interface Props {
   block: FlowBlockElement;

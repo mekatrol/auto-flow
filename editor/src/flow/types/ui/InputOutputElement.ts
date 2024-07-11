@@ -4,7 +4,7 @@ import { ElementType } from './ElementType';
 import type { Offset } from './Offset';
 import type { Size } from './Size';
 import type { BlockElement } from './BlockElement';
-import type { InputOutput } from '../persistence/InputOutput';
+import type { InputOutput } from '../InputOutput';
 
 export class InputOutputElement {
   type: ElementType;

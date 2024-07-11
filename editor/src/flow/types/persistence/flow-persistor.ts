@@ -1,8 +1,8 @@
 import { InputOutputDirection } from '../InputOutputDirection';
-import type { Flow } from './Flow';
-import type { FlowBlockElement } from './FlowBlockElement';
-import type { FlowConnection } from './FlowConnection';
-import type { FlowFunction } from './FlowFunction';
+import type { Flow } from '../Flow';
+import type { FlowBlockElement } from '../FlowBlockElement';
+import type { FlowConnection } from '../FlowConnection';
+import type { FlowFunction } from '../FlowFunction';
 import { InputOutputElement } from '../ui/InputOutputElement';
 import { BlockElement } from '../ui/BlockElement';
 import { BlockSide } from '../ui/BlockSide';

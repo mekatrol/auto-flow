@@ -115,7 +115,7 @@ import { InputOutputElement } from '../types/ui/InputOutputElement';
 import { InputOutputDirection } from '../types/InputOutputDirection';
 import { BlockSide } from '../types/ui/BlockSide';
 import { layoutInputOutputs } from '../utils/flow-element-helpers';
-import type { FlowBlockElement } from '../types/persistence/FlowBlockElement';
+import type { FlowBlockElement } from '../types/FlowBlockElement';
 
 const textGapX = 10;
 const textGapY = 5;

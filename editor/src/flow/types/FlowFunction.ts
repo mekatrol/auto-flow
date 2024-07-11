@@ -1,4 +1,4 @@
-import type { FunctionType } from '../FunctionType';
+import type { FunctionType } from './FunctionType';
 import type { InputOutput } from './InputOutput';
 
 export interface FlowFunction {

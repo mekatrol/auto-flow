@@ -3,8 +3,8 @@ import { FunctionType } from '../FunctionType';
 import { BlockSide } from './BlockSide';
 import { InputOutputElement } from './InputOutputElement';
 import { InputOutputDirection } from '../InputOutputDirection';
-import type { FlowBlockElement } from '../persistence/FlowBlockElement';
-import type { FlowFunction } from '../persistence/FlowFunction';
+import type { FlowBlockElement } from '../FlowBlockElement';
+import type { FlowFunction } from '../FlowFunction';
 import type { Offset } from './Offset';
 import type { Size } from './Size';
 

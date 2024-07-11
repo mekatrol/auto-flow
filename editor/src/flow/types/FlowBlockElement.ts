@@ -1,5 +1,5 @@
-import type { Offset } from '../ui/Offset';
-import type { Size } from '../ui/Size';
+import type { Offset } from './ui/Offset';
+import type { Size } from './ui/Size';
 
 export interface FlowBlockElement {
   // The ID of the flow function that this block represents
