@@ -15,6 +15,7 @@ export class BlockElement implements FlowBlockElement {
 
   public zBoost: number = 0;
   public zOrder: number = 0;
+  public z: number = 0;
 
   public icon: string;
 
@@ -35,9 +36,5 @@ export class BlockElement implements FlowBlockElement {
     this.io = this.flowFunction.io.map(
       (io) => new InputOutputElement(this, io.direction === InputOutputDirection.Input ? BlockSide.Left : BlockSide.Right, io)
     );
-  }
-
-  public get z() {
-    return this.zBoost + this.zOrder;
   }
 }

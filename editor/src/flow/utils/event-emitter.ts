@@ -102,7 +102,8 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
     flowDesigner.clearSelectedItems();
     flowDesigner.selectedBlock = e.data;
     flowDesigner.dragBlock.value = e.data;
-    (flowDesigner.dragBlock.value as BlockElement).zBoost = 0;
+    flowDesigner.dragBlock.value.zBoost = 0;
+    flowDesigner.dragBlock.value.z = flowDesigner.dragBlock.value.zOrder;
     flowDesigner.dragBlockOffset.value = { x: e.mouseEvent.offsetX - e.data.location.x, y: e.mouseEvent.offsetY - e.data.location.y };
     flowDesigner.dragBlockOriginalPosition.value = { x: e.data.location.x, y: e.data.location.y };
   });
@@ -110,7 +111,8 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
   emitter.on(BLOCK_MOUSE_UP, (_e: FlowBlockMouseEvent) => {
     // Restore drag block boost if a block is being dragged
     if (flowDesigner.dragBlock.value) {
-      (flowDesigner.dragBlock.value as BlockElement).zBoost = 0;
+      flowDesigner.dragBlock.value.zBoost = 0;
+      flowDesigner.dragBlock.value.z = flowDesigner.dragBlock.value.zOrder;
     }
 
     // Clear drag block
