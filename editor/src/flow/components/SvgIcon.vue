@@ -69,35 +69,52 @@ const icon = ref(null);
 
 const fetchIcon = async () => {
   const iconUri = `/function-icons/${props.icon}.svg`;
-  fetch(iconUri)
-    .then((response) => response.text())
-    .then((htmlText) => {
-      // Parse the returned HTML
-      const svgParsedDom = new DOMParser().parseFromString(htmlText, 'text/html');
 
+  // Get SVG container on the current Vue component
+  const svgContainer = icon.value! as SVGGElement;
+
+  // Clear contents
+  svgContainer.innerHTML = '';
+
+  try {
+    const response = await fetch(iconUri);
+    const htmlText = await response.text();
+
+    // Parse the returned HTML
+    const svgParsedDom = new DOMParser().parseFromString(htmlText, 'text/html');
+
+    // Get the svg tag
+    const svg = svgParsedDom.querySelector('svg');
+
+    if (svg) {
       // Get the 'g' tag (inside the SVG tag)
-      const svg = svgParsedDom.querySelector('svg')!;
-      const g = svgParsedDom.querySelector('g')!;
+      const g = svgParsedDom.querySelector('g');
 
-      // Set attributes for internal graphic
-      g.setAttribute('fill', props.svgFill);
-      g.setAttribute('opacity', props.svgFillOpacity);
-      g.setAttribute('stroke', props.svgStroke);
-      g.setAttribute('stroke-width', props.svgStrokeWidth);
+      if (g) {
+        // Set attributes for internal graphic
+        g.setAttribute('fill', props.svgFill);
+        g.setAttribute('opacity', props.svgFillOpacity);
+        g.setAttribute('stroke', props.svgStroke);
+        g.setAttribute('stroke-width', props.svgStrokeWidth);
+      }
 
       // Set svg attributes
       svg.setAttribute('width', `${props.size}`);
       svg.setAttribute('height', `${props.size}`);
 
-      // Get SVG container on the current Vue component
-      const svgContainer = icon.value! as SVGGElement;
-
-      // Clear contents
-      svgContainer.innerHTML = '';
-
       // Add the fetched 'g' element as the middle child
       svgContainer.appendChild(svg);
-    });
+    }
+  } catch (err) {
+    // Error svg is just an empty svg
+    const errorSvg = '<svg width="40" height="60" viewBox="0, 0, 40, 60" xmlns="http://www.w3.org/2000/svg"></svg>';
+
+    // Parse the error SVGG
+    const svgParsedDom = new DOMParser().parseFromString(errorSvg, 'text/html');
+
+    // Add the error svg
+    svgContainer.appendChild(svgParsedDom);
+  }
 };
 
 onMounted(async () => {

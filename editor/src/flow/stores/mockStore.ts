@@ -49,6 +49,18 @@ export const useMockStore = defineStore('mock', () => {
       zBoost: 0,
       z: 1,
       io: notConfiguration.io.map((io) => ({ ...io }))
+    },
+    {
+      id: uuidv4(),
+      label: undefined,
+      functionType: 'TRANSITION',
+      location: { x: 380, y: 200 },
+      size: { width: notConfiguration.size.width, height: notConfiguration.size.height },
+      selected: false,
+      zOrder: 1,
+      zBoost: 0,
+      z: 1,
+      io: notConfiguration.io.map((io) => ({ ...io }))
     }
   ];
 

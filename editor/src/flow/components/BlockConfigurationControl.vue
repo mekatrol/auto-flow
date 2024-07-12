@@ -1,0 +1,91 @@
+<template>
+  <g
+    v-if="blockConfiguration"
+    :transform="`translate(${x},${y})`"
+  >
+    <rect
+      class="flow-block"
+      :x="0"
+      :y="0"
+      :width="blockConfiguration.size.width"
+      :height="blockConfiguration.size.height"
+      :rx="`${theme.blockStyles.radius}px`"
+      :ry="`${theme.blockStyles.radius}px`"
+      :fill="theme.blockStyles.fill"
+      :fill-opacity="theme.blockStyles.fillOpacity"
+      :stroke="theme.blockStyles.stroke"
+      :stroke-width="theme.blockStyles.strokeWidth"
+    ></rect>
+
+    <!-- Block icon -->
+    <SvgIcon
+      :icon="props.blockConfiguration.type.toLowerCase()"
+      :x="0"
+      :y="0"
+      :backgroundCornerRadius="theme.blockStyles.radius"
+      :size="iconSize"
+      :svg-fill="theme.blockIconStyles.svg.fill"
+      :svg-fill-opacity="theme.blockIconStyles.svg.opacity"
+      :svg-stroke="theme.blockIconStyles.svg.stroke"
+      :svg-strokeWidth="theme.blockIconStyles.svg.strokeWidth"
+      :background-fill="theme.blockIconStyles.background.fill"
+      :background-opacity="theme.blockIconStyles.background.opacity"
+    />
+
+    <!-- Icon right border -->
+    <path
+      :d="`M ${iconSize - 0.5} ${0.5} l 0 ${iconSize - 1}`"
+      class="separator"
+      :stroke="theme.blockStyles.stroke"
+      :stroke-width="theme.blockStyles.strokeWidth"
+    >
+    </path>
+
+    <!-- Label inside block -->
+    <LabelControl
+      :x="iconSize + textGapX"
+      :y="blockConfiguration.size.height / 2"
+      :text="blockConfiguration.type.toUpperCase()"
+      vertical-alignment="middle"
+      :color="theme.blockFunctionLabelStyles.color"
+    />
+  </g>
+</template>
+
+<script setup lang="ts">
+import LabelControl from './LabelControl.vue';
+import SvgIcon from './SvgIcon.vue';
+import type { MarkerShape } from '../types/MarkerShape';
+import { computed } from 'vue';
+import { useEmitter, type FlowEvents } from '../utils/event-emitter';
+import {
+  MARKER_OFFSET_X,
+  MARKER_OFFSET_Y,
+  MARKER_SIZE,
+  BLOCK_MOUSE_MOVE,
+  BLOCK_MOUSE_OVER,
+  BLOCK_MOUSE_ENTER,
+  BLOCK_MOUSE_LEAVE,
+  BLOCK_MOUSE_DOWN,
+  BLOCK_MOUSE_UP
+} from '../constants';
+import { useThemeStore } from '../stores/themeStore';
+import type { BlockFunctionConfiguration } from '../types/BlockFunctionConfiguration';
+
+const textGapX = 10;
+
+interface Props {
+  blockConfiguration: BlockFunctionConfiguration;
+  x: number;
+  y: number;
+}
+
+const props = defineProps<Props>();
+
+const io = props.blockConfiguration.io;
+
+// Make the icon size same as block height (less border size) so that it is displayed as a square.
+// Using height works because the aspect ratio of the block is always width > height
+const iconSize = computed(() => props.blockConfiguration.size.height);
+const { theme } = useThemeStore();
+</script>

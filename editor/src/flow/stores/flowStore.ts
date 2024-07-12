@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
-import type { FunctionConfiguration } from '../types/FunctionConfiguration';
+import type { BlockFunctionConfiguration } from '../types/BlockFunctionConfiguration';
 import { InputOutputSignalType } from '../types/InputOutputSignalType';
 import { InputOutputDirection } from '../types/InputOutputDirection';
 import { BlockSide } from '../types/BlockSide';
 import { BLOCK_HEIGHT, BLOCK_IO_SIZE, BLOCK_WIDTH } from '../constants';
 
-const functionConfigurations: FunctionConfiguration[] = [
+const functionConfigurations: BlockFunctionConfiguration[] = [
   {
     type: 'AND',
     label: 'AND',
@@ -1033,6 +1033,54 @@ const functionConfigurations: FunctionConfiguration[] = [
       {
         pin: 4,
         label: '',
+        description: '',
+        type: InputOutputSignalType.Digital,
+        direction: InputOutputDirection.Output,
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
+      }
+    ]
+  },
+  {
+    type: 'TRANSITION',
+    label: 'Transition',
+    description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
+    io: [
+      {
+        pin: 1,
+        label: 'Transition input',
+        description: 'Input to used detect transition',
+        type: InputOutputSignalType.Digital,
+        direction: InputOutputDirection.Input,
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
+      },
+      {
+        pin: 2,
+        label: 'Transition reset',
+        description: 'Used to reset transition state',
+        type: InputOutputSignalType.Digital,
+        direction: InputOutputDirection.Input,
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
+      },
+      {
+        pin: 3,
+        label: 'Transition output',
+        description: '',
+        type: InputOutputSignalType.Digital,
+        direction: InputOutputDirection.Output,
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
+      },
+      {
+        pin: 4,
+        label: 'Transition output inverted',
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
