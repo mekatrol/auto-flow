@@ -70,12 +70,12 @@ export class ConnectionElement {
     return this._connection.endPin;
   }
 
-  public getEndOffset(): Offset | undefined {
+  public getEndOffset(): Offset {
     // If no end block then no end block offset
     if (!this._endBlock) {
       // If no end block then we must be creating a connection so return
-      // location (which is set to end off connection offset)
-      return this.endLocation;
+      // location (which is set to mouse offset)
+      return this.endLocation ?? { x: 0, y: 0 };
     }
 
     const endInputOutput = this._endBlock.io.find((io) => io.pin == this.endPin)!;
