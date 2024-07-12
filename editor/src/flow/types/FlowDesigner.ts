@@ -468,7 +468,7 @@ export class FlowDesigner {
 let flowDesigner: FlowDesigner;
 
 // Initialise the designer
-export const initFlowDesignController = (screenSize: Ref<{ width: number; height: number }>, gridSize: Ref<number>): FlowDesigner => {
+export const initFlowDesigner = (screenSize: Ref<{ width: number; height: number }>, gridSize: Ref<number>): FlowDesigner => {
   flowDesigner = new FlowDesigner(screenSize, gridSize);
 
   // Mouse events

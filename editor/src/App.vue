@@ -1,6 +1,8 @@
 <template>
   <main>
+    <FunctionSelectorControl />
     <EditorControl />
+    <FlowInformationControl />
   </main>
   <BusyOverlay
     :show="appStore.isBusy"
@@ -10,6 +12,8 @@
 
 <script setup lang="ts">
 import EditorControl from '@/flow/components/EditorControl.vue';
+import FunctionSelectorControl from '@/flow/components/FunctionSelectorControl.vue';
+import FlowInformationControl from '@/flow/components/FlowInformationControl.vue';
 import { BusyOverlay } from 'vue-boosted';
 import { useAppStore } from './stores/app';
 import { useIntervalTimer } from 'vue-boosted';
@@ -26,3 +30,10 @@ useIntervalTimer(async () => {
   return false;
 }, 500);
 </script>
+
+<style scoped lang="css">
+main {
+  display: flex;
+  flex-direction: row;
+}
+</style>

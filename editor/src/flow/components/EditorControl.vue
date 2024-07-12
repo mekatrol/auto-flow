@@ -11,7 +11,7 @@
     @keypress="(e) => flowDesigner.keyPress(e)"
     @keydown="(e) => flowDesigner.keyDown(e)"
     @keyup="(e) => flowDesigner.keyUp(e)"
-    @focusin="(e) => focusDesigner(e)"
+    @focusin="(e) => focus(e)"
   >
     <g class="grid">
       <line
@@ -50,14 +50,14 @@ import ConnectingControl from './ConnectingControl.vue';
 import { ref } from 'vue';
 import { useScreenSize } from 'vue-boosted';
 import BlockControl from './BlockControl.vue';
-import { initFlowDesignController } from '../types/FlowDesigner';
+import { initFlowDesigner } from '../types/FlowDesigner';
 import { useMockStore } from '../stores/mockStore';
 
 const gridSize = ref(20);
 const screenSize = useScreenSize();
 
 // Must be done before constructing any blocks or connections
-const flowDesigner = initFlowDesignController(screenSize, gridSize);
+const flowDesigner = initFlowDesigner(screenSize, gridSize);
 const gridLines = flowDesigner.gridLines;
 
 const { flow } = useMockStore();
@@ -65,7 +65,7 @@ const { flow } = useMockStore();
 flowDesigner.blocks.value = flow.blocks;
 flowDesigner.connections.value = flow.connections;
 
-const focusDesigner = (_e: FocusEvent): void => {
+const focus = (_e: FocusEvent): void => {
   // Do nothing, and SVG element won't raise keyboard events unless it has
   // a focus event handler
 };
