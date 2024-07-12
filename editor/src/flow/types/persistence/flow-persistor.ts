@@ -1,10 +1,8 @@
-import { InputOutputDirection } from '../InputOutputDirection';
 import type { Flow } from '../Flow';
 import type { FlowBlockElement } from '../FlowBlockElement';
 import type { FlowConnection } from '../FlowConnection';
 import type { FlowFunction } from '../FlowFunction';
 import { BlockElement } from '../ui/BlockElement';
-import { BlockSide } from '../ui/BlockSide';
 import { ConnectionElement } from '../ui/ConnectionElement';
 import { layoutInputOutputs } from '@/flow/utils/flow-element-helpers';
 import { BLOCK_HEIGHT, BLOCK_IO_SIZE, BLOCK_WIDTH } from '@/flow/constants';
