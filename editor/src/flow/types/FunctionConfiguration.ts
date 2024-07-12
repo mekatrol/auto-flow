@@ -1,4 +1,5 @@
 import type { InputOutput } from './InputOutput';
+import type { Size } from './ui/Size';
 
 export interface FunctionConfiguration {
   // The function type, must be unique across all function configurations,
@@ -13,4 +14,7 @@ export interface FunctionConfiguration {
 
   // Defines the inputs/outputs for the function
   io: InputOutput[];
+
+  // Defines the visual size
+  size: Size;
 }

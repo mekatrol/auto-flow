@@ -3,12 +3,14 @@ import type { FunctionConfiguration } from '../types/FunctionConfiguration';
 import { InputOutputSignalType } from '../types/InputOutputSignalType';
 import { InputOutputDirection } from '../types/InputOutputDirection';
 import { BlockSide } from '../types/ui/BlockSide';
+import { BLOCK_HEIGHT, BLOCK_IO_SIZE, BLOCK_WIDTH } from '../constants';
 
 const functionConfigurations: FunctionConfiguration[] = [
   {
     type: 'AND',
     label: 'AND',
     description: 'An boolean logic AND gate',
+    size: { width: BLOCK_WIDTH * 2, height: BLOCK_HEIGHT * 2 },
     io: [
       {
         pin: 1,
@@ -16,7 +18,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: 'AND gate input number 1',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -24,7 +28,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: 'AND gate input number 2',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -32,7 +38,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: 'AND gate output',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -40,7 +48,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: 'The inverted AND gate output',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -48,6 +58,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'AVERAGE',
     label: 'Average',
     description: 'Calculates the average of the two input values',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -55,7 +66,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -63,7 +76,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -71,7 +86,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -79,7 +96,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -87,6 +106,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'CALCULATOR',
     label: 'Calculator',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -94,7 +114,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -102,7 +124,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -110,7 +134,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -118,7 +144,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -126,6 +154,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'CALENDAR',
     label: 'Calendar',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -133,7 +162,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -141,7 +172,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -149,7 +182,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -157,7 +192,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -165,6 +202,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'CLAMP',
     label: 'Clamp',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -172,7 +210,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -180,7 +220,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -188,7 +230,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -196,7 +240,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -204,6 +250,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'COMPARATOR',
     label: 'Comparator',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -211,7 +258,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -219,7 +268,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -227,7 +278,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -235,7 +288,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -243,6 +298,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'DELAY',
     label: 'Delay',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -250,7 +306,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -258,7 +316,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -266,7 +326,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -274,7 +336,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -282,6 +346,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'IF',
     label: 'If',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -289,7 +354,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -297,7 +364,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -305,7 +374,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -313,7 +384,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -321,6 +394,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'LATCH',
     label: 'Latch',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -328,7 +402,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -336,7 +412,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -344,7 +422,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -352,7 +432,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -360,6 +442,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'MAX',
     label: 'Max',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -367,7 +450,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -375,7 +460,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -383,7 +470,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -391,7 +480,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -399,6 +490,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'MIN',
     label: 'Min',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -406,7 +498,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -414,7 +508,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -422,7 +518,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -430,7 +528,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -438,6 +538,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'NOT',
     label: 'NOT',
     description: 'Inverts the input boolean value, 0 -> 1 and 1 -> 0',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -445,7 +546,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: 'The NOT gate input',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -453,7 +556,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: 'The inverted output',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -461,6 +566,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'OR',
     label: 'OR',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -468,7 +574,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -476,7 +584,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -484,7 +594,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -492,7 +604,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -500,6 +614,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'OVERRIDE',
     label: 'Override',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -507,7 +622,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -515,7 +632,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -523,7 +642,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -531,7 +652,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -539,6 +662,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'PID',
     label: 'PID',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -546,7 +670,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -554,7 +680,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -562,7 +690,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -570,7 +700,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -578,6 +710,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'PULSE',
     label: 'Pulse',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -585,7 +718,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -593,7 +728,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -601,7 +738,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -609,7 +748,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -617,6 +758,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'SCHEDULE',
     label: 'Schedule',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -624,7 +766,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -632,7 +776,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -640,7 +786,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -648,7 +796,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -656,6 +806,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'SELECTOR',
     label: 'Selector',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -663,7 +814,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -671,7 +824,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -679,7 +834,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -687,7 +844,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -695,6 +854,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'SEQUENCE',
     label: 'Sequence',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -702,7 +862,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -710,7 +872,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -718,7 +882,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -726,7 +892,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -734,6 +902,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'SPAN',
     label: 'Span',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -741,7 +910,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -749,7 +920,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -757,7 +930,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -765,7 +940,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -773,6 +950,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'SPLIT',
     label: 'Split',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -780,7 +958,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -788,7 +968,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -796,7 +978,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -804,7 +988,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -812,6 +998,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'TIMER',
     label: 'Timer',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -819,7 +1006,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -827,7 +1016,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -835,7 +1026,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -843,7 +1036,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -851,6 +1046,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'XNOR',
     label: 'XNOR',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -858,7 +1054,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -866,7 +1064,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -874,7 +1074,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -882,7 +1084,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   },
@@ -890,6 +1094,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'XOR',
     label: 'XOR',
     description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,
@@ -897,7 +1102,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 2,
@@ -905,7 +1112,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
-        side: BlockSide.Left
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 3,
@@ -913,7 +1122,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
         pin: 4,
@@ -921,7 +1132,9 @@ const functionConfigurations: FunctionConfiguration[] = [
         description: '',
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
-        side: BlockSide.Right
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
   }
