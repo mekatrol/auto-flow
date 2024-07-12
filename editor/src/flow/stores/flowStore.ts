@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import type { FunctionConfiguration } from '../types/FunctionConfiguration';
 import { InputOutputSignalType } from '../types/InputOutputSignalType';
 import { InputOutputDirection } from '../types/InputOutputDirection';
-import { BlockSide } from '../types/ui/BlockSide';
+import { BlockSide } from '../types/BlockSide';
 import { BLOCK_HEIGHT, BLOCK_IO_SIZE, BLOCK_WIDTH } from '../constants';
 
 const functionConfigurations: FunctionConfiguration[] = [
@@ -10,7 +10,7 @@ const functionConfigurations: FunctionConfiguration[] = [
     type: 'AND',
     label: 'AND',
     description: 'An boolean logic AND gate',
-    size: { width: BLOCK_WIDTH * 2, height: BLOCK_HEIGHT * 2 },
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
       {
         pin: 1,

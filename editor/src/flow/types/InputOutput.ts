@@ -1,8 +1,8 @@
 import type { InputOutputDirection } from './InputOutputDirection';
 import type { InputOutputSignalType } from './InputOutputSignalType';
-import type { BlockSide } from './ui/BlockSide';
-import type { Offset } from './ui/Offset';
-import type { Size } from './ui/Size';
+import type { BlockSide } from './BlockSide';
+import type { Offset } from './Offset';
+import type { Size } from './Size';
 
 export interface InputOutput {
   // The unique pin number of this input/output for a given function block

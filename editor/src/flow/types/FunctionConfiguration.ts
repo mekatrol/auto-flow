@@ -1,5 +1,5 @@
 import type { InputOutput } from './InputOutput';
-import type { Size } from './ui/Size';
+import type { Size } from './Size';
 
 export interface FunctionConfiguration {
   // The function type, must be unique across all function configurations,

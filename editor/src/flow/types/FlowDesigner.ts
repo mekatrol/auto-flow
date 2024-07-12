@@ -1,27 +1,29 @@
 import { computed, type Ref, ref } from 'vue';
-import { ConnectionElement } from './ConnectionElement';
 import type { Offset } from './Offset';
-import { BlockElement } from './BlockElement';
 import { ZOrder } from './ZOrder';
 import type { Line } from './Line';
-import { configureFlowMouseEvents } from '../../utils/event-emitter';
-import type { FlowConnection } from '../FlowConnection';
-import { v4 as uuidv4 } from 'uuid';
+import { configureFlowMouseEvents } from '../utils/event-emitter';
+import type { FlowConnection } from './FlowConnection';
 import type { Size } from './Size';
-import type { InputOutput } from '../InputOutput';
+import type { FlowBlockElement } from './FlowBlockElement';
+import type { FlowConnecting } from './FlowConnecting';
+import { BlockSide } from './BlockSide';
+import type { EnumDictionary } from './EnumDictionary';
+import { BLOCK_IO_OFFSET, BLOCK_IO_SIZE } from '../constants';
+import type { InputOutput } from '../types/InputOutput';
 
 export class FlowDesigner {
   private _viewSize: Ref<{ width: number; height: number }>;
-  private _blocks: Ref<BlockElement[]>;
-  private _connections: Ref<ConnectionElement[]>;
+  private _blocks: Ref<FlowBlockElement[]>;
+  private _connections: Ref<FlowConnection[]>;
   private _zOrder: ZOrder;
   private _gridSize: Ref<number>;
-  private _drawingConnection = ref<ConnectionElement | undefined>(undefined);
-  private _drawingConnectionEndBlock = ref<BlockElement | undefined>(undefined);
+  private _drawingConnection = ref<FlowConnecting | undefined>(undefined);
+  private _drawingConnectionEndBlock = ref<FlowBlockElement | undefined>(undefined);
   private _drawingConnectionEndPin = ref<number | undefined>(undefined);
-  private _selectedConnection = ref<ConnectionElement | undefined>(undefined);
-  private _selectedBlock = ref<BlockElement | undefined>(undefined);
-  private _dragBlock = ref<BlockElement | undefined>(undefined);
+  private _selectedConnection = ref<FlowConnection | undefined>(undefined);
+  private _selectedBlock = ref<FlowBlockElement | undefined>(undefined);
+  private _dragBlock = ref<FlowBlockElement | undefined>(undefined);
   private _dragBlockOffset = ref<Offset>({ x: 0, y: 0 });
   private _dragBlockOriginalPosition = ref<Offset>({ x: 0, y: 0 });
 
@@ -33,11 +35,11 @@ export class FlowDesigner {
     this._zOrder = new ZOrder(this._blocks);
   }
 
-  public get blocks(): Ref<BlockElement[]> {
+  public get blocks(): Ref<FlowBlockElement[]> {
     return this._blocks;
   }
 
-  public get connections(): Ref<ConnectionElement[]> {
+  public get connections(): Ref<FlowConnection[]> {
     return this._connections;
   }
 
@@ -45,7 +47,7 @@ export class FlowDesigner {
     return this._viewSize;
   }
 
-  public get dragBlock(): Ref<BlockElement | undefined> {
+  public get dragBlock(): Ref<FlowBlockElement | undefined> {
     return this._dragBlock;
   }
 
@@ -57,15 +59,15 @@ export class FlowDesigner {
     return this._dragBlockOffset;
   }
 
-  public get drawingConnection(): Ref<ConnectionElement | undefined> {
+  public get drawingConnection(): Ref<FlowConnecting | undefined> {
     return this._drawingConnection;
   }
 
-  public get selectedBlock(): BlockElement | undefined {
+  public get selectedBlock(): FlowBlockElement | undefined {
     return this._selectedBlock.value;
   }
 
-  public set selectedBlock(block: BlockElement | undefined) {
+  public set selectedBlock(block: FlowBlockElement | undefined) {
     // Clear any existing selections
     this.clearSelectedBlock();
 
@@ -77,11 +79,11 @@ export class FlowDesigner {
     this._selectedBlock.value = block;
   }
 
-  public get selectedConnection(): ConnectionElement | undefined {
+  public get selectedConnection(): FlowConnection | undefined {
     return this._selectedConnection.value;
   }
 
-  public set selectedConnection(connection: ConnectionElement | undefined) {
+  public set selectedConnection(connection: FlowConnection | undefined) {
     // Clear any existing selections
     this.clearSelectedConnection();
 
@@ -176,7 +178,7 @@ export class FlowDesigner {
 
     // Get starting io
     const startBlock = this.drawingConnection.value.startBlock;
-    const startInputOutput = this.drawingConnection.value.getStartInputOutput();
+    const startInputOutput = startBlock.io.find((io) => io.pin === this.drawingConnection.value!.startPin)!;
 
     // Is there an element at the mouse position (that is not the drawing connection)
     const hitInputOutputs = this.getHitInputOutputs(e).filter(
@@ -217,15 +219,13 @@ export class FlowDesigner {
     const endBlockPin = this._drawingConnectionEndPin.value;
 
     const connection = {
-      id: uuidv4(),
-      label: null,
-      description: null,
+      startBlockId: startBlock.id,
       startPin: startBlockPin,
+      endBlockId: endBlock.id,
       endPin: endBlockPin
     } as FlowConnection;
 
-    const connectionElement = new ConnectionElement(connection, startBlock, endBlock);
-    this._connections.value.push(connectionElement);
+    this._connections.value.push(connection);
   };
 
   public canConnect = (from: InputOutput, to: InputOutput): boolean => {
@@ -247,10 +247,38 @@ export class FlowDesigner {
     return true;
   };
 
+  public getConnectionStartInputOutput(connection: FlowConnection): InputOutput {
+    const startBlock = this.blocks.value.find((b) => b.id === connection.startBlockId)!;
+    return startBlock.io.find((io) => io.pin === connection.startPin)!;
+  }
+
+  public getConnectionStartOffset(connection: FlowConnection): Offset {
+    const startBlock = this.blocks.value.find((b) => b.id === connection.startBlockId)!;
+    const startInputOutput = startBlock.io.find((io) => io.pin == connection.startPin)!;
+    return {
+      x: startBlock.location.x + startInputOutput.location.x,
+      y: startBlock.location.y + startInputOutput.location.y + startInputOutput.size.height / 2
+    };
+  }
+
+  public getConnectionEndInputOutput(connection: FlowConnection): InputOutput {
+    const endBlock = this.blocks.value.find((b) => b.id === connection.endBlockId)!;
+    return endBlock.io.find((io) => io.pin === connection.endPin)!;
+  }
+
+  public getConnectionEndOffset(connection: FlowConnection): Offset {
+    const endBlock = this.blocks.value.find((b) => b.id === connection.endBlockId)!;
+    const endInputOutput = endBlock.io.find((io) => io.pin == connection.endPin)!;
+    return {
+      x: endBlock.location.x + endInputOutput.location.x,
+      y: endBlock.location.y + endInputOutput.location.y + endInputOutput.size.height / 2
+    };
+  }
+
   public isConnectorConnected = (inputOutput: InputOutput): boolean => {
     let isConnected = false;
     this._connections.value.forEach((c) => {
-      if (c.getStartInputOutput() === inputOutput || c.getEndInputOutput() === inputOutput) {
+      if (this.getConnectionStartInputOutput(c) === inputOutput || this.getConnectionEndInputOutput(c) === inputOutput) {
         isConnected = true;
         return;
       }
@@ -273,15 +301,15 @@ export class FlowDesigner {
     return offset.x >= boundingBox.left && offset.x <= boundingBox.right && offset.y >= boundingBox.top && offset.y <= boundingBox.bottom;
   }
 
-  public getHitInputOutputs = (e: MouseEvent): [BlockElement, InputOutput][] => {
-    const hitInputOutputs: [BlockElement, InputOutput][] = [];
+  public getHitInputOutputs = (e: MouseEvent): [FlowBlockElement, InputOutput][] => {
+    const hitInputOutputs: [FlowBlockElement, InputOutput][] = [];
 
     this._blocks.value.forEach((block) => {
       // Convert mouse location to offset relative to block location for block input/output hit testing
       const blockRelativeOffset: Offset = { x: e.offsetX - block.location.x, y: e.offsetY - block.location.y };
 
       // Are any input/output hit?
-      (block as BlockElement).io.forEach((io) => {
+      (block as FlowBlockElement).io.forEach((io) => {
         const boundingBox = this.getBoundingBox(io.location, io.size);
         if (this.boundingBoxContainsOffset(boundingBox, blockRelativeOffset)) {
           hitInputOutputs.push([block, io]);
@@ -385,18 +413,54 @@ export class FlowDesigner {
     this.clearSelectedItems();
   };
 
-  public deleteBlock = (block: BlockElement): void => {
+  public deleteBlock = (block: FlowBlockElement): void => {
     // We must also delete any connections that connect to the node
-    const connections = this._connections.value.filter((c) => c.startBlock === block || c.endBlock === block);
+    const connections = this._connections.value.filter((c) => c.startBlockId === block.id || c.endBlockId === block.id);
     connections.forEach((c) => this.deleteConnection(c));
 
     // Filter nodes to the set without the node
     this._blocks.value = this._blocks.value.filter((b) => b != block);
   };
 
-  public deleteConnection = (connection: ConnectionElement): void => {
+  public deleteConnection = (connection: FlowConnection): void => {
     // Filter connections to the set without the connection
     this._connections.value = this._connections.value.filter((c) => c != connection);
+  };
+
+  private getInputOutputOffsets(size: Size, offset: number): EnumDictionary<BlockSide, Offset> {
+    const inputOutputOffsets: EnumDictionary<BlockSide, Offset> = {
+      [BlockSide.Left]: { x: -(BLOCK_IO_SIZE - BLOCK_IO_OFFSET), y: offset },
+      [BlockSide.Top]: { x: offset, y: -BLOCK_IO_OFFSET },
+      [BlockSide.Right]: { x: size.width - BLOCK_IO_OFFSET, y: offset },
+      [BlockSide.Bottom]: { x: offset, y: size.height - BLOCK_IO_OFFSET }
+    };
+
+    return inputOutputOffsets;
+  }
+
+  private layoutInputsOutputsSide(io: InputOutput[], side: BlockSide, inputOutputOffsets: EnumDictionary<BlockSide, Offset>): InputOutput[] {
+    const ioForSide = io.filter((io) => io.side === side);
+
+    let shift = 0;
+    ioForSide.forEach((io) => {
+      const shiftHorizontal = side === BlockSide.Top || side === BlockSide.Bottom;
+      const offset = inputOutputOffsets[side];
+      io.location = { x: offset.x + (shiftHorizontal ? shift : 0), y: offset.y + (!shiftHorizontal ? shift : 0) };
+      shift += BLOCK_IO_SIZE + (BLOCK_IO_SIZE >> 1);
+    });
+
+    return ioForSide;
+  }
+
+  public layoutInputOutputs = (size: Size, io: InputOutput[]): void => {
+    // Get the layout offsets for each side
+    const inputOutputOffsets = this.getInputOutputOffsets(size, 5);
+
+    // Layout inputs/outputs on each side
+    this.layoutInputsOutputsSide(io, BlockSide.Left, inputOutputOffsets);
+    this.layoutInputsOutputsSide(io, BlockSide.Right, inputOutputOffsets);
+    this.layoutInputsOutputsSide(io, BlockSide.Top, inputOutputOffsets);
+    this.layoutInputsOutputsSide(io, BlockSide.Bottom, inputOutputOffsets);
   };
 }
 

@@ -32,10 +32,10 @@ import {
   BLOCK_IO_MOUSE_DOWN,
   BLOCK_IO_MOUSE_UP
 } from '../constants';
-import type { BlockElement } from '../types/ui/BlockElement';
+import type { FlowBlockElement } from '../types/FlowBlockElement';
 
 interface Props {
-  block: BlockElement;
+  block: FlowBlockElement;
   inputOutput: InputOutput;
   fillColor?: string;
   strokeColor?: string;

@@ -1,19 +1,22 @@
-import type { Offset } from './ui/Offset';
-import type { Size } from './ui/Size';
+import type { InputOutput } from './InputOutput';
+import type { Offset } from './Offset';
+import type { Size } from './Size';
 
 export interface FlowBlockElement {
-  // The ID of the flow function that this block represents
-  functionId: string;
+  // Unique ID for this block instance (used for reference from other elements such as connections)
+  id: string;
+
+  // A label if one specified
+  label: string | undefined;
+
+  // The function type for this flow block
+  functionType: string;
 
   // The location of the block in SVG view units
   location: Offset;
 
   // The size of the block
   size: Size;
-
-  // The icon to use for the block, if an empty string then the
-  // default icon for the function type will be used
-  icon: string;
 
   // The display zOrder for the element. Used to determine rendering and mouse click order.
   // Elements with a higher zOrder are considered on top of elements with a lower zOrder.
@@ -30,4 +33,7 @@ export interface FlowBlockElement {
 
   // True if the element is currently selected
   selected: boolean;
+
+  // The block inputs/outputs
+  io: InputOutput[];
 }

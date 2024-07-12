@@ -27,6 +27,13 @@ export const BLOCK_IO_MOUSE_LEAVE = 'blockIOMouseLeave';
 export const BLOCK_IO_MOUSE_DOWN = 'blockIOMouseDown';
 export const BLOCK_IO_MOUSE_UP = 'blockIOMouseUp';
 
+export const CONNECTING_MOUSE_MOVE = 'connectingMouseMove';
+export const CONNECTING_MOUSE_OVER = 'connectingMouseOver';
+export const CONNECTING_MOUSE_ENTER = 'connectingMouseEnter';
+export const CONNECTING_MOUSE_LEAVE = 'connectingMouseLeave';
+export const CONNECTING_MOUSE_DOWN = 'connectingMouseDown';
+export const CONNECTING_MOUSE_UP = 'connectingMouseUp';
+
 export const CONNECTION_MOUSE_MOVE = 'connectionMouseMove';
 export const CONNECTION_MOUSE_OVER = 'connectionMouseOver';
 export const CONNECTION_MOUSE_ENTER = 'connectionMouseEnter';

@@ -25,7 +25,7 @@
 
     <!-- Block icon -->
     <SvgIcon
-      :icon="props.block.icon"
+      :icon="props.block.functionType.toLowerCase()"
       :x="0"
       :y="0"
       :backgroundCornerRadius="theme.blockStyles.radius"
@@ -51,16 +51,17 @@
     <LabelControl
       :x="iconSize + textGapX"
       :y="block.size.height / 2"
-      :text="block.flowFunction.functionType.toUpperCase()"
+      :text="block.functionType.toUpperCase()"
       vertical-alignment="middle"
       :color="theme.blockFunctionLabelStyles.color"
     />
 
     <!-- Label below block -->
     <LabelControl
+      v-if="block.label"
       :x="0"
       :y="block.size.height + textGapY"
-      :text="block.flowFunction.label ?? ''"
+      :text="block.label"
       :color="theme.blockLabelStyles.color"
     />
 
@@ -94,8 +95,7 @@ import LabelControl from './LabelControl.vue';
 import MarkerControl from './MarkerControl.vue';
 import InputOutputControl from './InputOutputControl.vue';
 import SvgIcon from './SvgIcon.vue';
-import { BlockElement } from '../types/ui/BlockElement';
-import { MarkerShape } from '../types/ui/MarkerShape';
+import type { MarkerShape } from '../types/MarkerShape';
 import { computed } from 'vue';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
 import {
@@ -110,20 +110,18 @@ import {
   BLOCK_MOUSE_UP
 } from '../constants';
 import { useThemeStore } from '../stores/themeStore';
-import { layoutInputOutputs } from '../utils/flow-element-helpers';
+import type { FlowBlockElement } from '../types/FlowBlockElement';
 
 const textGapX = 10;
 const textGapY = 5;
 
 interface Props {
-  block: BlockElement;
+  block: FlowBlockElement;
 }
 
 const props = defineProps<Props>();
 
-const io = props.block.flowFunction.io;
-
-layoutInputOutputs(props.block.size, io);
+const io = props.block.io;
 
 // Make the icon size same as block height (less border size) so that it is displayed as a square.
 // Using height works because the aspect ratio of the block is always width > height
@@ -143,15 +141,33 @@ const emit = (event: keyof FlowEvents, e: MouseEvent): boolean => {
   return false;
 };
 
-const markers = computed(() => {
+const markers = computed((): MarkerShape[] => {
   if (!props.block) {
     return [];
   }
 
   return [
-    new MarkerShape('circle', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 1, MARKER_OFFSET_Y, 'black', 'yellow'),
-    new MarkerShape('triangle', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 2, MARKER_OFFSET_Y, 'darkred', 'coral'),
-    new MarkerShape('square', props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 3, MARKER_OFFSET_Y, 'green', 'white')
+    {
+      shape: 'circle',
+      location: { x: props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 1, y: MARKER_OFFSET_Y },
+      size: { width: MARKER_SIZE, height: MARKER_SIZE },
+      strokeColor: 'black',
+      fillColor: 'yellow'
+    },
+    {
+      shape: 'triangle',
+      location: { x: props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 2, y: MARKER_OFFSET_Y },
+      size: { width: MARKER_SIZE, height: MARKER_SIZE },
+      strokeColor: 'darkred',
+      fillColor: 'coral'
+    },
+    {
+      shape: 'square',
+      location: { x: props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 3, y: MARKER_OFFSET_Y },
+      size: { width: MARKER_SIZE, height: MARKER_SIZE },
+      strokeColor: 'green',
+      fillColor: 'white'
+    }
   ];
 });
 

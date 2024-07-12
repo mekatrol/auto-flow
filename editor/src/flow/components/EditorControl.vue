@@ -37,19 +37,20 @@
       :block="block"
     />
 
-    <ConnectionControl
+    <ConnectingControl
       v-if="flowDesigner.drawingConnection.value"
-      :connection="flowDesigner.drawingConnection.value!"
+      :connecting="flowDesigner.drawingConnection.value!"
     />
   </svg>
 </template>
 
 <script setup lang="ts">
 import ConnectionControl from './ConnectionControl.vue';
+import ConnectingControl from './ConnectingControl.vue';
 import { ref } from 'vue';
 import { useScreenSize } from 'vue-boosted';
 import BlockControl from './BlockControl.vue';
-import { initFlowDesignController } from '../types/ui/FlowDesigner';
+import { initFlowDesignController } from '../types/FlowDesigner';
 import { useMockStore } from '../stores/mockStore';
 
 const gridSize = ref(20);
@@ -59,10 +60,10 @@ const screenSize = useScreenSize();
 const flowDesigner = initFlowDesignController(screenSize, gridSize);
 const gridLines = flowDesigner.gridLines;
 
-const { blocks, connections } = useMockStore();
+const { flow } = useMockStore();
 
-flowDesigner.blocks.value = blocks;
-flowDesigner.connections.value = connections;
+flowDesigner.blocks.value = flow.blocks;
+flowDesigner.connections.value = flow.connections;
 
 const focusDesigner = (_e: FocusEvent): void => {
   // Do nothing, and SVG element won't raise keyboard events unless it has

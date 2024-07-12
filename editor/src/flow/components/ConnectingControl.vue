@@ -1,7 +1,11 @@
 <template>
   <!-- Spline path -->
-  <g v-if="show">
+  <g
+    v-if="show"
+    :class="`flow-connection ${connecting ? 'connecting' : ''} ${connecting.cssClasses}`"
+  >
     <path
+      class="`line connecting"
       :d="svg"
       :fill="theme.connectionStyles.fill"
       :fill-opacity="theme.connectionStyles.fillOpacity"
@@ -17,8 +21,9 @@
     />
 
     <rect
-      :x="startOffset.x"
-      :y="startOffset.y"
+      class="connection-start"
+      :x="startOffset.x - BLOCK_IO_SIZE"
+      :y="startOffset.y - BLOCK_IO_SIZE / 2"
       rx="2"
       ry="2"
       :width="BLOCK_IO_SIZE"
@@ -26,8 +31,9 @@
     ></rect>
 
     <rect
-      :x="endOffset.x"
-      :y="endOffset.y"
+      class="connection-end"
+      :x="endOffset.x - BLOCK_IO_SIZE / 2"
+      :y="endOffset.y - BLOCK_IO_SIZE / 2"
       rx="2"
       ry="2"
       :width="BLOCK_IO_SIZE"
@@ -37,10 +43,11 @@
 </template>
 
 <script setup lang="ts">
+import { type Offset } from '../types/Offset';
 import { generateCubicBezierPoints } from '../utils/cubic-spline';
 import { cubicBezierToSvg } from '../utils/svg';
 import { computed } from 'vue';
-import { useEmitter, type FlowConnectionMouseEvent, type FlowEvents } from '../utils/event-emitter';
+import { useEmitter, type FlowConnectingMouseEvent, type FlowEvents } from '../utils/event-emitter';
 import {
   CONNECTION_MOUSE_MOVE,
   CONNECTION_MOUSE_OVER,
@@ -51,13 +58,12 @@ import {
   BLOCK_IO_SIZE
 } from '../constants';
 import { useThemeStore } from '../stores/themeStore';
-import type { FlowConnection } from '../types/FlowConnection';
-import { useFlowDesigner } from '../types/FlowDesigner';
+import type { FlowConnecting } from '../types/FlowConnecting';
 
 interface Props {
   show?: boolean;
 
-  connection: FlowConnection;
+  connecting: FlowConnecting;
 
   showPoints?: boolean;
 
@@ -82,12 +88,16 @@ const props = withDefaults(defineProps<Props>(), {
   endPointRadius: 5
 });
 
-const flowDesigner = useFlowDesigner();
+const startInputOutput = computed(() => props.connecting.startBlock.io.find((io) => io.pin === props.connecting.startPin)!);
 
-const startInputOutput = computed(() => flowDesigner.getConnectionStartInputOutput(props.connection));
-const startOffset = computed(() => flowDesigner.getConnectionStartOffset(props.connection));
+const startOffset = computed(() => {
+  return {
+    x: props.connecting.startBlock.location.x + startInputOutput.value.location.x + BLOCK_IO_SIZE,
+    y: props.connecting.startBlock.location.y + startInputOutput.value.location.y + BLOCK_IO_SIZE / 2
+  };
+});
 
-const endOffset = computed(() => flowDesigner.getConnectionEndOffset(props.connection));
+const endOffset = computed(() => props.connecting.endLocation);
 
 const svg = computed(() => {
   const points = generateCubicBezierPoints(startOffset.value, endOffset.value, startInputOutput.value.side);
@@ -97,12 +107,47 @@ const svg = computed(() => {
 const emitter = useEmitter();
 const emit = (event: keyof FlowEvents, e: MouseEvent): boolean => {
   emitter.emit(event, {
-    data: props.connection,
+    data: props.connecting,
     mouseEvent: e
-  } as FlowConnectionMouseEvent);
+  } as FlowConnectingMouseEvent);
   e.preventDefault();
   return false;
 };
 
 const { theme } = useThemeStore();
 </script>
+
+<style scoped lang="scss">
+.flow-connection {
+  .line {
+    fill: none;
+    cursor: pointer;
+  }
+
+  &.connecting {
+    .line {
+      stroke-dasharray: 5;
+    }
+
+    .connection-start {
+      fill: #008000;
+    }
+
+    .connection-end {
+      fill: #ff0000;
+    }
+
+    &.valid-end-point {
+      .line {
+        &.connecting {
+          stroke-dasharray: 0;
+          stroke: #00ff37;
+        }
+      }
+      .connection-end {
+        fill: #008000;
+      }
+    }
+  }
+}
+</style>

@@ -1,5 +1,5 @@
 import type { Ref } from 'vue';
-import type { FlowBlockElement } from '../FlowBlockElement';
+import type { FlowBlockElement } from './FlowBlockElement';
 
 export class ZOrder {
   private _blocks: Ref<FlowBlockElement[]>;
