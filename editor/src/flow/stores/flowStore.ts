@@ -343,54 +343,6 @@ const functionConfigurations: BlockFunctionConfiguration[] = [
     ]
   },
   {
-    type: 'IF',
-    label: 'If',
-    description: '',
-    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
-    io: [
-      {
-        pin: 1,
-        label: '',
-        description: '',
-        type: InputOutputSignalType.Digital,
-        direction: InputOutputDirection.Input,
-        side: BlockSide.Left,
-        location: { x: 0, y: 0 },
-        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
-      },
-      {
-        pin: 2,
-        label: '',
-        description: '',
-        type: InputOutputSignalType.Digital,
-        direction: InputOutputDirection.Input,
-        side: BlockSide.Left,
-        location: { x: 0, y: 0 },
-        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
-      },
-      {
-        pin: 3,
-        label: '',
-        description: '',
-        type: InputOutputSignalType.Digital,
-        direction: InputOutputDirection.Output,
-        side: BlockSide.Right,
-        location: { x: 0, y: 0 },
-        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
-      },
-      {
-        pin: 4,
-        label: '',
-        description: '',
-        type: InputOutputSignalType.Digital,
-        direction: InputOutputDirection.Output,
-        side: BlockSide.Right,
-        location: { x: 0, y: 0 },
-        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
-      }
-    ]
-  },
-  {
     type: 'LATCH',
     label: 'Latch',
     description: '',
@@ -709,54 +661,6 @@ const functionConfigurations: BlockFunctionConfiguration[] = [
   {
     type: 'PULSE',
     label: 'Pulse',
-    description: '',
-    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
-    io: [
-      {
-        pin: 1,
-        label: '',
-        description: '',
-        type: InputOutputSignalType.Digital,
-        direction: InputOutputDirection.Input,
-        side: BlockSide.Left,
-        location: { x: 0, y: 0 },
-        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
-      },
-      {
-        pin: 2,
-        label: '',
-        description: '',
-        type: InputOutputSignalType.Digital,
-        direction: InputOutputDirection.Input,
-        side: BlockSide.Left,
-        location: { x: 0, y: 0 },
-        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
-      },
-      {
-        pin: 3,
-        label: '',
-        description: '',
-        type: InputOutputSignalType.Digital,
-        direction: InputOutputDirection.Output,
-        side: BlockSide.Right,
-        location: { x: 0, y: 0 },
-        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
-      },
-      {
-        pin: 4,
-        label: '',
-        description: '',
-        type: InputOutputSignalType.Digital,
-        direction: InputOutputDirection.Output,
-        side: BlockSide.Right,
-        location: { x: 0, y: 0 },
-        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
-      }
-    ]
-  },
-  {
-    type: 'SCHEDULE',
-    label: 'Schedule',
     description: '',
     size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [

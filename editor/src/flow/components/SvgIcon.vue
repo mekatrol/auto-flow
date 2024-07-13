@@ -66,9 +66,12 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const icon = ref(null);
-
 const fetchIcon = async () => {
-  const iconUri = `/function-icons/${props.icon}.svg`;
+  const iconUri = `/function-icons/${props.icon}1.svg`;
+  const imageUri = `/function-icons/${props.icon}.png`;
+
+  // Error svg is just an empty svg
+  const errorSvg = `<image href="${imageUri}" height="${props.size}" :width="${props.size}" />`;
 
   // Get SVG container on the current Vue component
   const svgContainer = icon.value! as SVGGElement;
@@ -104,16 +107,15 @@ const fetchIcon = async () => {
 
       // Add the fetched 'g' element as the middle child
       svgContainer.appendChild(svg);
+    } else {
+      // Add the error svg
+      svgContainer.innerHTML = errorSvg;
     }
   } catch (err) {
-    // Error svg is just an empty svg
-    const errorSvg = '<svg width="40" height="60" viewBox="0, 0, 40, 60" xmlns="http://www.w3.org/2000/svg"></svg>';
-
-    // Parse the error SVGG
-    const svgParsedDom = new DOMParser().parseFromString(errorSvg, 'text/html');
+    console.error(err);
 
     // Add the error svg
-    svgContainer.appendChild(svgParsedDom);
+    svgContainer.innerHTML = errorSvg;
   }
 };
 

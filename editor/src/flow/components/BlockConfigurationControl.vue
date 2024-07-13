@@ -55,20 +55,7 @@
 <script setup lang="ts">
 import LabelControl from './LabelControl.vue';
 import SvgIcon from './SvgIcon.vue';
-import type { MarkerShape } from '../types/MarkerShape';
 import { computed } from 'vue';
-import { useEmitter, type FlowEvents } from '../utils/event-emitter';
-import {
-  MARKER_OFFSET_X,
-  MARKER_OFFSET_Y,
-  MARKER_SIZE,
-  BLOCK_MOUSE_MOVE,
-  BLOCK_MOUSE_OVER,
-  BLOCK_MOUSE_ENTER,
-  BLOCK_MOUSE_LEAVE,
-  BLOCK_MOUSE_DOWN,
-  BLOCK_MOUSE_UP
-} from '../constants';
 import { useThemeStore } from '../stores/themeStore';
 import type { BlockFunctionConfiguration } from '../types/BlockFunctionConfiguration';
 
@@ -89,3 +76,9 @@ const io = props.blockConfiguration.io;
 const iconSize = computed(() => props.blockConfiguration.size.height);
 const { theme } = useThemeStore();
 </script>
+
+<style scoped lang="css">
+.label {
+  font-size: 14px;
+}
+</style>
