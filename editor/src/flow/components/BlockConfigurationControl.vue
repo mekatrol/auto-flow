@@ -8,7 +8,7 @@
       :x="0"
       :y="0"
       :width="blockConfiguration.size.width"
-      :height="blockConfiguration.size.height"
+      :height="height"
       :rx="`${theme.blockStyles.radius}px`"
       :ry="`${theme.blockStyles.radius}px`"
       :fill="theme.blockStyles.fill"
@@ -44,7 +44,7 @@
     <!-- Label inside block -->
     <LabelControl
       :x="iconSize + textGapX"
-      :y="blockConfiguration.size.height / 2"
+      :y="height / 2"
       :text="blockConfiguration.type.toUpperCase()"
       vertical-alignment="middle"
       :color="theme.blockFunctionLabelStyles.color"
@@ -69,11 +69,11 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const io = props.blockConfiguration.io;
+const height = computed(() => props.blockConfiguration.size.height * 0.8);
 
 // Make the icon size same as block height (less border size) so that it is displayed as a square.
 // Using height works because the aspect ratio of the block is always width > height
-const iconSize = computed(() => props.blockConfiguration.size.height);
+const iconSize = computed(() => height.value);
 const { theme } = useThemeStore();
 </script>
 

@@ -340,6 +340,8 @@ export class FlowDesigner {
   };
 
   public mouseUp = (e: MouseEvent): void => {
+    this._dragBlock.value = undefined;
+
     if (this.drawingConnection.value && this._drawingConnectionEndPin.value) {
       this.dragConnectionCreateConnection();
     }

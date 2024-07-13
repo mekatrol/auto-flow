@@ -1,6 +1,5 @@
 <template>
-  <main>
-    <FunctionSelectorControl />
+  <main :style="`max-height: ${screenSize.height}`">
     <EditorControl />
     <FlowInformationControl />
   </main>
@@ -12,11 +11,12 @@
 
 <script setup lang="ts">
 import EditorControl from './EditorControl.vue';
-import FunctionSelectorControl from './FunctionSelectorControl.vue';
 import FlowInformationControl from './FlowInformationControl.vue';
-import { BusyOverlay } from 'vue-boosted';
+import { BusyOverlay, useScreenSize } from 'vue-boosted';
 import { useAppStore } from '../stores/app';
 import { useIntervalTimer } from 'vue-boosted';
+
+const screenSize = useScreenSize();
 
 const appStore = useAppStore();
 
@@ -35,5 +35,6 @@ useIntervalTimer(async () => {
 main {
   display: flex;
   flex-direction: row;
+  overflow: hidden;
 }
 </style>

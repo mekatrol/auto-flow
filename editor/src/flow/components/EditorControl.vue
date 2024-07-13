@@ -2,7 +2,8 @@
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1200"
-    height="1200"
+    :height="screenSize.height"
+    overflow="scroll"
     class="flow-designer"
     @mousemove="(e) => flowDesigner.mouseMove(e)"
     @mouseleave="(e) => flowDesigner.mouseLeave(e)"
@@ -25,34 +26,41 @@
       ></line>
     </g>
 
-    <ConnectionControl
-      v-for="(connection, i) in flowDesigner.connections.value"
-      :key="i"
-      :connection="connection"
-    />
+    <g class="editor">
+      <BlockPalletteControl
+        :width="blockPalletteWidth"
+        :height="screenSize.height"
+      />
 
-    <BlockControl
-      v-for="(block, i) in flowDesigner.blocks.value"
-      :key="i"
-      :block="block"
-    />
-
-    <ConnectingControl
-      v-if="flowDesigner.drawingConnection.value"
-      :connecting="flowDesigner.drawingConnection.value!"
-    />
+      <ConnectionControl
+        v-for="(connection, i) in flowDesigner.connections.value"
+        :key="i"
+        :connection="connection"
+      />
+      <BlockControl
+        v-for="(block, i) in flowDesigner.blocks.value"
+        :key="i"
+        :block="block"
+      />
+      <ConnectingControl
+        v-if="flowDesigner.drawingConnection.value"
+        :connecting="flowDesigner.drawingConnection.value!"
+      />
+    </g>
   </svg>
 </template>
 
 <script setup lang="ts">
 import ConnectionControl from './ConnectionControl.vue';
 import ConnectingControl from './ConnectingControl.vue';
+import BlockPalletteControl from './BlockPalletteControl.vue';
 import { ref } from 'vue';
 import { useScreenSize } from 'vue-boosted';
 import BlockControl from './BlockControl.vue';
 import { initFlowDesigner } from '../types/FlowDesigner';
 import { useMockStore } from '../stores/mockStore';
 
+const blockPalletteWidth = ref(168);
 const gridSize = ref(20);
 const screenSize = useScreenSize();
 
@@ -76,6 +84,7 @@ const focus = (_e: FocusEvent): void => {
   width: 100%;
   height: 100%;
   border: 1px solid #b6b3b6;
+  overflow: scroll;
 
   .grid-line {
     stroke: #aaaaaa77;

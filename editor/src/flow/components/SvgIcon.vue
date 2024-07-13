@@ -67,7 +67,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const icon = ref(null);
 const fetchIcon = async () => {
-  const iconUri = `/function-icons/${props.icon}1.svg`;
+  const iconUri = `/function-icons/${props.icon}.svg`;
   const imageUri = `/function-icons/${props.icon}.png`;
 
   // Error svg is just an empty svg
