@@ -57,12 +57,12 @@ import LabelControl from './LabelControl.vue';
 import SvgIcon from './SvgIcon.vue';
 import { computed } from 'vue';
 import { useThemeStore } from '../stores/themeStore';
-import type { BlockFunctionConfiguration } from '../types/BlockFunctionConfiguration';
+import type { BlockTemplate } from '../types/BlockTemplate';
 
 const textGapX = 10;
 
 interface Props {
-  blockConfiguration: BlockFunctionConfiguration;
+  blockConfiguration: BlockTemplate;
   x: number;
   y: number;
 }

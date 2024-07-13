@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
-import type { BlockFunctionConfiguration } from '../types/BlockFunctionConfiguration';
+import type { BlockTemplate } from '../types/BlockTemplate';
 import { InputOutputSignalType } from '../types/InputOutputSignalType';
 import { InputOutputDirection } from '../types/InputOutputDirection';
 import { BlockSide } from '../types/BlockSide';
 import { BLOCK_HEIGHT, BLOCK_IO_SIZE, BLOCK_WIDTH } from '../constants';
 
-const functionConfigurations: BlockFunctionConfiguration[] = [
+const functionConfigurations: BlockTemplate[] = [
   {
     type: 'AND',
     label: 'AND',

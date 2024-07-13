@@ -31,7 +31,7 @@
 import BlockConfigurationControl from './BlockConfigurationControl.vue';
 import { useFlowStore } from '../stores/flowStore';
 import { BLOCK_HEIGHT, BLOCK_MOUSE_DOWN } from '../constants';
-import type { BlockFunctionConfiguration } from '../types/BlockFunctionConfiguration';
+import type { BlockTemplate } from '../types/BlockTemplate';
 import { v4 as uuidv4 } from 'uuid';
 import { useFlowDesigner } from '../types/FlowDesigner';
 import type { FlowBlockElement } from '../types/FlowBlockElement';
@@ -50,7 +50,7 @@ const flowDesigner = useFlowDesigner();
 const gapX = 8;
 const gapY = 5;
 
-const mouseDown = (e: MouseEvent, functionConfiguration: BlockFunctionConfiguration, x: number, y: number): void => {
+const mouseDown = (e: MouseEvent, functionConfiguration: BlockTemplate, x: number, y: number): void => {
   const block: FlowBlockElement = {
     location: { x: x, y: y },
     functionType: functionConfiguration.type,

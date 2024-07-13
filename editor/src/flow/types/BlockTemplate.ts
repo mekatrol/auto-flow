@@ -1,7 +1,7 @@
 import type { InputOutput } from './InputOutput';
 import type { Size } from './Size';
 
-export interface BlockFunctionConfiguration {
+export interface BlockTemplate {
   // The function type, must be unique across all function configurations,
   // convention is upper case eg 'AND3' (for a 3 input And gate)
   type: string;
