@@ -1,4 +1,5 @@
 <template>
+  <nav><MenuControl /></nav>
   <main :style="`max-height: ${screenSize.height}`">
     <EditorControl />
     <FlowInformationControl />
@@ -10,6 +11,7 @@
 </template>
 
 <script setup lang="ts">
+import MenuControl from './MenuControl.vue';
 import EditorControl from './EditorControl.vue';
 import FlowInformationControl from './FlowInformationControl.vue';
 import { BusyOverlay, useScreenSize } from 'vue-boosted';
