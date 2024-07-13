@@ -2,18 +2,19 @@
   <g
     v-if="block"
     :transform="`translate(${block.location.x},${block.location.y})`"
+    :class="block.draggingAsNew ? 'dragging-new' : ''"
   >
     <rect
-      class="flow-block"
+      :class="`flow-block ${block.draggingAsNew ? 'dragging-new' : ''}`"
       :x="0"
       :y="0"
       :width="block.size.width"
       :height="block.size.height"
       :rx="`${theme.blockStyles.radius}px`"
       :ry="`${theme.blockStyles.radius}px`"
-      :fill="theme.blockStyles.fill"
-      :fill-opacity="theme.blockStyles.fillOpacity"
-      :stroke="theme.blockStyles.stroke"
+      :fill="blockStyles.fill"
+      :fill-opacity="blockStyles.opacity"
+      :stroke="blockStyles.stroke"
       :stroke-width="theme.blockStyles.strokeWidth"
       @mousemove="(e) => emit(BLOCK_MOUSE_MOVE, e)"
       @mouseover="(e) => emit(BLOCK_MOUSE_OVER, e)"
@@ -31,11 +32,11 @@
       :backgroundCornerRadius="theme.blockStyles.radius"
       :size="iconSize"
       :svg-fill="theme.blockIconStyles.svg.fill"
-      :svg-fill-opacity="theme.blockIconStyles.svg.opacity"
-      :svg-stroke="theme.blockIconStyles.svg.stroke"
+      :svg-fill-opacity="iconStyles.opacity"
+      :svg-stroke="iconStyles.stroke"
       :svg-strokeWidth="theme.blockIconStyles.svg.strokeWidth"
-      :background-fill="theme.blockIconStyles.background.fill"
-      :background-opacity="theme.blockIconStyles.background.opacity"
+      :background-fill="iconStyles.fill"
+      :background-opacity="iconStyles.opacity"
     />
 
     <!-- Icon right border -->
@@ -123,6 +124,36 @@ const props = defineProps<Props>();
 
 const io = props.block.io;
 
+interface Styles {
+  opacity: string;
+  fill: string;
+  stroke: string;
+}
+
+const blockStyles = computed((): Styles => {
+  return {
+    opacity: props.block.dragLocationInvalid ? '20%' : theme.blockStyles.fillOpacity,
+    fill: props.block.dragLocationInvalid ? 'red' : theme.blockStyles.fill,
+    stroke: props.block.dragLocationInvalid ? 'darkred' : theme.blockStyles.stroke
+  };
+});
+
+const iconStyles = computed((): Styles => {
+  return {
+    opacity: props.block.dragLocationInvalid ? '20%' : theme.blockIconStyles.background.opacity,
+    fill: props.block.dragLocationInvalid ? 'darkred' : theme.blockIconStyles.background.fill,
+    stroke: theme.blockIconStyles.svg.stroke
+  };
+});
+
+const labelStyles = computed((): Styles => {
+  return {
+    opacity: props.block.dragLocationInvalid ? '100%' : theme.blockStyles.fillOpacity,
+    fill: props.block.dragLocationInvalid ? 'red' : theme.blockStyles.fill,
+    stroke: props.block.dragLocationInvalid ? 'red' : theme.blockStyles.stroke
+  };
+});
+
 // Make the icon size same as block height (less border size) so that it is displayed as a square.
 // Using height works because the aspect ratio of the block is always width > height
 const iconSize = computed(() => props.block.size.height);
@@ -173,3 +204,9 @@ const markers = computed((): MarkerShape[] => {
 
 const { theme } = useThemeStore();
 </script>
+
+<style scoped lang="css">
+.dragging-new {
+  filter: grayscale(20%);
+}
+</style>

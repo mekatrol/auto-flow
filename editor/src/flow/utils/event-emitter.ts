@@ -122,6 +122,12 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
     if (flowDesigner.dragBlock.value) {
       flowDesigner.dragBlock.value.zBoost = 0;
       flowDesigner.dragBlock.value.z = flowDesigner.dragBlock.value.zOrder;
+
+      // Is this a new block?
+      if (flowDesigner.dragBlock.value.draggingAsNew && !flowDesigner.blockLocationIsInvalid(flowDesigner.dragBlock.value)) {
+        flowDesigner.blocks.value.push(flowDesigner.dragBlock.value);
+        flowDesigner.dragBlock.value.draggingAsNew = false;
+      }
     }
 
     // Clear drag block

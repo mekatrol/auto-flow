@@ -61,11 +61,11 @@ const mouseDown = (e: MouseEvent, functionConfiguration: BlockFunctionConfigurat
     z: 1,
     zBoost: 0,
     zOrder: 1,
-    label: 'New block'
+    label: 'New block',
+    draggingAsNew: true
   };
 
   flowDesigner.layoutInputOutputs(functionConfiguration.size, block.io);
-  flowDesigner.blocks.value.push(block);
 
   emit(BLOCK_MOUSE_DOWN, e, block);
 };

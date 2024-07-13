@@ -22,7 +22,7 @@ export interface FlowBlockElement {
   // Elements with a higher zOrder are considered on top of elements with a lower zOrder.
   // That is:
   //  * higher zOrder items will be rendered over the top of lower zOrder items
-  //  * clicking on a position will select the element with the highest zOrder at that position
+  //  * clicking on a location will select the element with the highest zOrder at that location
   zOrder: number;
 
   // The amount to boost the zOrder by. Use to bring element to front for operations such as dragging.
@@ -36,4 +36,14 @@ export interface FlowBlockElement {
 
   // The block inputs/outputs
   io: InputOutput[];
+
+  // Flag to indicate if this block is a new block being dragged onto editor area
+  draggingAsNew?: boolean;
+
+  // Will be set to true if the blocks drag location is valid
+  dragLocationInvalid?: boolean;
+
+  // For a new block this will be set to try once the block has been dragged to a valid location
+  // it allows stopping the block from being dragged back out of a valid location
+  dragLocationHasBeenValid: boolean;
 }

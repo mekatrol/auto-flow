@@ -9,15 +9,20 @@ import type { FlowBlockElement } from './FlowBlockElement';
 import type { FlowConnecting } from './FlowConnecting';
 import { BlockSide } from './BlockSide';
 import type { EnumDictionary } from './EnumDictionary';
-import { BLOCK_IO_OFFSET, BLOCK_IO_SIZE } from '../constants';
+import { BLOCK_IO_OFFSET, BLOCK_IO_SIZE, MARKER_SIZE } from '../constants';
 import type { InputOutput } from '../types/InputOutput';
 
 export class FlowDesigner {
+  // To be valid location the block IO/marker also needs to be within the bounds
+  private validLocationOffsetX = BLOCK_IO_SIZE;
+  private validLocationOffsetY = MARKER_SIZE;
+
   private _viewSize: Ref<{ width: number; height: number }>;
   private _blocks: Ref<FlowBlockElement[]>;
   private _connections: Ref<FlowConnection[]>;
   private _zOrder: ZOrder;
   private _gridSize: Ref<number>;
+  private _blockPalletteWidth: Ref<number>;
   private _drawingConnection = ref<FlowConnecting | undefined>(undefined);
   private _drawingConnectionEndBlock = ref<FlowBlockElement | undefined>(undefined);
   private _drawingConnectionEndPin = ref<number | undefined>(undefined);
@@ -27,11 +32,12 @@ export class FlowDesigner {
   private _dragBlockOffset = ref<Offset>({ x: 0, y: 0 });
   private _dragBlockOriginalPosition = ref<Offset>({ x: 0, y: 0 });
 
-  constructor(viewSize: Ref<{ width: number; height: number }>, gridSize: Ref<number>) {
+  constructor(viewSize: Ref<{ width: number; height: number }>, gridSize: Ref<number>, blockPalletteWidth: Ref<number>) {
     this._blocks = ref([]);
     this._connections = ref([]);
     this._viewSize = viewSize;
     this._gridSize = gridSize;
+    this._blockPalletteWidth = blockPalletteWidth;
     this._zOrder = new ZOrder(this._blocks);
   }
 
@@ -167,10 +173,38 @@ export class FlowDesigner {
     return lines;
   });
 
+  public blockLocationIsInvalid(block: FlowBlockElement): boolean {
+    return block.location.x < this._blockPalletteWidth.value + this.validLocationOffsetX || block.location.y < this.validLocationOffsetY;
+  }
+
   public dragBlockMove = (e: MouseEvent): void => {
     if (!this._dragBlock.value) return;
-    this._dragBlock.value.location.x = e.offsetX - this._dragBlockOffset.value.x;
-    this._dragBlock.value.location.y = e.offsetY - this._dragBlockOffset.value.y;
+
+    // Just for code readability
+    const block = this._dragBlock.value;
+
+    // Calculate new location
+    const x = e.offsetX - this._dragBlockOffset.value.x;
+    const y = e.offsetY - this._dragBlockOffset.value.y;
+
+    // Don't allow X update unless it is at a valid location or a new block being dragged to the editor area
+    if ((block.draggingAsNew && !block.dragLocationHasBeenValid) || x > this._blockPalletteWidth.value + this.validLocationOffsetX) {
+      block.location.x = x;
+    }
+
+    // Don't allow Y update unless it is at a valid location or a new block being dragged to the editor area
+    if ((block.draggingAsNew && !block.dragLocationHasBeenValid) || y >= this.validLocationOffsetY) {
+      block.location.y = y;
+    }
+
+    // Update the drag location invalid flag. Used to style block when at an invalid location
+    block.dragLocationInvalid = this.blockLocationIsInvalid(block);
+
+    // Once a block has a valid location then we can't go back to an invalid location
+    // this is only relevant to new blocks being dragged onto the editor area
+    if (!block.dragLocationInvalid) {
+      block.dragLocationHasBeenValid = true;
+    }
   };
 
   public dragConnectionMove = (e: MouseEvent): void => {
@@ -470,8 +504,12 @@ export class FlowDesigner {
 let flowDesigner: FlowDesigner;
 
 // Initialise the designer
-export const initFlowDesigner = (screenSize: Ref<{ width: number; height: number }>, gridSize: Ref<number>): FlowDesigner => {
-  flowDesigner = new FlowDesigner(screenSize, gridSize);
+export const initFlowDesigner = (
+  screenSize: Ref<{ width: number; height: number }>,
+  gridSize: Ref<number>,
+  blockPalletteWidth: Ref<number>
+): FlowDesigner => {
+  flowDesigner = new FlowDesigner(screenSize, gridSize, blockPalletteWidth);
 
   // Mouse events
   configureFlowMouseEvents(flowDesigner);

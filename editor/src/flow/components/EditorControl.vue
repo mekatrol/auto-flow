@@ -46,6 +46,10 @@
         v-if="flowDesigner.drawingConnection.value"
         :connecting="flowDesigner.drawingConnection.value!"
       />
+      <BlockControl
+        v-if="flowDesigner.dragBlock.value && flowDesigner.dragBlock.value.draggingAsNew"
+        :block="flowDesigner.dragBlock.value"
+      />
     </g>
   </svg>
 </template>
@@ -65,7 +69,7 @@ const gridSize = ref(20);
 const screenSize = useScreenSize();
 
 // Must be done before constructing any blocks or connections
-const flowDesigner = initFlowDesigner(screenSize, gridSize);
+const flowDesigner = initFlowDesigner(screenSize, gridSize, blockPalletteWidth);
 const gridLines = flowDesigner.gridLines;
 
 const { flow } = useMockStore();
