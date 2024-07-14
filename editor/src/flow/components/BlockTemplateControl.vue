@@ -56,7 +56,7 @@
 import LabelControl from './LabelControl.vue';
 import SvgIcon from './SvgIcon.vue';
 import { computed } from 'vue';
-import { useThemeStore } from '../stores/themeStore';
+import { useThemeStore } from '../stores/theme-store';
 import type { BlockTemplate } from '../types/BlockTemplate';
 
 const textGapX = 7;

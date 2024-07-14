@@ -75,7 +75,7 @@ import { onMounted, ref, watch } from 'vue';
 import { useScreenSize } from 'vue-boosted';
 import BlockControl from './BlockControl.vue';
 import { initFlowDesigner } from '../types/FlowDesigner';
-import { useMockStore } from '../stores/mockStore';
+import { useMockStore } from '../stores/mock-store';
 import ContainerControl from './ContainerControl.vue';
 import { BLOCK_WIDTH } from '../constants';
 

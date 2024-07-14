@@ -56,7 +56,7 @@ import {
   CONNECTION_POINTER_UP,
   BLOCK_IO_SIZE
 } from '../constants';
-import { useThemeStore } from '../stores/themeStore';
+import { useThemeStore } from '../stores/theme-store';
 import type { FlowConnecting } from '../types/FlowConnecting';
 
 interface Props {

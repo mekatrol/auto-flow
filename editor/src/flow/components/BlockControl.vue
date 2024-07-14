@@ -110,7 +110,7 @@ import {
   BLOCK_POINTER_DOWN,
   BLOCK_POINTER_UP
 } from '../constants';
-import { useThemeStore } from '../stores/themeStore';
+import { useThemeStore } from '../stores/theme-store';
 import type { FlowBlockElement } from '../types/FlowBlockElement';
 
 const textGapX = 7;

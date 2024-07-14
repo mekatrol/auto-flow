@@ -50,7 +50,7 @@ import {
   CONNECTION_POINTER_UP,
   BLOCK_IO_SIZE
 } from '../constants';
-import { useThemeStore } from '../stores/themeStore';
+import { useThemeStore } from '../stores/theme-store';
 import type { FlowConnection } from '../types/FlowConnection';
 import { useFlowDesigner } from '../types/FlowDesigner';
 

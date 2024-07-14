@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import BlockTemplateControl from './BlockTemplateControl.vue';
 import SvgScrollbar from './SvgScrollbar.vue';
-import { useFlowStore } from '../stores/flowStore';
+import { useFlowStore } from '../stores/flow-store';
 import { BLOCK_HEIGHT, BLOCK_POINTER_DOWN, BLOCK_POINTER_UP } from '../constants';
 import type { BlockTemplate } from '../types/BlockTemplate';
 import { v4 as uuidv4 } from 'uuid';
