@@ -5,7 +5,7 @@ import { InputOutputDirection } from '../types/InputOutputDirection';
 import { BlockSide } from '../types/BlockSide';
 import { BLOCK_HEIGHT, BLOCK_IO_SIZE, BLOCK_WIDTH } from '../constants';
 
-const functionConfigurations: BlockTemplate[] = [
+const blockTemplates: BlockTemplate[] = [
   {
     type: 'AND',
     label: 'AND',
@@ -249,6 +249,54 @@ const functionConfigurations: BlockTemplate[] = [
   {
     type: 'COMPARATOR',
     label: 'Comparator',
+    description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
+    io: [
+      {
+        pin: 1,
+        label: '',
+        description: '',
+        type: InputOutputSignalType.Digital,
+        direction: InputOutputDirection.Input,
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
+      },
+      {
+        pin: 2,
+        label: '',
+        description: '',
+        type: InputOutputSignalType.Digital,
+        direction: InputOutputDirection.Input,
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
+      },
+      {
+        pin: 3,
+        label: '',
+        description: '',
+        type: InputOutputSignalType.Digital,
+        direction: InputOutputDirection.Output,
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
+      },
+      {
+        pin: 4,
+        label: '',
+        description: '',
+        type: InputOutputSignalType.Digital,
+        direction: InputOutputDirection.Output,
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
+      }
+    ]
+  },
+  {
+    type: 'COUNTER',
+    label: 'Counter',
     description: '',
     size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
     io: [
@@ -803,6 +851,54 @@ const functionConfigurations: BlockTemplate[] = [
     ]
   },
   {
+    type: 'SMOOTH',
+    label: 'Smooth',
+    description: '',
+    size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
+    io: [
+      {
+        pin: 1,
+        label: '',
+        description: '',
+        type: InputOutputSignalType.Digital,
+        direction: InputOutputDirection.Input,
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
+      },
+      {
+        pin: 2,
+        label: '',
+        description: '',
+        type: InputOutputSignalType.Digital,
+        direction: InputOutputDirection.Input,
+        side: BlockSide.Left,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
+      },
+      {
+        pin: 3,
+        label: '',
+        description: '',
+        type: InputOutputSignalType.Digital,
+        direction: InputOutputDirection.Output,
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
+      },
+      {
+        pin: 4,
+        label: '',
+        description: '',
+        type: InputOutputSignalType.Digital,
+        direction: InputOutputDirection.Output,
+        side: BlockSide.Right,
+        location: { x: 0, y: 0 },
+        size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
+      }
+    ]
+  },
+  {
     type: 'SPAN',
     label: 'Span',
     description: '',
@@ -1092,14 +1188,6 @@ const functionConfigurations: BlockTemplate[] = [
   }
 ];
 
-const flowElements: Record<string, any> = {};
-
-const clearElements = (): void => {
-  for (const key in flowElements) {
-    delete flowElements[key];
-  }
-};
-
 export const useFlowStore = defineStore('flow', () => {
-  return { elements: flowElements, clearElements, functionConfigurations };
+  return { blockTemplates };
 });

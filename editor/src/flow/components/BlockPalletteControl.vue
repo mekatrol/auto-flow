@@ -1,34 +1,38 @@
 <template>
   <g
-    class="block-pallette"
-    :width="width"
-    :height="height"
-    overflow="scroll"
+    class="block-template-pallette"
     @mousemove="(e) => flowDesigner.mouseMove(e)"
     @mouseup="(e) => flowDesigner.mouseUp(e)"
     @focusin="(e) => focus(e)"
   >
-    <BlockConfigurationControl
-      v-for="(functionConfiguration, i) in functionConfigurations"
+    <!-- Block templates -->
+    <BlockTemplateControl
+      v-for="(blockTemplate, i) in visibleBlockTemplates"
       :key="i"
-      :blockConfiguration="functionConfiguration"
-      :x="gapX"
-      :y="gapY + i * BLOCK_HEIGHT + gapY"
-      @mousedown="(e) => mouseDown(e, functionConfiguration, gapX, gapY + i * BLOCK_HEIGHT + gapY)"
+      :blockConfiguration="blockTemplate"
+      :x="gap"
+      :y="gap + i * BLOCK_HEIGHT"
+      @mousedown="(e) => mouseDown(e, blockTemplate, gap, gap + i * BLOCK_HEIGHT)"
     />
-
-    <!-- Right border -->
-    <path
-      :d="`M ${width - 1} ${0} l 0 ${height - 1}`"
-      stroke="lightgrey"
-      stroke-width="3px"
-    >
-    </path>
+    <!-- Right scrollbar -->
+    <SvgScrollbar
+      :x="width - scrollbarWidth"
+      :y="0"
+      :scroll="yScroll"
+      :width="scrollbarWidth"
+      :height="height"
+      :count="blockTemplates.length"
+      fill="#333"
+      @scroll-down="scrollDown"
+      @scroll-up="scrollUp"
+      @scroll="scroll"
+    />
   </g>
 </template>
 
 <script setup lang="ts">
-import BlockConfigurationControl from './BlockConfigurationControl.vue';
+import BlockTemplateControl from './BlockTemplateControl.vue';
+import SvgScrollbar from './SvgScrollbar.vue';
 import { useFlowStore } from '../stores/flowStore';
 import { BLOCK_HEIGHT, BLOCK_MOUSE_DOWN } from '../constants';
 import type { BlockTemplate } from '../types/BlockTemplate';
@@ -36,27 +40,68 @@ import { v4 as uuidv4 } from 'uuid';
 import { useFlowDesigner } from '../types/FlowDesigner';
 import type { FlowBlockElement } from '../types/FlowBlockElement';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
+import { computed, ref } from 'vue';
 
 interface Props {
   width: number;
   height: number;
+  scrollbarWidth: number;
+  gap: number;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
-const { functionConfigurations } = useFlowStore();
+const { blockTemplates } = useFlowStore();
 const flowDesigner = useFlowDesigner();
 
-const gapX = 8;
-const gapY = 5;
+// This is the number of blocks that have been scrolled up
+const yScroll = ref(0);
 
-const mouseDown = (e: MouseEvent, functionConfiguration: BlockTemplate, x: number, y: number): void => {
+const scrollUp = () => {
+  if (yScroll.value < 0) {
+    // This should never happen, but just in cas there is a bug in the scrolling logic
+    yScroll.value = 0;
+  }
+
+  if (yScroll.value === 0) {
+    return;
+  }
+
+  yScroll.value -= 1;
+};
+
+const scrollDown = () => {
+  // Always display at least height number
+  const visibleBlocksHeight = Math.floor(props.height / (props.gap + BLOCK_HEIGHT));
+
+  if (yScroll.value >= blockTemplates.length - visibleBlocksHeight) {
+    return;
+  }
+
+  yScroll.value += 1;
+};
+
+const scroll = (scroll: number) => {
+  yScroll.value = scroll;
+};
+
+const visibleBlockTemplates = computed(() => {
+  const visible: BlockTemplate[] = [];
+
+  for (let i = yScroll.value; i < blockTemplates.length; i++) {
+    visible.push(blockTemplates[i]);
+  }
+
+  return visible;
+});
+
+const mouseDown = (e: MouseEvent, blockTemplate: BlockTemplate, x: number, y: number): void => {
   const block: FlowBlockElement = {
     location: { x: x, y: y },
-    functionType: functionConfiguration.type,
-    size: { ...functionConfiguration.size },
+    functionType: blockTemplate.type,
+    size: { ...blockTemplate.size },
     id: uuidv4(),
-    io: functionConfiguration.io.map((io) => ({ ...io })),
+    io: blockTemplate.io.map((io) => ({ ...io })),
     selected: true,
     z: 1,
     zBoost: 0,
@@ -65,7 +110,7 @@ const mouseDown = (e: MouseEvent, functionConfiguration: BlockTemplate, x: numbe
     draggingAsNew: true
   };
 
-  flowDesigner.layoutInputOutputs(functionConfiguration.size, block.io);
+  flowDesigner.layoutInputOutputs(blockTemplate.size, block.io);
 
   emit(BLOCK_MOUSE_DOWN, e, block);
 };
@@ -89,8 +134,7 @@ const emit = (event: keyof FlowEvents, e: MouseEvent, block: FlowBlockElement): 
 </script>
 
 <style scoped lang="css">
-.block-pallette {
-  overflow: scroll;
-  border-right: 1px solid red;
+.block-template-pallette > .border {
+  stroke: red;
 }
 </style>

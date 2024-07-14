@@ -1,8 +1,12 @@
 <template>
   <nav><MenuControl /></nav>
-  <main :style="`max-height: ${screenSize.height}`">
-    <EditorControl />
-    <FlowInformationControl />
+  <main>
+    <div>
+      <EditorControl />
+    </div>
+    <div>
+      <FlowInformationControl />
+    </div>
   </main>
   <BusyOverlay
     :show="appStore.isBusy"
@@ -33,10 +37,20 @@ useIntervalTimer(async () => {
 }, 500);
 </script>
 
-<style scoped lang="css">
+<style scoped lang="scss">
 main {
+  width: 100%;
   display: flex;
   flex-direction: row;
   overflow: hidden;
+
+  > div {
+    width: 80%;
+    max-width: 80%;
+  }
+
+  > div:last-child {
+    max-width: 20%;
+  }
 }
 </style>

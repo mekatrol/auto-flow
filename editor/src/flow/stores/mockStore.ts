@@ -7,11 +7,11 @@ import type { FlowBlockElement } from '../types/FlowBlockElement';
 import type { FlowConnection } from '../types/FlowConnection';
 
 export const useMockStore = defineStore('mock', () => {
-  const { elements, clearElements, functionConfigurations } = useFlowStore();
+  const { blockTemplates } = useFlowStore();
 
-  const andConfiguration = functionConfigurations.find((f) => f.type === 'AND')!;
-  const orConfiguration = functionConfigurations.find((f) => f.type === 'OR')!;
-  const notConfiguration = functionConfigurations.find((f) => f.type === 'NOT')!;
+  const andConfiguration = blockTemplates.find((f) => f.type === 'AND')!;
+  const orConfiguration = blockTemplates.find((f) => f.type === 'OR')!;
+  const notConfiguration = blockTemplates.find((f) => f.type === 'NOT')!;
 
   const blocks: FlowBlockElement[] = [
     {
@@ -42,7 +42,7 @@ export const useMockStore = defineStore('mock', () => {
       id: uuidv4(),
       label: undefined,
       functionType: 'NOT',
-      location: { x: 180, y: 200 },
+      location: { x: 1500, y: 50 },
       size: { width: notConfiguration.size.width, height: notConfiguration.size.height },
       selected: false,
       zOrder: 1,
@@ -54,7 +54,7 @@ export const useMockStore = defineStore('mock', () => {
       id: uuidv4(),
       label: undefined,
       functionType: 'TRANSITION',
-      location: { x: 380, y: 200 },
+      location: { x: 380, y: 400 },
       size: { width: notConfiguration.size.width, height: notConfiguration.size.height },
       selected: false,
       zOrder: 1,
@@ -69,6 +69,13 @@ export const useMockStore = defineStore('mock', () => {
       startBlockId: blocks[0].id,
       startPin: 3,
       endBlockId: blocks[1].id,
+      endPin: 1,
+      selected: false
+    },
+    {
+      startBlockId: blocks[3].id,
+      startPin: 2,
+      endBlockId: blocks[2].id,
       endPin: 1,
       selected: false
     }

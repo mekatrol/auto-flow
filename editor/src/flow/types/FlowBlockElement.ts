@@ -45,5 +45,5 @@ export interface FlowBlockElement {
 
   // For a new block this will be set to try once the block has been dragged to a valid location
   // it allows stopping the block from being dragged back out of a valid location
-  dragLocationHasBeenValid: boolean;
+  dragLocationHasBeenValid?: boolean;
 }
