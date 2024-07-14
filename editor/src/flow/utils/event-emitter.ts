@@ -40,7 +40,7 @@ export interface FlowPointerEvent<T> {
 export interface FlowBlockPointerEvent extends FlowPointerEvent<FlowBlockElement> {}
 
 // A pointer event from a flow block io (includes the block that the io is attached to)
-export interface FlowBlockConnectorPointerEvent extends FlowBlockPointerEvent {
+export interface FlowBlockIOPointerEvent extends FlowBlockPointerEvent {
   inputOutput: InputOutput;
 }
 
@@ -64,12 +64,12 @@ export type FlowEvents = {
   /*
    * Block input/output pointer events
    */
-  blockIOPointerMove: FlowBlockConnectorPointerEvent;
-  blockIOPointerOver: FlowBlockConnectorPointerEvent;
-  blockIOPointerEnter: FlowBlockConnectorPointerEvent;
-  blockIOPointerLeave: FlowBlockConnectorPointerEvent;
-  blockIOPointerDown: FlowBlockConnectorPointerEvent;
-  blockIOPointerUp: FlowBlockConnectorPointerEvent;
+  blockIOPointerMove: FlowBlockIOPointerEvent;
+  blockIOPointerOver: FlowBlockIOPointerEvent;
+  blockIOPointerEnter: FlowBlockIOPointerEvent;
+  blockIOPointerLeave: FlowBlockIOPointerEvent;
+  blockIOPointerDown: FlowBlockIOPointerEvent;
+  blockIOPointerUp: FlowBlockIOPointerEvent;
 
   /*
    * Connecting pointer events
@@ -107,37 +107,11 @@ export const configureFlowPointerEvents = (flowDesigner: FlowDesigner): void => 
   });
 
   emitter.on(BLOCK_POINTER_DOWN, (e: FlowBlockPointerEvent) => {
-    (e.pointerEvent.target as SVGElement).setPointerCapture(e.pointerEvent.pointerId);
-
-    flowDesigner.clearSelectedItems();
-    flowDesigner.selectedBlock = e.data;
-    flowDesigner.dragBlock.value = e.data;
-    flowDesigner.dragBlock.value.zBoost = 0;
-    flowDesigner.dragBlock.value.z = flowDesigner.dragBlock.value.zOrder;
-    flowDesigner.dragBlockOffset.value = { x: e.pointerEvent.offsetX - e.data.location.x, y: e.pointerEvent.offsetY - e.data.location.y };
-    flowDesigner.dragBlockOriginalPosition.value = { x: e.data.location.x, y: e.data.location.y };
+    flowDesigner.blockPointerDown(e);
   });
 
   emitter.on(BLOCK_POINTER_UP, (e: FlowBlockPointerEvent) => {
-    (e.pointerEvent.target as SVGElement).releasePointerCapture(e.pointerEvent.pointerId);
-
-    // Restore drag block boost if a block is being dragged
-    if (flowDesigner.dragBlock.value) {
-      flowDesigner.dragBlock.value.zBoost = 0;
-      flowDesigner.dragBlock.value.z = flowDesigner.dragBlock.value.zOrder;
-
-      // Is this a new block?
-      if (flowDesigner.dragBlock.value.draggingAsNew && !flowDesigner.blockLocationIsInvalid(flowDesigner.dragBlock.value)) {
-        flowDesigner.blocks.value.push(flowDesigner.dragBlock.value);
-        flowDesigner.dragBlock.value.draggingAsNew = false;
-      }
-    }
-
-    // Clear drag block
-    flowDesigner.dragBlock.value = undefined;
-
-    // Clear drawing connection
-    flowDesigner.drawingConnection.value = undefined;
+    flowDesigner.blockPointerUp(e);
   });
 
   emitter.on(BLOCK_POINTER_MOVE, (e: FlowBlockPointerEvent) => {
@@ -167,16 +141,7 @@ export const configureFlowPointerEvents = (flowDesigner: FlowDesigner): void => 
   });
 
   emitter.on(BLOCK_IO_POINTER_DOWN, (e) => {
-    flowDesigner.clearSelectedItems();
-
-    const connecting = {
-      startBlock: e.data as FlowBlockElement,
-      startPin: e.inputOutput.pin,
-      endLocation: { x: e.pointerEvent.offsetX - flowDesigner.blockPalletteWidth.value, y: e.pointerEvent.offsetY },
-      cssClasses: ''
-    } as FlowConnecting;
-
-    flowDesigner.drawingConnection.value = connecting;
+    flowDesigner.blockIOPointerDown(e);
   });
 
   emitter.on(CONNECTING_POINTER_MOVE, (_e) => {

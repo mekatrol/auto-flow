@@ -2,7 +2,7 @@ import { computed, type Ref, ref } from 'vue';
 import type { Offset } from './Offset';
 import { ZOrder } from './ZOrder';
 import type { Line } from './Line';
-import { configureFlowPointerEvents } from '../utils/event-emitter';
+import { configureFlowPointerEvents, type FlowBlockIOPointerEvent, type FlowBlockPointerEvent } from '../utils/event-emitter';
 import type { FlowConnection } from './FlowConnection';
 import type { Size } from './Size';
 import type { FlowBlockElement } from './FlowBlockElement';
@@ -176,6 +176,53 @@ export class FlowDesigner {
   public blockLocationIsInvalid(block: FlowBlockElement): boolean {
     // Must be at least MARKER_SIZE from left and top
     return block.location.x < MARKER_SIZE || block.location.y < MARKER_SIZE;
+  }
+
+  public blockPointerDown(e: FlowBlockPointerEvent) {
+    (e.pointerEvent.target as SVGElement).setPointerCapture(e.pointerEvent.pointerId);
+
+    this.clearSelectedItems();
+    this.selectedBlock = e.data;
+    this.dragBlock.value = e.data;
+    this.dragBlock.value.zBoost = 0;
+    this.dragBlock.value.z = this.dragBlock.value.zOrder;
+    this.dragBlockOffset.value = { x: e.pointerEvent.offsetX - e.data.location.x, y: e.pointerEvent.offsetY - e.data.location.y };
+    this.dragBlockOriginalPosition.value = { x: e.data.location.x, y: e.data.location.y };
+  }
+
+  public blockPointerUp(e: FlowBlockPointerEvent) {
+    (e.pointerEvent.target as SVGElement).releasePointerCapture(e.pointerEvent.pointerId);
+
+    // Restore drag block boost if a block is being dragged
+    if (flowDesigner.dragBlock.value) {
+      flowDesigner.dragBlock.value.zBoost = 0;
+      flowDesigner.dragBlock.value.z = flowDesigner.dragBlock.value.zOrder;
+
+      // Is this a new block?
+      if (flowDesigner.dragBlock.value.draggingAsNew && !flowDesigner.blockLocationIsInvalid(flowDesigner.dragBlock.value)) {
+        flowDesigner.blocks.value.push(flowDesigner.dragBlock.value);
+        flowDesigner.dragBlock.value.draggingAsNew = false;
+      }
+    }
+
+    // Clear drag block
+    flowDesigner.dragBlock.value = undefined;
+
+    // Clear drawing connection
+    flowDesigner.drawingConnection.value = undefined;
+  }
+
+  public blockIOPointerDown(e: FlowBlockIOPointerEvent) {
+    this.clearSelectedItems();
+
+    const connecting = {
+      startBlock: e.data as FlowBlockElement,
+      startPin: e.inputOutput.pin,
+      endLocation: { x: e.pointerEvent.offsetX - this.blockPalletteWidth.value, y: e.pointerEvent.offsetY },
+      cssClasses: ''
+    } as FlowConnecting;
+
+    this.drawingConnection.value = connecting;
   }
 
   public dragBlockMove = (e: PointerEvent): void => {
