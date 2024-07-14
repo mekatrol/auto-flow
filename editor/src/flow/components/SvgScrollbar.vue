@@ -16,7 +16,7 @@
     <rect
       style="pointer-events: none"
       :x="x"
-      :y="scroll * sliderHeight"
+      :y="sliderY"
       :width="width"
       :height="Math.max(0, sliderHeight)"
       :fill="sliderDragging ? '#bbb' : '#fff'"
@@ -44,6 +44,7 @@ const props = defineProps<Props>();
 const emit = defineEmits(['scrollUp', 'scrollDown', 'scroll']);
 
 const scrollbar = ref();
+const sliderPointerEvent = ref<PointerEvent | undefined>(undefined);
 
 // How much of the height is the scroll height
 const scrollHeight = computed(() => props.height);
@@ -55,6 +56,7 @@ const sliderDragging = ref(false);
 
 const dragSliderStart = (e: PointerEvent) => {
   sliderDragging.value = true;
+  sliderPointerEvent.value = e;
 
   (scrollbar.value as SVGTextElement).setPointerCapture(e.pointerId);
 
@@ -64,14 +66,24 @@ const dragSliderStart = (e: PointerEvent) => {
 const dragSliderEnd = (e: PointerEvent) => {
   (scrollbar.value as SVGTextElement).releasePointerCapture(e.pointerId);
   sliderDragging.value = false;
+  sliderPointerEvent.value = undefined;
 };
 
 const dragSliderMove = (e: PointerEvent) => {
   if (sliderDragging.value) {
+    sliderPointerEvent.value = e;
     const scrollValue = Math.min(props.count - 1, Math.max(0, Math.floor(e.offsetY / sliderHeight.value)));
     emit('scroll', scrollValue);
   }
 };
+
+const sliderY = computed(() => {
+  return sliderDragging.value && sliderPointerEvent.value
+    ? // relative to mouse position (to make slide smooth)
+      Math.min(props.height - sliderHeight.value, Math.max(0, sliderPointerEvent.value.offsetY - sliderHeight.value / 2))
+    : // based on scroll value
+      props.scroll * sliderHeight.value;
+});
 </script>
 
 <style scoped lang="css">
