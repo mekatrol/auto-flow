@@ -17,7 +17,6 @@ export class FlowDesigner {
   private _blocks: Ref<FlowBlockElement[]>;
   private _connections: Ref<FlowConnection[]>;
   private _zOrder: ZOrder;
-  private _gridSize: Ref<number>;
   private _blockPalletteWidth: Ref<number>;
   private _drawingConnection = ref<FlowConnecting | undefined>(undefined);
   private _drawingConnectionEndBlock = ref<FlowBlockElement | undefined>(undefined);
@@ -28,11 +27,10 @@ export class FlowDesigner {
   private _dragBlockOffset = ref<Offset>({ x: 0, y: 0 });
   private _dragBlockOriginalPosition = ref<Offset>({ x: 0, y: 0 });
 
-  constructor(viewSize: Ref<{ width: number; height: number }>, gridSize: Ref<number>, blockPalletteWidth: Ref<number>) {
+  constructor(viewSize: Ref<{ width: number; height: number }>, blockPalletteWidth: Ref<number>) {
     this._blocks = ref([]);
     this._connections = ref([]);
     this._viewSize = viewSize;
-    this._gridSize = gridSize;
     this._blockPalletteWidth = blockPalletteWidth;
     this._zOrder = new ZOrder(this._blocks);
   }
@@ -148,30 +146,6 @@ export class FlowDesigner {
 
     this._zOrder.moveBlockZOrder(action, this.selectedBlock);
   };
-
-  public gridLines = computed((): Line[] => {
-    const lines: Line[] = [];
-
-    if (this.viewSize.value.height < this._gridSize.value || this.viewSize.value.height < this._gridSize.value) {
-      return [];
-    }
-
-    for (let y = 0; y < this.viewSize.value.height; y += this._gridSize.value) {
-      lines.push({
-        start: { x: 0, y: y },
-        end: { x: this.viewSize.value.width, y: y }
-      });
-    }
-
-    for (let x = 0; x < this.viewSize.value.width; x += this._gridSize.value) {
-      lines.push({
-        start: { x: x, y: 0 },
-        end: { x: x, y: this.viewSize.value.height }
-      });
-    }
-
-    return lines;
-  });
 
   public blockLocationIsInvalid(block: FlowBlockElement): boolean {
     // Must be at least MARKER_SIZE from left and top
@@ -552,12 +526,8 @@ export class FlowDesigner {
 let flowDesigner: FlowDesigner;
 
 // Initialise the designer
-export const initFlowDesigner = (
-  screenSize: Ref<{ width: number; height: number }>,
-  gridSize: Ref<number>,
-  blockPalletteWidth: Ref<number>
-): FlowDesigner => {
-  flowDesigner = new FlowDesigner(screenSize, gridSize, blockPalletteWidth);
+export const initFlowDesigner = (screenSize: Ref<{ width: number; height: number }>, blockPalletteWidth: Ref<number>): FlowDesigner => {
+  flowDesigner = new FlowDesigner(screenSize, blockPalletteWidth);
 
   // Pointer events
   configureFlowPointerEvents(flowDesigner);

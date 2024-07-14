@@ -33,17 +33,12 @@
         :width="svgWidth - blockPalletteWidth"
         :height="svgHeight"
       >
-        <g class="grid">
-          <line
-            v-for="(line, i) in gridLines"
-            :key="i"
-            :x1="line.start.x"
-            :y1="line.start.y"
-            :x2="line.end.x"
-            :y2="line.end.y"
-            class="grid-line"
-          ></line>
-        </g>
+        <FlowControl
+          :width="svgWidth - blockPalletteWidth"
+          :height="svgHeight"
+          :grid-size="gridSize"
+        />
+
         <ConnectionControl
           v-for="(connection, i) in flowDesigner.connections.value"
           :key="i"
@@ -71,6 +66,7 @@
 import ConnectionControl from './ConnectionControl.vue';
 import ConnectingControl from './ConnectingControl.vue';
 import BlockPalletteControl from './BlockPalletteControl.vue';
+import FlowControl from './FlowControl.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useScreenSize } from 'vue-boosted';
 import BlockControl from './BlockControl.vue';
@@ -101,8 +97,7 @@ const calculateSvgHeight = () => {
 };
 
 // Must be done before constructing any blocks or connections
-const flowDesigner = initFlowDesigner(screenSize, gridSize, blockPalletteWidth);
-const gridLines = flowDesigner.gridLines;
+const flowDesigner = initFlowDesigner(screenSize, blockPalletteWidth);
 
 const { flow } = useMockStore();
 
