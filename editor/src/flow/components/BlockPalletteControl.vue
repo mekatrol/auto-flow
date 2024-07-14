@@ -3,6 +3,7 @@
     class="block-template-pallette"
     @pointermove="(e) => flowDesigner.pointerMove(e)"
     @pointerup="(e) => flowDesigner.pointerUp(e)"
+    @mousewheel="mouseWheel"
     @focusin="(e) => focus(e)"
   >
     <!-- Block templates -->
@@ -89,6 +90,12 @@ const scrollDown = () => {
 
 const scroll = (scroll: number) => {
   yScroll.value = scroll;
+};
+
+const mouseWheel = (e: WheelEvent) => {
+  const delta = e.deltaY / 100;
+
+  yScroll.value = Math.min(blockTemplates.length - visibleBlocks.value, Math.max(0, yScroll.value + delta));
 };
 
 const visibleBlockTemplates = computed(() => {
