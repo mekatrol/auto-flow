@@ -1,5 +1,5 @@
-import type { Flow } from './Flow';
-import { useFlowDesigner } from './FlowDesigner';
+import type { Flow } from '../types/Flow';
+import { useFlowDesigner } from '../types/FlowDesigner';
 
 export const loadFlowFromJson = (json: string): Flow => {
   const flow = JSON.parse(json) as Flow;

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
 import type { Flow } from '../types/Flow';
-import { loadFlowFromJson } from '../types/flow-persistor';
+import { loadFlowFromJson } from '../utils/flow-persistor';
 import { useFlowStore } from './flow-store';
 import type { FlowBlockElement } from '../types/FlowBlockElement';
 import type { FlowConnection } from '../types/FlowConnection';
