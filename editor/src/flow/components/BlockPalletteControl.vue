@@ -23,7 +23,7 @@
       :scroll="yScroll"
       :width="scrollbarWidth"
       :height="height"
-      :count="blockTemplates.length"
+      :count="blockTemplates.length - visibleBlocks + 1"
       fill="#333"
       @scroll-down="scrollDown"
       @scroll-up="scrollUp"
@@ -71,6 +71,10 @@ const scrollUp = () => {
 
   yScroll.value -= 1;
 };
+
+const visibleBlocks = computed(() => {
+  return Math.floor(props.height / (props.gap + BLOCK_HEIGHT));
+});
 
 const scrollDown = () => {
   // Always display at least height number
