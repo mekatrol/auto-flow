@@ -52,7 +52,7 @@ import {
 } from '../constants';
 import { useThemeStore } from '../stores/theme-store';
 import type { FlowConnection } from '../types/FlowConnection';
-import { useFlowDesigner } from '../types/FlowDesigner';
+import { useFlowController } from '../types/FlowController';
 
 interface Props {
   show?: boolean;
@@ -82,12 +82,12 @@ const props = withDefaults(defineProps<Props>(), {
   endPointRadius: 5
 });
 
-const flowDesigner = useFlowDesigner();
+const flowController = useFlowController();
 
-const startInputOutput = computed(() => flowDesigner.getConnectionStartInputOutput(props.connection));
-const startOffset = computed(() => flowDesigner.getConnectionStartOffset(props.connection));
+const startInputOutput = computed(() => flowController.getConnectionStartInputOutput(props.connection));
+const startOffset = computed(() => flowController.getConnectionStartOffset(props.connection));
 
-const endOffset = computed(() => flowDesigner.getConnectionEndOffset(props.connection));
+const endOffset = computed(() => flowController.getConnectionEndOffset(props.connection));
 
 const svg = computed(() => {
   const points = generateCubicBezierPoints(startOffset.value, endOffset.value, startInputOutput.value.side);

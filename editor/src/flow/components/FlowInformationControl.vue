@@ -3,7 +3,7 @@
     xmlns="http://www.w3.org/2000/svg"
     width="200"
     height="1000"
-    class="flow-designer"
+    class="flow-controller"
     @focusin="(e) => focus(e)"
   >
     <LabelControl

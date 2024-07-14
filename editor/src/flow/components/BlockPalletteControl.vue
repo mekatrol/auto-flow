@@ -1,8 +1,8 @@
 <template>
   <g
     class="block-template-pallette"
-    @pointermove="(e) => flowDesigner.pointerMove(e)"
-    @pointerup="(e) => flowDesigner.pointerUp(e)"
+    @pointermove="(e) => flowController.pointerMove(e)"
+    @pointerup="(e) => flowController.pointerUp(e)"
     @mousewheel="mouseWheel"
     @focusin="(e) => focus(e)"
   >
@@ -50,7 +50,7 @@ import { useFlowStore } from '../stores/flow-store';
 import { BLOCK_HEIGHT, BLOCK_POINTER_DOWN, BLOCK_POINTER_UP } from '../constants';
 import type { BlockTemplate } from '../types/BlockTemplate';
 import { v4 as uuidv4 } from 'uuid';
-import { useFlowDesigner } from '../types/FlowDesigner';
+import { useFlowController } from '../types/FlowController';
 import type { FlowBlockElement } from '../types/FlowBlockElement';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
 import { computed, ref } from 'vue';
@@ -65,7 +65,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const { blockTemplates } = useFlowStore();
-const flowDesigner = useFlowDesigner();
+const flowController = useFlowController();
 
 // This is the number of blocks that have been scrolled up
 const yScroll = ref(0);
@@ -132,13 +132,13 @@ const pointerDown = (e: PointerEvent, blockTemplate: BlockTemplate, x: number, y
     draggingAsNew: true
   };
 
-  flowDesigner.layoutInputOutputs(blockTemplate.size, block.io);
+  flowController.layoutInputOutputs(blockTemplate.size, block.io);
 
   emit(BLOCK_POINTER_DOWN, e, block);
 };
 
 const pointerUp = (e: PointerEvent) => {
-  emit(BLOCK_POINTER_UP, e, flowDesigner.dragBlock.value!);
+  emit(BLOCK_POINTER_UP, e, flowController.dragBlock.value!);
 };
 
 const focus = (_e: FocusEvent): void => {

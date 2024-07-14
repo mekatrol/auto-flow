@@ -4,13 +4,13 @@
     class="flow-editor"
     :viewBox="`0 0 ${svgWidth} ${svgHeight}`"
     ref="svg"
-    @pointermove="(e) => flowDesigner.pointerMove(e)"
-    @pointerleave="(e) => flowDesigner.pointerLeave(e)"
-    @pointerdown="(e) => flowDesigner.pointerDown(e)"
-    @pointerup="(e) => flowDesigner.pointerUp(e)"
-    @keypress="(e) => flowDesigner.keyPress(e)"
-    @keydown="(e) => flowDesigner.keyDown(e)"
-    @keyup="(e) => flowDesigner.keyUp(e)"
+    @pointermove="(e) => flowController.pointerMove(e)"
+    @pointerleave="(e) => flowController.pointerLeave(e)"
+    @pointerdown="(e) => flowController.pointerDown(e)"
+    @pointerup="(e) => flowController.pointerUp(e)"
+    @keypress="(e) => flowController.keyPress(e)"
+    @keydown="(e) => flowController.keyDown(e)"
+    @keyup="(e) => flowController.keyUp(e)"
     @focusin="(e) => focus(e)"
   >
     <g :transform="`translate(0, 0)`">
@@ -48,7 +48,7 @@ import BlockPalletteControl from './BlockPalletteControl.vue';
 import FlowControl from './FlowControl.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useScreenSize } from 'vue-boosted';
-import { initFlowDesigner } from '../types/FlowDesigner';
+import { initFlowController } from '../types/FlowController';
 import { useMockStore } from '../stores/mock-store';
 import ContainerControl from './ContainerControl.vue';
 import { BLOCK_WIDTH } from '../constants';
@@ -75,12 +75,12 @@ const calculateSvgHeight = () => {
 };
 
 // Must be done before constructing any blocks or connections
-const flowDesigner = initFlowDesigner(screenSize, blockPalletteWidth);
+const flowController = initFlowController(screenSize, blockPalletteWidth);
 
 const { flow } = useMockStore();
 
-flowDesigner.blocks.value = flow.blocks;
-flowDesigner.connections.value = flow.connections;
+flowController.blocks.value = flow.blocks;
+flowController.connections.value = flow.connections;
 
 onMounted(() => {
   calculateSvgHeight();

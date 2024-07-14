@@ -1,5 +1,5 @@
 import mitt, { type Emitter } from 'mitt';
-import { type FlowDesigner } from '../types/FlowDesigner';
+import { type FlowController } from '../types/FlowController';
 import {
   BLOCK_IO_POINTER_DOWN,
   BLOCK_IO_POINTER_ENTER,
@@ -95,7 +95,7 @@ export type FlowEvents = {
 // We want a single instance for all use (singleton pattern)
 const emitter: Emitter<FlowEvents> = mitt<FlowEvents>();
 
-export const configureFlowPointerEvents = (flowDesigner: FlowDesigner): void => {
+export const configureFlowPointerEvents = (flowController: FlowController): void => {
   const emitter = useEmitter();
 
   emitter.on(BLOCK_POINTER_ENTER, (_e: FlowBlockPointerEvent) => {
@@ -107,15 +107,15 @@ export const configureFlowPointerEvents = (flowDesigner: FlowDesigner): void => 
   });
 
   emitter.on(BLOCK_POINTER_DOWN, (e: FlowBlockPointerEvent) => {
-    flowDesigner.blockPointerDown(e);
+    flowController.blockPointerDown(e);
   });
 
   emitter.on(BLOCK_POINTER_UP, (e: FlowBlockPointerEvent) => {
-    flowDesigner.blockPointerUp(e);
+    flowController.blockPointerUp(e);
   });
 
   emitter.on(BLOCK_POINTER_MOVE, (e: FlowBlockPointerEvent) => {
-    flowDesigner.dragBlockMove(e.pointerEvent);
+    flowController.dragBlockMove(e.pointerEvent);
   });
 
   emitter.on(BLOCK_POINTER_OVER, (_e) => {});
@@ -137,11 +137,11 @@ export const configureFlowPointerEvents = (flowDesigner: FlowDesigner): void => 
   });
 
   emitter.on(BLOCK_IO_POINTER_UP, (_e) => {
-    flowDesigner.drawingConnection.value = undefined;
+    flowController.drawingConnection.value = undefined;
   });
 
   emitter.on(BLOCK_IO_POINTER_DOWN, (e) => {
-    flowDesigner.blockIOPointerDown(e);
+    flowController.blockIOPointerDown(e);
   });
 
   emitter.on(CONNECTING_POINTER_MOVE, (_e) => {
@@ -189,9 +189,9 @@ export const configureFlowPointerEvents = (flowDesigner: FlowDesigner): void => 
   });
 
   emitter.on(CONNECTION_POINTER_DOWN, (e) => {
-    flowDesigner.clearSelectedItems();
-    flowDesigner.drawingConnection.value = undefined;
-    flowDesigner.selectedConnection = e.data;
+    flowController.clearSelectedItems();
+    flowController.drawingConnection.value = undefined;
+    flowController.selectedConnection = e.data;
   });
 };
 

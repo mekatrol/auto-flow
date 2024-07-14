@@ -1,7 +1,6 @@
-import { computed, type Ref, ref } from 'vue';
+import { type Ref, ref } from 'vue';
 import type { Offset } from './Offset';
 import { ZOrder } from './ZOrder';
-import type { Line } from './Line';
 import { configureFlowPointerEvents, type FlowBlockIOPointerEvent, type FlowBlockPointerEvent } from '../utils/event-emitter';
 import type { FlowConnection } from './FlowConnection';
 import type { Size } from './Size';
@@ -12,7 +11,7 @@ import type { EnumDictionary } from './EnumDictionary';
 import { BLOCK_IO_OFFSET, BLOCK_IO_SIZE, MARKER_SIZE } from '../constants';
 import type { InputOutput } from '../types/InputOutput';
 
-export class FlowDesigner {
+export class FlowController {
   private _viewSize: Ref<{ width: number; height: number }>;
   private _blocks: Ref<FlowBlockElement[]>;
   private _connections: Ref<FlowConnection[]>;
@@ -168,22 +167,22 @@ export class FlowDesigner {
     (e.pointerEvent.target as SVGElement).releasePointerCapture(e.pointerEvent.pointerId);
 
     // Restore drag block boost if a block is being dragged
-    if (flowDesigner.dragBlock.value) {
-      flowDesigner.dragBlock.value.zBoost = 0;
-      flowDesigner.dragBlock.value.z = flowDesigner.dragBlock.value.zOrder;
+    if (flowController.dragBlock.value) {
+      flowController.dragBlock.value.zBoost = 0;
+      flowController.dragBlock.value.z = flowController.dragBlock.value.zOrder;
 
       // Is this a new block?
-      if (flowDesigner.dragBlock.value.draggingAsNew && !flowDesigner.blockLocationIsInvalid(flowDesigner.dragBlock.value)) {
-        flowDesigner.blocks.value.push(flowDesigner.dragBlock.value);
-        flowDesigner.dragBlock.value.draggingAsNew = false;
+      if (flowController.dragBlock.value.draggingAsNew && !flowController.blockLocationIsInvalid(flowController.dragBlock.value)) {
+        flowController.blocks.value.push(flowController.dragBlock.value);
+        flowController.dragBlock.value.draggingAsNew = false;
       }
     }
 
     // Clear drag block
-    flowDesigner.dragBlock.value = undefined;
+    flowController.dragBlock.value = undefined;
 
     // Clear drawing connection
-    flowDesigner.drawingConnection.value = undefined;
+    flowController.drawingConnection.value = undefined;
   }
 
   public blockIOPointerDown(e: FlowBlockIOPointerEvent) {
@@ -376,9 +375,9 @@ export class FlowDesigner {
     return hitInputOutputs;
   };
 
-  // Whenever pointer is clicked anywhere in the designer
+  // Whenever pointer is clicked anywhere in the editor
   // allows clearing any currently selected node when clicking
-  // on designer background (ie not on a node)
+  // on editor background (ie not on a node)
   public pointerDown = (e: PointerEvent): void => {
     if (e.target instanceof SVGElement || e.target instanceof HTMLElement) {
       const element = e.target as HTMLElement | SVGElement;
@@ -522,21 +521,21 @@ export class FlowDesigner {
   };
 }
 
-// The singleton flow designer instance
-let flowDesigner: FlowDesigner;
+// The singleton flow controller instance
+let flowController: FlowController;
 
-// Initialise the designer
-export const initFlowDesigner = (screenSize: Ref<{ width: number; height: number }>, blockPalletteWidth: Ref<number>): FlowDesigner => {
-  flowDesigner = new FlowDesigner(screenSize, blockPalletteWidth);
+// Initialise the controller
+export const initFlowController = (screenSize: Ref<{ width: number; height: number }>, blockPalletteWidth: Ref<number>): FlowController => {
+  flowController = new FlowController(screenSize, blockPalletteWidth);
 
   // Pointer events
-  configureFlowPointerEvents(flowDesigner);
+  configureFlowPointerEvents(flowController);
 
-  // Return flow designer instance
-  return flowDesigner;
+  // Return flow controller instance
+  return flowController;
 };
 
-// Use the designer methods and values
-export const useFlowDesigner = (): FlowDesigner => {
-  return flowDesigner;
+// Use the controller methods and values
+export const useFlowController = (): FlowController => {
+  return flowController;
 };
