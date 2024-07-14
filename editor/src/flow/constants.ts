@@ -6,6 +6,8 @@ export const BLOCK_IO_SIZE = 10;
 export const MARKER_SIZE = 15;
 export const MARKER_OFFSET_X = 5;
 export const MARKER_OFFSET_Y = -8;
+export const PALETTE_GAP = 8;
+export const SCROLLBAR_SIZE = 25;
 
 /*
  * This file defines the various events that a flow and its elements will generate

@@ -10,14 +10,14 @@ import { BlockSide } from './BlockSide';
 import type { EnumDictionary } from './EnumDictionary';
 import { BLOCK_IO_OFFSET, BLOCK_IO_SIZE, MARKER_SIZE } from '../constants';
 import type { InputOutput } from '../types/InputOutput';
+import { useAppStore } from '../stores/app-store';
 
 export class FlowController {
   private _key: string;
-  private _viewSize: Ref<{ width: number; height: number }>;
   private _blocks: Ref<FlowBlockElement[]>;
   private _connections: Ref<FlowConnection[]>;
   private _zOrder: ZOrder;
-  private _blockPaletteWidth: Ref<number>;
+  private _blockPaletteWidth: number;
   private _drawingConnection = ref<FlowConnecting | undefined>(undefined);
   private _drawingConnectionEndBlock = ref<FlowBlockElement | undefined>(undefined);
   private _drawingConnectionEndPin = ref<number | undefined>(undefined);
@@ -27,21 +27,17 @@ export class FlowController {
   private _dragBlockOffset = ref<Offset>({ x: 0, y: 0 });
   private _dragBlockOriginalPosition = ref<Offset>({ x: 0, y: 0 });
 
-  constructor(key: string, viewSize: Ref<{ width: number; height: number }>, blockPaletteWidth: Ref<number>) {
+  constructor(key: string) {
     this._key = key;
     this._blocks = ref([]);
     this._connections = ref([]);
-    this._viewSize = viewSize;
-    this._blockPaletteWidth = blockPaletteWidth;
     this._zOrder = new ZOrder(this._blocks);
+
+    this._blockPaletteWidth = useAppStore().blockPaletteWidth;
   }
 
   public get key() {
     return this._key;
-  }
-
-  public get blockPaletteWidth(): Ref<number> {
-    return this._blockPaletteWidth;
   }
 
   public get blocks(): Ref<FlowBlockElement[]> {
@@ -50,10 +46,6 @@ export class FlowController {
 
   public get connections(): Ref<FlowConnection[]> {
     return this._connections;
-  }
-
-  public get viewSize(): Ref<{ width: number; height: number }> {
-    return this._viewSize;
   }
 
   public get dragBlock(): Ref<FlowBlockElement | undefined> {
@@ -197,7 +189,7 @@ export class FlowController {
     const connecting = {
       startBlock: e.data as FlowBlockElement,
       startPin: e.inputOutput.pin,
-      endLocation: { x: e.pointerEvent.offsetX - this.blockPaletteWidth.value, y: e.pointerEvent.offsetY },
+      endLocation: { x: e.pointerEvent.offsetX - this._blockPaletteWidth, y: e.pointerEvent.offsetY },
       cssClasses: ''
     } as FlowConnecting;
 
@@ -256,7 +248,7 @@ export class FlowController {
     this._drawingConnectionEndPin.value = inputOutput?.pin;
 
     // Update end offset to pointer offset
-    this.drawingConnection.value.endLocation = { x: e.offsetX - this._blockPaletteWidth.value, y: e.offsetY };
+    this.drawingConnection.value.endLocation = { x: e.offsetX - this._blockPaletteWidth, y: e.offsetY };
 
     if (!block || !inputOutput) {
       // Clear any existing styles / hit info
@@ -367,7 +359,7 @@ export class FlowController {
 
     this._blocks.value.forEach((block) => {
       // Convert pointer location to offset relative to block location for block input/output hit testing
-      const blockRelativeOffset: Offset = { x: e.offsetX - block.location.x - this._blockPaletteWidth.value, y: e.offsetY - block.location.y };
+      const blockRelativeOffset: Offset = { x: e.offsetX - block.location.x - this._blockPaletteWidth, y: e.offsetY - block.location.y };
 
       // Are any input/output hit?
       (block as FlowBlockElement).io.forEach((io) => {
@@ -531,17 +523,15 @@ export class FlowController {
 const flowControllers: Record<string, FlowController> = {};
 
 // Initialise a new instance of a controller
-export const initFlowController = (
-  key: string,
-  screenSize: Ref<{ width: number; height: number }>,
-  blockPaletteWidth: Ref<number>
-): FlowController => {
+export const initFlowController = (key: string): FlowController => {
   // Does a controller with the specified key already exist?
   if (key in flowControllers) {
     throw new Error(`A controller with the key '${key}' has already been initialised. Did you mean to call useFlowController?`);
   }
 
-  const flowController = new FlowController(key, screenSize, blockPaletteWidth);
+  // Create instance and add to dictionary
+  const flowController = new FlowController(key);
+  flowControllers[key] = flowController;
 
   // Pointer events
   configureFlowPointerEvents(flowController);
@@ -554,7 +544,7 @@ export const initFlowController = (
 export const useFlowController = (key: string): FlowController => {
   // Does a controller with the specified key already exist?
   if (!(key in flowControllers)) {
-    throw new Error(`A controller with the key '${key}' does not exist. Did you call initFlowController first?`);
+    return initFlowController(key);
   }
 
   return flowControllers[key];

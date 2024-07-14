@@ -1,9 +1,9 @@
 import type { Flow } from '../types/Flow';
 import { useFlowController } from '../types/FlowController';
 
-export const loadFlowFromJson = (json: string): Flow => {
+export const loadFlowFromJson = (key: string, json: string): Flow => {
   const flow = JSON.parse(json) as Flow;
-  const flowController = useFlowController('flow-key');
+  const flowController = useFlowController(key);
 
   // Load functionality blocks first
   for (let i = 0; i < flow.blocks.length; i++) {
