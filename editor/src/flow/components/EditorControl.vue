@@ -15,26 +15,26 @@
   >
     <g :transform="`translate(0, 0)`">
       <ContainerControl
-        :width="blockPalletteWidth"
+        :width="blockPaletteWidth"
         :height="svgHeight"
       >
-        <BlockPalletteControl
+        <BlockPaletteControl
           :x="0"
           :y="0"
-          :width="blockPalletteWidth"
+          :width="blockPaletteWidth"
           :height="svgHeight"
-          :gap="palletteGap"
-          :scrollbarWidth="palletteScrollbarWidth"
+          :gap="paletteGap"
+          :scrollbarWidth="paletteScrollbarWidth"
         />
       </ContainerControl>
     </g>
-    <g :transform="`translate(${blockPalletteWidth}, 0)`">
+    <g :transform="`translate(${blockPaletteWidth}, 0)`">
       <ContainerControl
-        :width="svgWidth - blockPalletteWidth"
+        :width="svgWidth - blockPaletteWidth"
         :height="svgHeight"
       >
         <FlowControl
-          :width="svgWidth - blockPalletteWidth"
+          :width="svgWidth - blockPaletteWidth"
           :height="svgHeight"
           :grid-size="gridSize"
         />
@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import BlockPalletteControl from './BlockPalletteControl.vue';
+import BlockPaletteControl from './BlockPaletteControl.vue';
 import FlowControl from './FlowControl.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useScreenSize } from 'vue-boosted';
@@ -53,9 +53,9 @@ import { useMockStore } from '../stores/mock-store';
 import ContainerControl from './ContainerControl.vue';
 import { BLOCK_WIDTH } from '../constants';
 
-const palletteScrollbarWidth = ref(25);
-const palletteGap = ref(8);
-const blockPalletteWidth = ref(BLOCK_WIDTH + 2 * palletteGap.value + palletteScrollbarWidth.value);
+const paletteScrollbarWidth = ref(25);
+const paletteGap = ref(8);
+const blockPaletteWidth = ref(BLOCK_WIDTH + 2 * paletteGap.value + paletteScrollbarWidth.value);
 const gridSize = ref(20);
 const screenSize = useScreenSize();
 const svg = ref();
@@ -75,7 +75,7 @@ const calculateSvgHeight = () => {
 };
 
 // Must be done before constructing any blocks or connections
-const flowController = initFlowController(screenSize, blockPalletteWidth);
+const flowController = initFlowController('flow-key', screenSize, blockPaletteWidth);
 
 const { flow } = useMockStore();
 

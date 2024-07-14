@@ -3,7 +3,7 @@ import { useFlowController } from '../types/FlowController';
 
 export const loadFlowFromJson = (json: string): Flow => {
   const flow = JSON.parse(json) as Flow;
-  const flowController = useFlowController();
+  const flowController = useFlowController('flow-key');
 
   // Load functionality blocks first
   for (let i = 0; i < flow.blocks.length; i++) {

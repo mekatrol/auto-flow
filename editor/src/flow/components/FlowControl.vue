@@ -32,7 +32,7 @@ import ConnectingControl from './ConnectingControl.vue';
 import BlockControl from './BlockControl.vue';
 import { useFlowController } from '../types/FlowController';
 
-const flowController = useFlowController();
+const flowController = useFlowController('flow-key');
 
 interface Props {
   width: number;

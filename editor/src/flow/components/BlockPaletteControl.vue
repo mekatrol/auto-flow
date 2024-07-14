@@ -1,12 +1,12 @@
 <template>
   <g
-    class="block-template-pallette"
+    class="block-template-palette"
     @pointermove="(e) => flowController.pointerMove(e)"
     @pointerup="(e) => flowController.pointerUp(e)"
     @mousewheel="mouseWheel"
     @focusin="(e) => focus(e)"
   >
-    <!-- We need a rect covering the full pallette view so that mouse wheel events are captured when the mouse is over areas that are not a block -->
+    <!-- We need a rect covering the full palette view so that mouse wheel events are captured when the mouse is over areas that are not a block -->
     <rect
       x="0"
       y="0"
@@ -65,7 +65,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const { blockTemplates } = useFlowStore();
-const flowController = useFlowController();
+const flowController = useFlowController('flow-key');
 
 // This is the number of blocks that have been scrolled up
 const yScroll = ref(0);

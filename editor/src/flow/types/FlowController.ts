@@ -12,11 +12,12 @@ import { BLOCK_IO_OFFSET, BLOCK_IO_SIZE, MARKER_SIZE } from '../constants';
 import type { InputOutput } from '../types/InputOutput';
 
 export class FlowController {
+  private _key: string;
   private _viewSize: Ref<{ width: number; height: number }>;
   private _blocks: Ref<FlowBlockElement[]>;
   private _connections: Ref<FlowConnection[]>;
   private _zOrder: ZOrder;
-  private _blockPalletteWidth: Ref<number>;
+  private _blockPaletteWidth: Ref<number>;
   private _drawingConnection = ref<FlowConnecting | undefined>(undefined);
   private _drawingConnectionEndBlock = ref<FlowBlockElement | undefined>(undefined);
   private _drawingConnectionEndPin = ref<number | undefined>(undefined);
@@ -26,16 +27,21 @@ export class FlowController {
   private _dragBlockOffset = ref<Offset>({ x: 0, y: 0 });
   private _dragBlockOriginalPosition = ref<Offset>({ x: 0, y: 0 });
 
-  constructor(viewSize: Ref<{ width: number; height: number }>, blockPalletteWidth: Ref<number>) {
+  constructor(key: string, viewSize: Ref<{ width: number; height: number }>, blockPaletteWidth: Ref<number>) {
+    this._key = key;
     this._blocks = ref([]);
     this._connections = ref([]);
     this._viewSize = viewSize;
-    this._blockPalletteWidth = blockPalletteWidth;
+    this._blockPaletteWidth = blockPaletteWidth;
     this._zOrder = new ZOrder(this._blocks);
   }
 
-  public get blockPalletteWidth(): Ref<number> {
-    return this._blockPalletteWidth;
+  public get key() {
+    return this._key;
+  }
+
+  public get blockPaletteWidth(): Ref<number> {
+    return this._blockPaletteWidth;
   }
 
   public get blocks(): Ref<FlowBlockElement[]> {
@@ -167,22 +173,22 @@ export class FlowController {
     (e.pointerEvent.target as SVGElement).releasePointerCapture(e.pointerEvent.pointerId);
 
     // Restore drag block boost if a block is being dragged
-    if (flowController.dragBlock.value) {
-      flowController.dragBlock.value.zBoost = 0;
-      flowController.dragBlock.value.z = flowController.dragBlock.value.zOrder;
+    if (this.dragBlock.value) {
+      this.dragBlock.value.zBoost = 0;
+      this.dragBlock.value.z = this.dragBlock.value.zOrder;
 
       // Is this a new block?
-      if (flowController.dragBlock.value.draggingAsNew && !flowController.blockLocationIsInvalid(flowController.dragBlock.value)) {
-        flowController.blocks.value.push(flowController.dragBlock.value);
-        flowController.dragBlock.value.draggingAsNew = false;
+      if (this.dragBlock.value.draggingAsNew && !this.blockLocationIsInvalid(this.dragBlock.value)) {
+        this.blocks.value.push(this.dragBlock.value);
+        this.dragBlock.value.draggingAsNew = false;
       }
     }
 
     // Clear drag block
-    flowController.dragBlock.value = undefined;
+    this.dragBlock.value = undefined;
 
     // Clear drawing connection
-    flowController.drawingConnection.value = undefined;
+    this.drawingConnection.value = undefined;
   }
 
   public blockIOPointerDown(e: FlowBlockIOPointerEvent) {
@@ -191,7 +197,7 @@ export class FlowController {
     const connecting = {
       startBlock: e.data as FlowBlockElement,
       startPin: e.inputOutput.pin,
-      endLocation: { x: e.pointerEvent.offsetX - this.blockPalletteWidth.value, y: e.pointerEvent.offsetY },
+      endLocation: { x: e.pointerEvent.offsetX - this.blockPaletteWidth.value, y: e.pointerEvent.offsetY },
       cssClasses: ''
     } as FlowConnecting;
 
@@ -250,7 +256,7 @@ export class FlowController {
     this._drawingConnectionEndPin.value = inputOutput?.pin;
 
     // Update end offset to pointer offset
-    this.drawingConnection.value.endLocation = { x: e.offsetX - this._blockPalletteWidth.value, y: e.offsetY };
+    this.drawingConnection.value.endLocation = { x: e.offsetX - this._blockPaletteWidth.value, y: e.offsetY };
 
     if (!block || !inputOutput) {
       // Clear any existing styles / hit info
@@ -361,7 +367,7 @@ export class FlowController {
 
     this._blocks.value.forEach((block) => {
       // Convert pointer location to offset relative to block location for block input/output hit testing
-      const blockRelativeOffset: Offset = { x: e.offsetX - block.location.x - this._blockPalletteWidth.value, y: e.offsetY - block.location.y };
+      const blockRelativeOffset: Offset = { x: e.offsetX - block.location.x - this._blockPaletteWidth.value, y: e.offsetY - block.location.y };
 
       // Are any input/output hit?
       (block as FlowBlockElement).io.forEach((io) => {
@@ -521,12 +527,21 @@ export class FlowController {
   };
 }
 
-// The singleton flow controller instance
-let flowController: FlowController;
+// The instantiated flow controllers
+const flowControllers: Record<string, FlowController> = {};
 
-// Initialise the controller
-export const initFlowController = (screenSize: Ref<{ width: number; height: number }>, blockPalletteWidth: Ref<number>): FlowController => {
-  flowController = new FlowController(screenSize, blockPalletteWidth);
+// Initialise a new instance of a controller
+export const initFlowController = (
+  key: string,
+  screenSize: Ref<{ width: number; height: number }>,
+  blockPaletteWidth: Ref<number>
+): FlowController => {
+  // Does a controller with the specified key already exist?
+  if (key in flowControllers) {
+    throw new Error(`A controller with the key '${key}' has already been initialised. Did you mean to call useFlowController?`);
+  }
+
+  const flowController = new FlowController(key, screenSize, blockPaletteWidth);
 
   // Pointer events
   configureFlowPointerEvents(flowController);
@@ -535,7 +550,24 @@ export const initFlowController = (screenSize: Ref<{ width: number; height: numb
   return flowController;
 };
 
-// Use the controller methods and values
-export const useFlowController = (): FlowController => {
-  return flowController;
+// Get an instance of a flow controller by key
+export const useFlowController = (key: string): FlowController => {
+  // Does a controller with the specified key already exist?
+  if (!(key in flowControllers)) {
+    throw new Error(`A controller with the key '${key}' does not exist. Did you call initFlowController first?`);
+  }
+
+  return flowControllers[key];
+};
+
+// Clean up a flow controller instance
+export const deleteFlowController = (key: string): void => {
+  // Does a controller with the specified key already exist?
+  if (!(key in flowControllers)) {
+    // Doesn't exist so nothing to do
+    return;
+  }
+
+  // Remove the instance
+  delete flowControllers[key];
 };
