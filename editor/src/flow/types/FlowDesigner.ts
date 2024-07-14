@@ -13,10 +13,6 @@ import { BLOCK_IO_OFFSET, BLOCK_IO_SIZE, MARKER_SIZE } from '../constants';
 import type { InputOutput } from '../types/InputOutput';
 
 export class FlowDesigner {
-  // To be valid location the block IO/marker also needs to be within the bounds
-  private validLocationOffsetX = BLOCK_IO_SIZE;
-  private validLocationOffsetY = MARKER_SIZE;
-
   private _viewSize: Ref<{ width: number; height: number }>;
   private _blocks: Ref<FlowBlockElement[]>;
   private _connections: Ref<FlowConnection[]>;
@@ -178,7 +174,8 @@ export class FlowDesigner {
   });
 
   public blockLocationIsInvalid(block: FlowBlockElement): boolean {
-    return block.location.x < 0 || block.location.y < this.validLocationOffsetY;
+    // Must be at least MARKER_SIZE from left and top
+    return block.location.x < MARKER_SIZE || block.location.y < MARKER_SIZE;
   }
 
   public dragBlockMove = (e: PointerEvent): void => {
@@ -197,7 +194,7 @@ export class FlowDesigner {
     // }
 
     // Don't allow Y update unless it is at a valid location or a new block being dragged to the editor area
-    if ((block.draggingAsNew && !block.dragLocationHasBeenValid) || y >= this.validLocationOffsetY) {
+    if ((block.draggingAsNew && !block.dragLocationHasBeenValid) || y >= MARKER_SIZE) {
       block.location.y = y;
     }
 
