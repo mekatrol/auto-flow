@@ -6,6 +6,16 @@
     @mousewheel="mouseWheel"
     @focusin="(e) => focus(e)"
   >
+    <!-- We need a rect covering the full pallette view so that mouse wheel events are captured when the mouse is over areas that are not a block -->
+    <rect
+      x="0"
+      y="0"
+      :width="width"
+      :height="height"
+      fill="transparent"
+      @mousewheel="mouseWheel"
+    ></rect>
+
     <!-- Block templates -->
     <BlockTemplateControl
       v-for="(blockTemplate, i) in visibleBlockTemplates"
@@ -94,7 +104,6 @@ const scroll = (scroll: number) => {
 
 const mouseWheel = (e: WheelEvent) => {
   const delta = e.deltaY / 100;
-
   yScroll.value = Math.min(blockTemplates.length - visibleBlocks.value, Math.max(0, yScroll.value + delta));
 };
 
