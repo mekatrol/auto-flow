@@ -10,12 +10,12 @@
     :fill="fillColor"
     :stroke="strokeColor"
     :stroke-width="strokeWidth"
-    @mousemove="(e) => emit(BLOCK_IO_MOUSE_MOVE, e)"
-    @mouseover="(e) => emit(BLOCK_IO_MOUSE_OVER, e)"
-    @mouseenter="(e) => emit(BLOCK_IO_MOUSE_ENTER, e)"
-    @mouseleave="(e) => emit(BLOCK_IO_MOUSE_LEAVE, e)"
-    @mousedown="(e) => emit(BLOCK_IO_MOUSE_DOWN, e)"
-    @mouseup="(e) => emit(BLOCK_IO_MOUSE_UP, e)"
+    @pointermove="(e) => emit(BLOCK_IO_POINTER_MOVE, e)"
+    @pointerover="(e) => emit(BLOCK_IO_POINTER_OVER, e)"
+    @pointerenter="(e) => emit(BLOCK_IO_POINTER_ENTER, e)"
+    @pointerleave="(e) => emit(BLOCK_IO_POINTER_LEAVE, e)"
+    @pointerdown="(e) => emit(BLOCK_IO_POINTER_DOWN, e)"
+    @pointerup="(e) => emit(BLOCK_IO_POINTER_UP, e)"
   >
     ></rect
   >
@@ -25,12 +25,12 @@
 import type { InputOutput } from '../types/InputOutput';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
 import {
-  BLOCK_IO_MOUSE_MOVE,
-  BLOCK_IO_MOUSE_OVER,
-  BLOCK_IO_MOUSE_ENTER,
-  BLOCK_IO_MOUSE_LEAVE,
-  BLOCK_IO_MOUSE_DOWN,
-  BLOCK_IO_MOUSE_UP
+  BLOCK_IO_POINTER_MOVE,
+  BLOCK_IO_POINTER_OVER,
+  BLOCK_IO_POINTER_ENTER,
+  BLOCK_IO_POINTER_LEAVE,
+  BLOCK_IO_POINTER_DOWN,
+  BLOCK_IO_POINTER_UP
 } from '../constants';
 import type { FlowBlockElement } from '../types/FlowBlockElement';
 
@@ -52,11 +52,11 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emitter = useEmitter();
 
-const emit = (event: keyof FlowEvents, e: MouseEvent): boolean => {
+const emit = (event: keyof FlowEvents, e: PointerEvent): boolean => {
   emitter.emit(event, {
     inputOutput: props.inputOutput,
     data: props.block,
-    mouseEvent: e
+    pointerEvent: e
   });
   e.preventDefault();
   return false;

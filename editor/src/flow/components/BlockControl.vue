@@ -16,12 +16,12 @@
       :fill-opacity="blockStyles.opacity"
       :stroke="blockStyles.stroke"
       :stroke-width="theme.blockStyles.strokeWidth"
-      @mousemove="(e) => emit(BLOCK_MOUSE_MOVE, e)"
-      @mouseover="(e) => emit(BLOCK_MOUSE_OVER, e)"
-      @mouseenter="(e) => emit(BLOCK_MOUSE_ENTER, e)"
-      @mouseleave="(e) => emit(BLOCK_MOUSE_LEAVE, e)"
-      @mousedown="(e) => emit(BLOCK_MOUSE_DOWN, e)"
-      @mouseup="(e) => emit(BLOCK_MOUSE_UP, e)"
+      @pointermove="(e) => emit(BLOCK_POINTER_MOVE, e)"
+      @pointerover="(e) => emit(BLOCK_POINTER_OVER, e)"
+      @pointerenter="(e) => emit(BLOCK_POINTER_ENTER, e)"
+      @pointerleave="(e) => emit(BLOCK_POINTER_LEAVE, e)"
+      @pointerdown="(e) => emit(BLOCK_POINTER_DOWN, e)"
+      @pointerup="(e) => emit(BLOCK_POINTER_UP, e)"
     ></rect>
 
     <!-- Block icon -->
@@ -103,17 +103,17 @@ import {
   MARKER_OFFSET_X,
   MARKER_OFFSET_Y,
   MARKER_SIZE,
-  BLOCK_MOUSE_MOVE,
-  BLOCK_MOUSE_OVER,
-  BLOCK_MOUSE_ENTER,
-  BLOCK_MOUSE_LEAVE,
-  BLOCK_MOUSE_DOWN,
-  BLOCK_MOUSE_UP
+  BLOCK_POINTER_MOVE,
+  BLOCK_POINTER_OVER,
+  BLOCK_POINTER_ENTER,
+  BLOCK_POINTER_LEAVE,
+  BLOCK_POINTER_DOWN,
+  BLOCK_POINTER_UP
 } from '../constants';
 import { useThemeStore } from '../stores/themeStore';
 import type { FlowBlockElement } from '../types/FlowBlockElement';
 
-const textGapX = 10;
+const textGapX = 7;
 const textGapY = 5;
 
 interface Props {
@@ -160,11 +160,11 @@ const iconSize = computed(() => props.block.size.height);
 
 const emitter = useEmitter();
 
-const emit = (event: keyof FlowEvents, e: MouseEvent): boolean => {
+const emit = (event: keyof FlowEvents, e: PointerEvent): boolean => {
   if (props.block) {
     emitter.emit(event, {
       data: props.block,
-      mouseEvent: e
+      pointerEvent: e
     });
   }
 
@@ -208,5 +208,9 @@ const { theme } = useThemeStore();
 <style scoped lang="css">
 .dragging-new {
   filter: grayscale(20%);
+}
+
+.label {
+  font-size: 14px;
 }
 </style>

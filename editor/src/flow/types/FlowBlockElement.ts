@@ -18,7 +18,7 @@ export interface FlowBlockElement {
   // The size of the block
   size: Size;
 
-  // The display zOrder for the element. Used to determine rendering and mouse click order.
+  // The display zOrder for the element. Used to determine rendering and pointer click order.
   // Elements with a higher zOrder are considered on top of elements with a lower zOrder.
   // That is:
   //  * higher zOrder items will be rendered over the top of lower zOrder items

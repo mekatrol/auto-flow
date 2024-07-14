@@ -1,123 +1,126 @@
 import mitt, { type Emitter } from 'mitt';
 import { type FlowDesigner } from '../types/FlowDesigner';
-import { v4 as uuidv4 } from 'uuid';
 import {
-  BLOCK_IO_MOUSE_DOWN,
-  BLOCK_IO_MOUSE_ENTER,
-  BLOCK_IO_MOUSE_LEAVE,
-  BLOCK_IO_MOUSE_MOVE,
-  BLOCK_IO_MOUSE_OVER,
-  BLOCK_IO_MOUSE_UP,
-  BLOCK_MOUSE_DOWN,
-  BLOCK_MOUSE_ENTER,
-  BLOCK_MOUSE_LEAVE,
-  BLOCK_MOUSE_MOVE,
-  BLOCK_MOUSE_OVER,
-  BLOCK_MOUSE_UP,
-  CONNECTING_MOUSE_DOWN,
-  CONNECTING_MOUSE_ENTER,
-  CONNECTING_MOUSE_LEAVE,
-  CONNECTING_MOUSE_MOVE,
-  CONNECTING_MOUSE_OVER,
-  CONNECTING_MOUSE_UP,
-  CONNECTION_MOUSE_DOWN,
-  CONNECTION_MOUSE_ENTER,
-  CONNECTION_MOUSE_LEAVE,
-  CONNECTION_MOUSE_MOVE,
-  CONNECTION_MOUSE_OVER,
-  CONNECTION_MOUSE_UP
+  BLOCK_IO_POINTER_DOWN,
+  BLOCK_IO_POINTER_ENTER,
+  BLOCK_IO_POINTER_LEAVE,
+  BLOCK_IO_POINTER_MOVE,
+  BLOCK_IO_POINTER_OVER,
+  BLOCK_IO_POINTER_UP,
+  BLOCK_POINTER_DOWN,
+  BLOCK_POINTER_ENTER,
+  BLOCK_POINTER_LEAVE,
+  BLOCK_POINTER_MOVE,
+  BLOCK_POINTER_OVER,
+  BLOCK_POINTER_UP,
+  CONNECTING_POINTER_DOWN,
+  CONNECTING_POINTER_ENTER,
+  CONNECTING_POINTER_LEAVE,
+  CONNECTING_POINTER_MOVE,
+  CONNECTING_POINTER_OVER,
+  CONNECTING_POINTER_UP,
+  CONNECTION_POINTER_DOWN,
+  CONNECTION_POINTER_ENTER,
+  CONNECTION_POINTER_LEAVE,
+  CONNECTION_POINTER_MOVE,
+  CONNECTION_POINTER_OVER,
+  CONNECTION_POINTER_UP
 } from '../constants';
 import type { FlowConnection } from '../types/FlowConnection';
 import type { InputOutput } from '../types/InputOutput';
 import type { FlowBlockElement } from '../types/FlowBlockElement';
 import type { FlowConnecting } from '../types/FlowConnecting';
 
-export interface FlowMouseEvent<T> {
+export interface FlowPointerEvent<T> {
   data: T;
-  mouseEvent: MouseEvent;
+  pointerEvent: PointerEvent;
 }
 
 // An event from a flow block
-export interface FlowBlockMouseEvent extends FlowMouseEvent<FlowBlockElement> {}
+export interface FlowBlockPointerEvent extends FlowPointerEvent<FlowBlockElement> {}
 
-// A mouse event from a flow block io (includes the block that the io is attached to)
-export interface FlowBlockConnectorMouseEvent extends FlowBlockMouseEvent {
+// A pointer event from a flow block io (includes the block that the io is attached to)
+export interface FlowBlockConnectorPointerEvent extends FlowBlockPointerEvent {
   inputOutput: InputOutput;
 }
 
-// A mouse event from a flow connection
-export interface FlowConnectionMouseEvent extends FlowMouseEvent<FlowConnection> {}
+// A pointer event from a flow connection
+export interface FlowConnectionPointerEvent extends FlowPointerEvent<FlowConnection> {}
 
-// A mouse event from a flow connecting
-export interface FlowConnectingMouseEvent extends FlowMouseEvent<FlowConnecting> {}
+// A pointer event from a flow connecting
+export interface FlowConnectingPointerEvent extends FlowPointerEvent<FlowConnecting> {}
 
 export type FlowEvents = {
   /*
-   * Block mouse events
+   * Block pointer events
    */
-  blockMouseMove: FlowBlockMouseEvent;
-  blockMouseOver: FlowBlockMouseEvent;
-  blockMouseEnter: FlowBlockMouseEvent;
-  blockMouseLeave: FlowBlockMouseEvent;
-  blockMouseDown: FlowBlockMouseEvent;
-  blockMouseUp: FlowBlockMouseEvent;
+  blockPointerMove: FlowBlockPointerEvent;
+  blockPointerOver: FlowBlockPointerEvent;
+  blockPointerEnter: FlowBlockPointerEvent;
+  blockPointerLeave: FlowBlockPointerEvent;
+  blockPointerDown: FlowBlockPointerEvent;
+  blockPointerUp: FlowBlockPointerEvent;
 
   /*
-   * Block input/output mouse events
+   * Block input/output pointer events
    */
-  blockIOMouseMove: FlowBlockConnectorMouseEvent;
-  blockIOMouseOver: FlowBlockConnectorMouseEvent;
-  blockIOMouseEnter: FlowBlockConnectorMouseEvent;
-  blockIOMouseLeave: FlowBlockConnectorMouseEvent;
-  blockIOMouseDown: FlowBlockConnectorMouseEvent;
-  blockIOMouseUp: FlowBlockConnectorMouseEvent;
+  blockIOPointerMove: FlowBlockConnectorPointerEvent;
+  blockIOPointerOver: FlowBlockConnectorPointerEvent;
+  blockIOPointerEnter: FlowBlockConnectorPointerEvent;
+  blockIOPointerLeave: FlowBlockConnectorPointerEvent;
+  blockIOPointerDown: FlowBlockConnectorPointerEvent;
+  blockIOPointerUp: FlowBlockConnectorPointerEvent;
 
   /*
-   * Connecting mouse events
+   * Connecting pointer events
    */
-  connectingMouseMove: FlowConnectingMouseEvent;
-  connectingMouseOver: FlowConnectingMouseEvent;
-  connectingMouseEnter: FlowConnectingMouseEvent;
-  connectingMouseLeave: FlowConnectingMouseEvent;
-  connectingMouseDown: FlowConnectingMouseEvent;
-  connectingMouseUp: FlowConnectingMouseEvent;
+  connectingPointerMove: FlowConnectingPointerEvent;
+  connectingPointerOver: FlowConnectingPointerEvent;
+  connectingPointerEnter: FlowConnectingPointerEvent;
+  connectingPointerLeave: FlowConnectingPointerEvent;
+  connectingPointerDown: FlowConnectingPointerEvent;
+  connectingPointerUp: FlowConnectingPointerEvent;
 
   /*
-   * Connection mouse events
+   * Connection pointer events
    */
-  connectionMouseMove: FlowConnectionMouseEvent;
-  connectionMouseOver: FlowConnectionMouseEvent;
-  connectionMouseEnter: FlowConnectionMouseEvent;
-  connectionMouseLeave: FlowConnectionMouseEvent;
-  connectionMouseDown: FlowConnectionMouseEvent;
-  connectionMouseUp: FlowConnectionMouseEvent;
+  connectionPointerMove: FlowConnectionPointerEvent;
+  connectionPointerOver: FlowConnectionPointerEvent;
+  connectionPointerEnter: FlowConnectionPointerEvent;
+  connectionPointerLeave: FlowConnectionPointerEvent;
+  connectionPointerDown: FlowConnectionPointerEvent;
+  connectionPointerUp: FlowConnectionPointerEvent;
 };
 
 // We want a single instance for all use (singleton pattern)
 const emitter: Emitter<FlowEvents> = mitt<FlowEvents>();
 
-export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
+export const configureFlowPointerEvents = (flowDesigner: FlowDesigner): void => {
   const emitter = useEmitter();
 
-  emitter.on(BLOCK_MOUSE_ENTER, (_e: FlowBlockMouseEvent) => {
-    // console.log(`block mouse enter: ${e.data.id}`, e);
+  emitter.on(BLOCK_POINTER_ENTER, (_e: FlowBlockPointerEvent) => {
+    // console.log(`block pointer enter: ${e.data.id}`, e);
   });
 
-  emitter.on(BLOCK_MOUSE_LEAVE, (_e: FlowBlockMouseEvent) => {
-    // console.log(`block mouse leave: ${e.data.id}`, e);
+  emitter.on(BLOCK_POINTER_LEAVE, (_e: FlowBlockPointerEvent) => {
+    // console.log(`block pointer leave: ${e.data.id}`, e);
   });
 
-  emitter.on(BLOCK_MOUSE_DOWN, (e: FlowBlockMouseEvent) => {
+  emitter.on(BLOCK_POINTER_DOWN, (e: FlowBlockPointerEvent) => {
+    (e.pointerEvent.target as SVGElement).setPointerCapture(e.pointerEvent.pointerId);
+
     flowDesigner.clearSelectedItems();
     flowDesigner.selectedBlock = e.data;
     flowDesigner.dragBlock.value = e.data;
     flowDesigner.dragBlock.value.zBoost = 0;
     flowDesigner.dragBlock.value.z = flowDesigner.dragBlock.value.zOrder;
-    flowDesigner.dragBlockOffset.value = { x: e.mouseEvent.offsetX - e.data.location.x, y: e.mouseEvent.offsetY - e.data.location.y };
+    flowDesigner.dragBlockOffset.value = { x: e.pointerEvent.offsetX - e.data.location.x, y: e.pointerEvent.offsetY - e.data.location.y };
     flowDesigner.dragBlockOriginalPosition.value = { x: e.data.location.x, y: e.data.location.y };
   });
 
-  emitter.on(BLOCK_MOUSE_UP, (_e: FlowBlockMouseEvent) => {
+  emitter.on(BLOCK_POINTER_UP, (e: FlowBlockPointerEvent) => {
+    (e.pointerEvent.target as SVGElement).releasePointerCapture(e.pointerEvent.pointerId);
+
     // Restore drag block boost if a block is being dragged
     if (flowDesigner.dragBlock.value) {
       flowDesigner.dragBlock.value.zBoost = 0;
@@ -137,90 +140,90 @@ export const configureFlowMouseEvents = (flowDesigner: FlowDesigner): void => {
     flowDesigner.drawingConnection.value = undefined;
   });
 
-  emitter.on(BLOCK_MOUSE_MOVE, (e: FlowBlockMouseEvent) => {
-    flowDesigner.dragBlockMove(e.mouseEvent);
+  emitter.on(BLOCK_POINTER_MOVE, (e: FlowBlockPointerEvent) => {
+    flowDesigner.dragBlockMove(e.pointerEvent);
   });
 
-  emitter.on(BLOCK_MOUSE_OVER, (_e) => {});
+  emitter.on(BLOCK_POINTER_OVER, (_e) => {});
 
-  emitter.on(BLOCK_IO_MOUSE_MOVE, (_e) => {
-    // console.log(`BLOCK_IO_MOUSE_MOVE: ${e.data.id}`, e);
+  emitter.on(BLOCK_IO_POINTER_MOVE, (_e) => {
+    // console.log(`BLOCK_IO_POINTER_MOVE: ${e.data.id}`, e);
   });
 
-  emitter.on(BLOCK_IO_MOUSE_OVER, (_e) => {
-    // console.log(`BLOCK_IO_MOUSE_OVER: ${e.data.id}`, e);
+  emitter.on(BLOCK_IO_POINTER_OVER, (_e) => {
+    // console.log(`BLOCK_IO_POINTER_OVER: ${e.data.id}`, e);
   });
 
-  emitter.on(BLOCK_IO_MOUSE_ENTER, (_e) => {
-    // console.log(`BLOCK_IO_MOUSE_ENTER: ${e.data.id}`, e);
+  emitter.on(BLOCK_IO_POINTER_ENTER, (_e) => {
+    // console.log(`BLOCK_IO_POINTER_ENTER: ${e.data.id}`, e);
   });
 
-  emitter.on(BLOCK_IO_MOUSE_LEAVE, (_e) => {
-    // console.log(`BLOCK_IO_MOUSE_LEAVE: ${e.data.id}`, e);
+  emitter.on(BLOCK_IO_POINTER_LEAVE, (_e) => {
+    // console.log(`BLOCK_IO_POINTER_LEAVE: ${e.data.id}`, e);
   });
 
-  emitter.on(BLOCK_IO_MOUSE_UP, (_e) => {
+  emitter.on(BLOCK_IO_POINTER_UP, (_e) => {
     flowDesigner.drawingConnection.value = undefined;
   });
 
-  emitter.on(BLOCK_IO_MOUSE_DOWN, (e) => {
+  emitter.on(BLOCK_IO_POINTER_DOWN, (e) => {
     flowDesigner.clearSelectedItems();
 
     const connecting = {
       startBlock: e.data as FlowBlockElement,
       startPin: e.inputOutput.pin,
-      endLocation: { x: e.mouseEvent.offsetX, y: e.mouseEvent.offsetY },
+      endLocation: { x: e.pointerEvent.offsetX, y: e.pointerEvent.offsetY },
       cssClasses: ''
     } as FlowConnecting;
 
     flowDesigner.drawingConnection.value = connecting;
   });
 
-  emitter.on(CONNECTING_MOUSE_MOVE, (_e) => {
-    // console.log(`CONNECTING_MOUSE_MOVE: ${_e.data.id}`, _e);
+  emitter.on(CONNECTING_POINTER_MOVE, (_e) => {
+    // console.log(`CONNECTING_POINTER_MOVE: ${_e.data.id}`, _e);
   });
 
-  emitter.on(CONNECTING_MOUSE_OVER, (_e) => {
-    // console.log(`CONNECTING_MOUSE_OVER: ${_e.data.id}`, _e);
+  emitter.on(CONNECTING_POINTER_OVER, (_e) => {
+    // console.log(`CONNECTING_POINTER_OVER: ${_e.data.id}`, _e);
   });
 
-  emitter.on(CONNECTING_MOUSE_ENTER, (_e) => {
-    // console.log(`CONNECTING_MOUSE_ENTER: ${_e.data.id}`, _e);
+  emitter.on(CONNECTING_POINTER_ENTER, (_e) => {
+    // console.log(`CONNECTING_POINTER_ENTER: ${_e.data.id}`, _e);
   });
 
-  emitter.on(CONNECTING_MOUSE_LEAVE, (_e) => {
-    // console.log(`CONNECTING_MOUSE_LEAVE: ${_e.data.id}`, _e);
+  emitter.on(CONNECTING_POINTER_LEAVE, (_e) => {
+    // console.log(`CONNECTING_POINTER_LEAVE: ${_e.data.id}`, _e);
   });
 
-  emitter.on(CONNECTING_MOUSE_UP, (_e) => {
-    // console.log(`CONNECTING_MOUSE_UP: ${_e.data.id}`, _e);
+  emitter.on(CONNECTING_POINTER_UP, (_e) => {
+    // console.log(`CONNECTING_POINTER_UP: ${_e.data.id}`, _e);
   });
 
-  emitter.on(CONNECTING_MOUSE_DOWN, (e) => {
-    // console.log(`CONNECTING_MOUSE_DOWN: ${_e.data.id}`, _e);
+  emitter.on(CONNECTING_POINTER_DOWN, (e) => {
+    // console.log(`CONNECTING_POINTER_DOWN: ${_e.data.id}`, _e);
   });
 
-  emitter.on(CONNECTION_MOUSE_MOVE, (_e) => {
-    // console.log(`CONNECTION_MOUSE_MOVE: ${_e.data.id}`, _e);
+  emitter.on(CONNECTION_POINTER_MOVE, (_e) => {
+    // console.log(`CONNECTION_POINTER_MOVE: ${_e.data.id}`, _e);
   });
 
-  emitter.on(CONNECTION_MOUSE_OVER, (_e) => {
-    // console.log(`CONNECTION_MOUSE_OVER: ${_e.data.id}`, _e);
+  emitter.on(CONNECTION_POINTER_OVER, (_e) => {
+    // console.log(`CONNECTION_POINTER_OVER: ${_e.data.id}`, _e);
   });
 
-  emitter.on(CONNECTION_MOUSE_ENTER, (_e) => {
-    // console.log(`CONNECTION_MOUSE_ENTER: ${_e.data.id}`, _e);
+  emitter.on(CONNECTION_POINTER_ENTER, (_e) => {
+    // console.log(`CONNECTION_POINTER_ENTER: ${_e.data.id}`, _e);
   });
 
-  emitter.on(CONNECTION_MOUSE_LEAVE, (_e) => {
-    // console.log(`CONNECTION_MOUSE_LEAVE: ${_e.data.id}`, _e);
+  emitter.on(CONNECTION_POINTER_LEAVE, (_e) => {
+    // console.log(`CONNECTION_POINTER_LEAVE: ${_e.data.id}`, _e);
   });
 
-  emitter.on(CONNECTION_MOUSE_UP, (_e) => {
-    // console.log(`CONNECTION_MOUSE_UP: ${_e.data.id}`, _e);
+  emitter.on(CONNECTION_POINTER_UP, (_e) => {
+    // console.log(`CONNECTION_POINTER_UP: ${_e.data.id}`, _e);
   });
 
-  emitter.on(CONNECTION_MOUSE_DOWN, (e) => {
+  emitter.on(CONNECTION_POINTER_DOWN, (e) => {
     flowDesigner.clearSelectedItems();
     flowDesigner.drawingConnection.value = undefined;
     flowDesigner.selectedConnection = e.data;

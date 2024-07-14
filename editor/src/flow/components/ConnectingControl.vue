@@ -11,12 +11,12 @@
       :fill-opacity="theme.connectionStyles.fillOpacity"
       :stroke="theme.connectionStyles.stroke"
       :stroke-width="theme.connectionStyles.strokeWidth"
-      @mousemove="(e) => emit(CONNECTION_MOUSE_MOVE, e)"
-      @mouseover="(e) => emit(CONNECTION_MOUSE_OVER, e)"
-      @mouseenter="(e) => emit(CONNECTION_MOUSE_ENTER, e)"
-      @mouseleave="(e) => emit(CONNECTION_MOUSE_LEAVE, e)"
-      @mousedown="(e) => emit(CONNECTION_MOUSE_DOWN, e)"
-      @mouseup="(e) => emit(CONNECTION_MOUSE_UP, e)"
+      @pointermove="(e) => emit(CONNECTION_POINTER_MOVE, e)"
+      @pointerover="(e) => emit(CONNECTION_POINTER_OVER, e)"
+      @pointerenter="(e) => emit(CONNECTION_POINTER_ENTER, e)"
+      @pointerleave="(e) => emit(CONNECTION_POINTER_LEAVE, e)"
+      @pointerdown="(e) => emit(CONNECTION_POINTER_DOWN, e)"
+      @pointerup="(e) => emit(CONNECTION_POINTER_UP, e)"
       zOrder="100"
     />
 
@@ -43,18 +43,17 @@
 </template>
 
 <script setup lang="ts">
-import { type Offset } from '../types/Offset';
 import { generateCubicBezierPoints } from '../utils/cubic-spline';
 import { cubicBezierToSvg } from '../utils/svg';
 import { computed } from 'vue';
-import { useEmitter, type FlowConnectingMouseEvent, type FlowEvents } from '../utils/event-emitter';
+import { useEmitter, type FlowConnectingPointerEvent, type FlowEvents } from '../utils/event-emitter';
 import {
-  CONNECTION_MOUSE_MOVE,
-  CONNECTION_MOUSE_OVER,
-  CONNECTION_MOUSE_ENTER,
-  CONNECTION_MOUSE_LEAVE,
-  CONNECTION_MOUSE_DOWN,
-  CONNECTION_MOUSE_UP,
+  CONNECTION_POINTER_MOVE,
+  CONNECTION_POINTER_OVER,
+  CONNECTION_POINTER_ENTER,
+  CONNECTION_POINTER_LEAVE,
+  CONNECTION_POINTER_DOWN,
+  CONNECTION_POINTER_UP,
   BLOCK_IO_SIZE
 } from '../constants';
 import { useThemeStore } from '../stores/themeStore';
@@ -105,11 +104,11 @@ const svg = computed(() => {
 });
 
 const emitter = useEmitter();
-const emit = (event: keyof FlowEvents, e: MouseEvent): boolean => {
+const emit = (event: keyof FlowEvents, e: PointerEvent): boolean => {
   emitter.emit(event, {
     data: props.connecting,
-    mouseEvent: e
-  } as FlowConnectingMouseEvent);
+    pointerEvent: e
+  } as FlowConnectingPointerEvent);
   e.preventDefault();
   return false;
 };

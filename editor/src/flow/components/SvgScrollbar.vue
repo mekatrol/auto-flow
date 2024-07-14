@@ -30,7 +30,7 @@
       fill="white"
       stroke="black"
       stroke-width="1px"
-      @mousedown="(e) => emit('scrollUp', e)"
+      @pointerdown="(e) => emit('scrollUp', e)"
     ></path>
     <!-- The increment value triangle -->
     <path
@@ -39,7 +39,7 @@
       fill="white"
       stroke="black"
       stroke-width="1px"
-      @mousedown="(e) => emit('scrollDown', e)"
+      @pointerdown="(e) => emit('scrollDown', e)"
     ></path>
   </g>
 </template>

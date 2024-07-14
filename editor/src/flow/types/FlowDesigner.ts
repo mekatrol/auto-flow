@@ -2,7 +2,7 @@ import { computed, type Ref, ref } from 'vue';
 import type { Offset } from './Offset';
 import { ZOrder } from './ZOrder';
 import type { Line } from './Line';
-import { configureFlowMouseEvents } from '../utils/event-emitter';
+import { configureFlowPointerEvents } from '../utils/event-emitter';
 import type { FlowConnection } from './FlowConnection';
 import type { Size } from './Size';
 import type { FlowBlockElement } from './FlowBlockElement';
@@ -174,10 +174,10 @@ export class FlowDesigner {
   });
 
   public blockLocationIsInvalid(block: FlowBlockElement): boolean {
-    return block.location.x < this._blockPalletteWidth.value + this.validLocationOffsetX || block.location.y < this.validLocationOffsetY;
+    return block.location.x < 0 || block.location.y < this.validLocationOffsetY;
   }
 
-  public dragBlockMove = (e: MouseEvent): void => {
+  public dragBlockMove = (e: PointerEvent): void => {
     if (!this._dragBlock.value) return;
 
     // Just for code readability
@@ -187,10 +187,10 @@ export class FlowDesigner {
     const x = e.offsetX - this._dragBlockOffset.value.x;
     const y = e.offsetY - this._dragBlockOffset.value.y;
 
-    // Don't allow X update unless it is at a valid location or a new block being dragged to the editor area
-    if ((block.draggingAsNew && !block.dragLocationHasBeenValid) || x > this._blockPalletteWidth.value + this.validLocationOffsetX) {
-      block.location.x = x;
-    }
+    // // Don't allow X update unless it is at a valid location or a new block being dragged to the editor area
+    // if ((block.draggingAsNew && !block.dragLocationHasBeenValid) || x >= 0) {
+    block.location.x = x;
+    // }
 
     // Don't allow Y update unless it is at a valid location or a new block being dragged to the editor area
     if ((block.draggingAsNew && !block.dragLocationHasBeenValid) || y >= this.validLocationOffsetY) {
@@ -207,14 +207,14 @@ export class FlowDesigner {
     }
   };
 
-  public dragConnectionMove = (e: MouseEvent): void => {
+  public dragConnectionMove = (e: PointerEvent): void => {
     if (!this.drawingConnection.value) return;
 
     // Get starting io
     const startBlock = this.drawingConnection.value.startBlock;
     const startInputOutput = startBlock.io.find((io) => io.pin === this.drawingConnection.value!.startPin)!;
 
-    // Is there an element at the mouse position (that is not the drawing connection)
+    // Is there an element at the pointer position (that is not the drawing connection)
     const hitInputOutputs = this.getHitInputOutputs(e).filter(
       ([block, io]) =>
         // Don't hit test the starting io
@@ -228,7 +228,7 @@ export class FlowDesigner {
     this._drawingConnectionEndBlock.value = block;
     this._drawingConnectionEndPin.value = inputOutput?.pin;
 
-    // Update end offset to mouse offset
+    // Update end offset to pointer offset
     this.drawingConnection.value.endLocation = { x: e.offsetX, y: e.offsetY };
 
     if (!block || !inputOutput) {
@@ -335,11 +335,11 @@ export class FlowDesigner {
     return offset.x >= boundingBox.left && offset.x <= boundingBox.right && offset.y >= boundingBox.top && offset.y <= boundingBox.bottom;
   }
 
-  public getHitInputOutputs = (e: MouseEvent): [FlowBlockElement, InputOutput][] => {
+  public getHitInputOutputs = (e: PointerEvent): [FlowBlockElement, InputOutput][] => {
     const hitInputOutputs: [FlowBlockElement, InputOutput][] = [];
 
     this._blocks.value.forEach((block) => {
-      // Convert mouse location to offset relative to block location for block input/output hit testing
+      // Convert pointer location to offset relative to block location for block input/output hit testing
       const blockRelativeOffset: Offset = { x: e.offsetX - block.location.x, y: e.offsetY - block.location.y };
 
       // Are any input/output hit?
@@ -354,10 +354,10 @@ export class FlowDesigner {
     return hitInputOutputs;
   };
 
-  // Whenever mouse is clicked anywhere in the designer
+  // Whenever pointer is clicked anywhere in the designer
   // allows clearing any currently selected node when clicking
   // on designer background (ie not on a node)
-  public mouseDown = (e: MouseEvent): void => {
+  public pointerDown = (e: PointerEvent): void => {
     if (e.target instanceof SVGElement || e.target instanceof HTMLElement) {
       const element = e.target as HTMLElement | SVGElement;
 
@@ -373,7 +373,7 @@ export class FlowDesigner {
     }
   };
 
-  public mouseUp = (e: MouseEvent): void => {
+  public pointerUp = (e: PointerEvent): void => {
     this._dragBlock.value = undefined;
 
     if (this.drawingConnection.value && this._drawingConnectionEndPin.value) {
@@ -391,7 +391,7 @@ export class FlowDesigner {
     this.drawingConnection.value = undefined;
   };
 
-  public mouseMove = (e: MouseEvent): void => {
+  public pointerMove = (e: PointerEvent): void => {
     // Is there a connection being drawn
     if (this.drawingConnection.value) {
       this.dragConnectionMove(e);
@@ -400,7 +400,7 @@ export class FlowDesigner {
     this.dragBlockMove(e);
   };
 
-  public mouseLeave = (_: MouseEvent): void => {
+  public pointerLeave = (_: PointerEvent): void => {
     this.dragBlock.value = undefined;
     this.drawingConnection.value = undefined;
   };
@@ -511,8 +511,8 @@ export const initFlowDesigner = (
 ): FlowDesigner => {
   flowDesigner = new FlowDesigner(screenSize, gridSize, blockPalletteWidth);
 
-  // Mouse events
-  configureFlowMouseEvents(flowDesigner);
+  // Pointer events
+  configureFlowPointerEvents(flowDesigner);
 
   // Return flow designer instance
   return flowDesigner;

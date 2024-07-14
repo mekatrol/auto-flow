@@ -1,8 +1,8 @@
 <template>
   <g
     class="block-template-pallette"
-    @mousemove="(e) => flowDesigner.mouseMove(e)"
-    @mouseup="(e) => flowDesigner.mouseUp(e)"
+    @pointermove="(e) => flowDesigner.pointerMove(e)"
+    @pointerup="(e) => flowDesigner.pointerUp(e)"
     @focusin="(e) => focus(e)"
   >
     <!-- Block templates -->
@@ -11,9 +11,11 @@
       :key="i"
       :blockConfiguration="blockTemplate"
       :x="gap"
-      :y="gap + i * BLOCK_HEIGHT"
-      @mousedown="(e) => mouseDown(e, blockTemplate, gap, gap + i * BLOCK_HEIGHT)"
+      :y="gap + i * (BLOCK_HEIGHT + gap)"
+      @pointerdown="(e) => pointerDown(e, blockTemplate, gap, gap + i * (BLOCK_HEIGHT + gap))"
+      @pointerup="pointerUp"
     />
+
     <!-- Right scrollbar -->
     <SvgScrollbar
       :x="width - scrollbarWidth"
@@ -34,7 +36,7 @@
 import BlockTemplateControl from './BlockTemplateControl.vue';
 import SvgScrollbar from './SvgScrollbar.vue';
 import { useFlowStore } from '../stores/flowStore';
-import { BLOCK_HEIGHT, BLOCK_MOUSE_DOWN } from '../constants';
+import { BLOCK_HEIGHT, BLOCK_POINTER_DOWN, BLOCK_POINTER_UP } from '../constants';
 import type { BlockTemplate } from '../types/BlockTemplate';
 import { v4 as uuidv4 } from 'uuid';
 import { useFlowDesigner } from '../types/FlowDesigner';
@@ -95,9 +97,9 @@ const visibleBlockTemplates = computed(() => {
   return visible;
 });
 
-const mouseDown = (e: MouseEvent, blockTemplate: BlockTemplate, x: number, y: number): void => {
+const pointerDown = (e: PointerEvent, blockTemplate: BlockTemplate, x: number, y: number): void => {
   const block: FlowBlockElement = {
-    location: { x: x, y: y },
+    location: { x: x - props.width, y: y },
     functionType: blockTemplate.type,
     size: { ...blockTemplate.size },
     id: uuidv4(),
@@ -112,7 +114,11 @@ const mouseDown = (e: MouseEvent, blockTemplate: BlockTemplate, x: number, y: nu
 
   flowDesigner.layoutInputOutputs(blockTemplate.size, block.io);
 
-  emit(BLOCK_MOUSE_DOWN, e, block);
+  emit(BLOCK_POINTER_DOWN, e, block);
+};
+
+const pointerUp = (e: PointerEvent) => {
+  emit(BLOCK_POINTER_UP, e, flowDesigner.dragBlock.value!);
 };
 
 const focus = (_e: FocusEvent): void => {
@@ -122,19 +128,13 @@ const focus = (_e: FocusEvent): void => {
 
 const emitter = useEmitter();
 
-const emit = (event: keyof FlowEvents, e: MouseEvent, block: FlowBlockElement): boolean => {
+const emit = (event: keyof FlowEvents, e: PointerEvent, block: FlowBlockElement): boolean => {
   emitter.emit(event, {
     data: block,
-    mouseEvent: e
+    pointerEvent: e
   });
 
   e.preventDefault();
   return false;
 };
 </script>
-
-<style scoped lang="css">
-.block-template-pallette > .border {
-  stroke: red;
-}
-</style>

@@ -13,30 +13,30 @@ export const MARKER_OFFSET_Y = -8;
 
 export const ELEMENT_CHANGED = 'elementChanged';
 
-export const BLOCK_MOUSE_MOVE = 'blockMouseMove';
-export const BLOCK_MOUSE_OVER = 'blockMouseOver';
-export const BLOCK_MOUSE_ENTER = 'blockMouseEnter';
-export const BLOCK_MOUSE_LEAVE = 'blockMouseLeave';
-export const BLOCK_MOUSE_DOWN = 'blockMouseDown';
-export const BLOCK_MOUSE_UP = 'blockMouseUp';
+export const BLOCK_POINTER_MOVE = 'blockPointerMove';
+export const BLOCK_POINTER_OVER = 'blockPointerOver';
+export const BLOCK_POINTER_ENTER = 'blockPointerEnter';
+export const BLOCK_POINTER_LEAVE = 'blockPointerLeave';
+export const BLOCK_POINTER_DOWN = 'blockPointerDown';
+export const BLOCK_POINTER_UP = 'blockPointerUp';
 
-export const BLOCK_IO_MOUSE_MOVE = 'blockIOMouseMove';
-export const BLOCK_IO_MOUSE_OVER = 'blockIOMouseOver';
-export const BLOCK_IO_MOUSE_ENTER = 'blockIOMouseEnter';
-export const BLOCK_IO_MOUSE_LEAVE = 'blockIOMouseLeave';
-export const BLOCK_IO_MOUSE_DOWN = 'blockIOMouseDown';
-export const BLOCK_IO_MOUSE_UP = 'blockIOMouseUp';
+export const BLOCK_IO_POINTER_MOVE = 'blockIOPointerMove';
+export const BLOCK_IO_POINTER_OVER = 'blockIOPointerOver';
+export const BLOCK_IO_POINTER_ENTER = 'blockIOPointerEnter';
+export const BLOCK_IO_POINTER_LEAVE = 'blockIOPointerLeave';
+export const BLOCK_IO_POINTER_DOWN = 'blockIOPointerDown';
+export const BLOCK_IO_POINTER_UP = 'blockIOPointerUp';
 
-export const CONNECTING_MOUSE_MOVE = 'connectingMouseMove';
-export const CONNECTING_MOUSE_OVER = 'connectingMouseOver';
-export const CONNECTING_MOUSE_ENTER = 'connectingMouseEnter';
-export const CONNECTING_MOUSE_LEAVE = 'connectingMouseLeave';
-export const CONNECTING_MOUSE_DOWN = 'connectingMouseDown';
-export const CONNECTING_MOUSE_UP = 'connectingMouseUp';
+export const CONNECTING_POINTER_MOVE = 'connectingPointerMove';
+export const CONNECTING_POINTER_OVER = 'connectingPointerOver';
+export const CONNECTING_POINTER_ENTER = 'connectingPointerEnter';
+export const CONNECTING_POINTER_LEAVE = 'connectingPointerLeave';
+export const CONNECTING_POINTER_DOWN = 'connectingPointerDown';
+export const CONNECTING_POINTER_UP = 'connectingPointerUp';
 
-export const CONNECTION_MOUSE_MOVE = 'connectionMouseMove';
-export const CONNECTION_MOUSE_OVER = 'connectionMouseOver';
-export const CONNECTION_MOUSE_ENTER = 'connectionMouseEnter';
-export const CONNECTION_MOUSE_LEAVE = 'connectionMouseLeave';
-export const CONNECTION_MOUSE_DOWN = 'connectionMouseDown';
-export const CONNECTION_MOUSE_UP = 'connectionMouseUp';
+export const CONNECTION_POINTER_MOVE = 'connectionPointerMove';
+export const CONNECTION_POINTER_OVER = 'connectionPointerOver';
+export const CONNECTION_POINTER_ENTER = 'connectionPointerEnter';
+export const CONNECTION_POINTER_LEAVE = 'connectionPointerLeave';
+export const CONNECTION_POINTER_DOWN = 'connectionPointerDown';
+export const CONNECTION_POINTER_UP = 'connectionPointerUp';

@@ -59,7 +59,7 @@ import { computed } from 'vue';
 import { useThemeStore } from '../stores/themeStore';
 import type { BlockTemplate } from '../types/BlockTemplate';
 
-const textGapX = 10;
+const textGapX = 7;
 
 interface Props {
   blockConfiguration: BlockTemplate;
@@ -69,7 +69,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const height = computed(() => props.blockConfiguration.size.height * 0.8);
+const height = computed(() => props.blockConfiguration.size.height);
 
 // Make the icon size same as block height (less border size) so that it is displayed as a square.
 // Using height works because the aspect ratio of the block is always width > height
