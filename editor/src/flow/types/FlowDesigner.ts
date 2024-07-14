@@ -41,6 +41,10 @@ export class FlowDesigner {
     this._zOrder = new ZOrder(this._blocks);
   }
 
+  public get blockPalletteWidth(): Ref<number> {
+    return this._blockPalletteWidth;
+  }
+
   public get blocks(): Ref<FlowBlockElement[]> {
     return this._blocks;
   }
@@ -229,7 +233,7 @@ export class FlowDesigner {
     this._drawingConnectionEndPin.value = inputOutput?.pin;
 
     // Update end offset to pointer offset
-    this.drawingConnection.value.endLocation = { x: e.offsetX, y: e.offsetY };
+    this.drawingConnection.value.endLocation = { x: e.offsetX - this._blockPalletteWidth.value, y: e.offsetY };
 
     if (!block || !inputOutput) {
       // Clear any existing styles / hit info
@@ -340,7 +344,7 @@ export class FlowDesigner {
 
     this._blocks.value.forEach((block) => {
       // Convert pointer location to offset relative to block location for block input/output hit testing
-      const blockRelativeOffset: Offset = { x: e.offsetX - block.location.x, y: e.offsetY - block.location.y };
+      const blockRelativeOffset: Offset = { x: e.offsetX - block.location.x - this._blockPalletteWidth.value, y: e.offsetY - block.location.y };
 
       // Are any input/output hit?
       (block as FlowBlockElement).io.forEach((io) => {

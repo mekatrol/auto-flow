@@ -172,7 +172,7 @@ export const configureFlowPointerEvents = (flowDesigner: FlowDesigner): void => 
     const connecting = {
       startBlock: e.data as FlowBlockElement,
       startPin: e.inputOutput.pin,
-      endLocation: { x: e.pointerEvent.offsetX, y: e.pointerEvent.offsetY },
+      endLocation: { x: e.pointerEvent.offsetX - flowDesigner.blockPalletteWidth.value, y: e.pointerEvent.offsetY },
       cssClasses: ''
     } as FlowConnecting;
 
