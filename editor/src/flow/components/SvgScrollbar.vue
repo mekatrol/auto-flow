@@ -19,7 +19,7 @@
       :y="sliderY"
       :width="width"
       :height="Math.max(0, sliderHeight)"
-      :fill="sliderDragging ? '#bbb' : '#fff'"
+      :fill="sliderDragging ? '#dff' : '#aaa'"
       stroke="black"
       stroke-width="1px"
     ></rect>
