@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import { generateCubicBezierPoints } from '../utils/cubic-spline';
-import { cubicBezierToSvg } from '../utils/svg';
+import { cubicBezierToSvg } from '../utils/svg-generator';
 import { computed } from 'vue';
 import { useEmitter, type FlowConnectingPointerEvent, type FlowEvents } from '../utils/event-emitter';
 import {
