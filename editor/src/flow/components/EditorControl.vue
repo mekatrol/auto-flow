@@ -25,6 +25,7 @@
           :height="svgHeight"
           :gap="PALETTE_GAP"
           :scrollbarWidth="SCROLLBAR_SIZE"
+          :flow-key="flowKey"
         />
       </ContainerControl>
     </g>
@@ -37,6 +38,7 @@
           :width="svgWidth - blockPaletteWidth"
           :height="svgHeight"
           :grid-size="gridSize"
+          :flow-key="flowKey"
         />
       </ContainerControl>
     </g>
@@ -48,11 +50,16 @@ import BlockPaletteControl from './BlockPaletteControl.vue';
 import FlowControl from './FlowControl.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useScreenSize } from 'vue-boosted';
-import { initFlowController } from '../types/FlowController';
-import { useMockStore } from '../stores/mock-store';
+import { useFlowController } from '../types/FlowController';
 import ContainerControl from './ContainerControl.vue';
 import { useAppStore } from '../stores/app-store';
 import { PALETTE_GAP, SCROLLBAR_SIZE } from '../constants';
+
+interface Props {
+  flowKey: string;
+}
+
+const props = defineProps<Props>();
 
 const gridSize = ref(20);
 const screenSize = useScreenSize();
@@ -74,12 +81,7 @@ const calculateSvgHeight = () => {
 };
 
 // Must be done before constructing any blocks or connections
-const flowController = initFlowController('flow-key');
-
-const { flow } = useMockStore();
-
-flowController.blocks.value = flow.blocks;
-flowController.connections.value = flow.connections;
+const flowController = useFlowController(props.flowKey);
 
 onMounted(() => {
   calculateSvgHeight();

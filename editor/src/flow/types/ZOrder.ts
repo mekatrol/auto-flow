@@ -1,33 +1,32 @@
-import type { Ref } from 'vue';
 import type { FlowBlockElement } from './FlowBlockElement';
 
 export class ZOrder {
-  private _blocks: Ref<FlowBlockElement[]>;
+  private _blocks: FlowBlockElement[];
 
-  constructor(blocks: Ref<FlowBlockElement[]>) {
+  constructor(blocks: FlowBlockElement[]) {
     this._blocks = blocks;
   }
 
   private sequenceZOrder = (): void => {
     let nextZOrder = 1;
-    this._blocks.value.forEach((block) => {
+    this._blocks.forEach((block) => {
       block.zOrder = nextZOrder;
       nextZOrder += 1;
     });
   };
 
   public sort = (): void => {
-    this._blocks.value.sort((a: FlowBlockElement, b: FlowBlockElement) => a.z + a.zBoost - (b.z + b.zBoost));
+    this._blocks.sort((a: FlowBlockElement, b: FlowBlockElement) => a.z + a.zBoost - (b.z + b.zBoost));
     this.sequenceZOrder();
   };
 
   private moveToFront = (selected: FlowBlockElement): void => {
-    if (!selected || !this._blocks || !this._blocks.value) {
+    if (!selected || !this._blocks) {
       return;
     }
 
     let maxZ = 0;
-    this._blocks.value.forEach((block) => {
+    this._blocks.forEach((block) => {
       if (block.z > maxZ) {
         maxZ = block.z;
       }
@@ -39,14 +38,14 @@ export class ZOrder {
   };
 
   private moveForward = (selected: FlowBlockElement): void => {
-    if (!selected || !this._blocks || !this._blocks.value) {
+    if (!selected || !this._blocks || !this._blocks) {
       return;
     }
 
     // Make sure z-order sequential
     this.sort();
 
-    const swapWith = this._blocks.value.find((block) => block.z == selected.z + 1);
+    const swapWith = this._blocks.find((block) => block.z == selected.z + 1);
     if (swapWith) {
       swapWith.zOrder--;
       selected.zOrder++;
@@ -54,14 +53,14 @@ export class ZOrder {
   };
 
   private moveBackward = (selected: FlowBlockElement): void => {
-    if (!selected || !this._blocks || !this._blocks.value) {
+    if (!selected || !this._blocks || !this._blocks) {
       return;
     }
 
     // Make sure z-order sequential
     this.sort();
 
-    const swapWith = this._blocks.value.find((block) => block.z == selected.z - 1);
+    const swapWith = this._blocks.find((block) => block.z == selected.z - 1);
     if (swapWith) {
       swapWith.zOrder++;
       selected.zOrder--;
@@ -69,12 +68,12 @@ export class ZOrder {
   };
 
   private moveToBack = (selected: FlowBlockElement): void => {
-    if (!selected || !this._blocks || !this._blocks.value) {
+    if (!selected || !this._blocks || !this._blocks) {
       return;
     }
 
     let minZ = 0;
-    this._blocks.value.forEach((block) => {
+    this._blocks.forEach((block) => {
       if (block.z < minZ) {
         minZ = block.z;
       }

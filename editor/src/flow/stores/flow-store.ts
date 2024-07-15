@@ -4,6 +4,8 @@ import { InputOutputSignalType } from '../types/InputOutputSignalType';
 import { InputOutputDirection } from '../types/InputOutputDirection';
 import { BlockSide } from '../types/BlockSide';
 import { BLOCK_HEIGHT, BLOCK_IO_SIZE, BLOCK_WIDTH } from '../constants';
+import type { Flow } from '../types/Flow';
+import { toRef, type Ref } from 'vue';
 
 const blockTemplates: BlockTemplate[] = [
   {
@@ -1188,6 +1190,31 @@ const blockTemplates: BlockTemplate[] = [
   }
 ];
 
+const flows: Record<string, Ref<Flow>> = {};
+
 export const useFlowStore = defineStore('flow', () => {
-  return { blockTemplates };
+  const addFlow = (key: string, flow: Flow): Ref<Flow> => {
+    // Does a flow with the specified key already exist?
+    if (key in flows) {
+      throw new Error(`A flow with the key '${key}' has already been added.`);
+    }
+
+    flows[key] = toRef(flow);
+
+    return flows[key];
+  };
+
+  const deleteFlow = (key: string): void => {
+    delete flows[key];
+  };
+
+  const getFlow = (key: string): Ref<Flow> | undefined => {
+    if (!(key in flows)) {
+      return undefined;
+    }
+
+    return flows[key];
+  };
+
+  return { blockTemplates, flows, addFlow, deleteFlow, getFlow };
 });

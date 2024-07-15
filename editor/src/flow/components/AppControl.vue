@@ -1,8 +1,8 @@
 <template>
   <nav><MenuControl /></nav>
   <main>
-    <div>
-      <EditorControl />
+    <div v-if="appStore.activeFlowKey.length > 0">
+      <EditorControl :flow-key="appStore.activeFlowKey" />
     </div>
     <div>
       <FlowInformationControl />
@@ -18,13 +18,23 @@
 import MenuControl from './MenuControl.vue';
 import EditorControl from './EditorControl.vue';
 import FlowInformationControl from './FlowInformationControl.vue';
-import { BusyOverlay, useScreenSize } from 'vue-boosted';
+import { BusyOverlay } from 'vue-boosted';
 import { useAppStore } from '../stores/app-store';
 import { useIntervalTimer } from 'vue-boosted';
-
-const screenSize = useScreenSize();
+import { useMockStore } from '../stores/mock-store';
+import { useFlowStore } from '../stores/flow-store';
 
 const appStore = useAppStore();
+const flowStore = useFlowStore();
+
+appStore.activeFlowKey = 'flow-1';
+
+// Use mock store for now
+const { createMockFlow } = useMockStore();
+const flow = createMockFlow();
+
+// Add to flow store
+flowStore.addFlow(appStore.activeFlowKey, flow);
 
 appStore.incrementBusy();
 

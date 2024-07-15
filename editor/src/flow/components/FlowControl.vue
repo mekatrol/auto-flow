@@ -6,22 +6,26 @@
   />
 
   <ConnectionControl
-    v-for="(connection, i) in flowController.connections.value"
+    v-for="(connection, i) in flowController.flow.connections"
     :key="i"
+    :flow-key="flowKey"
     :connection="connection"
   />
   <BlockControl
-    v-for="(block, i) in flowController.blocks.value"
+    v-for="(block, i) in flowController.flow.blocks"
     :key="i"
+    :flow-key="flowKey"
     :block="block"
   />
   <ConnectingControl
     v-if="flowController.drawingConnection.value"
     :connecting="flowController.drawingConnection.value!"
+    :flow-key="flowKey"
   />
   <BlockControl
     v-if="flowController.dragBlock.value && flowController.dragBlock.value.draggingAsNew"
     :block="flowController.dragBlock.value"
+    :flow-key="flowKey"
   />
 </template>
 
@@ -32,13 +36,14 @@ import ConnectingControl from './ConnectingControl.vue';
 import BlockControl from './BlockControl.vue';
 import { useFlowController } from '../types/FlowController';
 
-const flowController = useFlowController('flow-key');
-
 interface Props {
   width: number;
   height: number;
   gridSize: number;
+  flowKey: string;
 }
 
 const props = defineProps<Props>();
+
+const flowController = useFlowController(props.flowKey);
 </script>

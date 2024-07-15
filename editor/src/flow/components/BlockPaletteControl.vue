@@ -60,12 +60,13 @@ interface Props {
   height: number;
   scrollbarWidth: number;
   gap: number;
+  flowKey: string;
 }
 
 const props = defineProps<Props>();
 
 const { blockTemplates } = useFlowStore();
-const flowController = useFlowController('flow-key');
+const flowController = useFlowController(props.flowKey);
 
 // This is the number of blocks that have been scrolled up
 const yScroll = ref(0);

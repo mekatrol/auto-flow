@@ -117,6 +117,7 @@ const textGapX = 7;
 const textGapY = 5;
 
 interface Props {
+  flowKey: string;
   block: FlowBlockElement;
 }
 

@@ -4,6 +4,7 @@ import { BLOCK_WIDTH, PALETTE_GAP, SCROLLBAR_SIZE } from '../constants';
 
 export const useAppStore = defineStore('app', () => {
   const isBusyCount = ref(0);
+  const activeFlowKey = ref('');
 
   const isBusy = computed(() => isBusyCount.value > 0);
 
@@ -23,5 +24,5 @@ export const useAppStore = defineStore('app', () => {
     return BLOCK_WIDTH + 2 * PALETTE_GAP + SCROLLBAR_SIZE;
   });
 
-  return { isBusy, incrementBusy, decrementBusy, blockPaletteWidth };
+  return { isBusy, incrementBusy, decrementBusy, blockPaletteWidth, activeFlowKey };
 });

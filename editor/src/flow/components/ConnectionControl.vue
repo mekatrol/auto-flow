@@ -57,6 +57,8 @@ import { useFlowController } from '../types/FlowController';
 interface Props {
   show?: boolean;
 
+  flowKey: string;
+
   connection: FlowConnection;
 
   showPoints?: boolean;
@@ -82,7 +84,7 @@ const props = withDefaults(defineProps<Props>(), {
   endPointRadius: 5
 });
 
-const flowController = useFlowController('flow-key');
+const flowController = useFlowController(props.flowKey);
 
 const startInputOutput = computed(() => flowController.getConnectionStartInputOutput(props.connection));
 const startOffset = computed(() => flowController.getConnectionStartOffset(props.connection));

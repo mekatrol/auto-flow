@@ -11,28 +11,27 @@ import type { EnumDictionary } from './EnumDictionary';
 import { BLOCK_IO_OFFSET, BLOCK_IO_SIZE, MARKER_SIZE } from '../constants';
 import type { InputOutput } from '../types/InputOutput';
 import { useAppStore } from '../stores/app-store';
+import type { Flow } from './Flow';
+import { useFlowStore } from '../stores/flow-store';
 
 export class FlowController {
-  private _key: string;
-  private _blocks: Ref<FlowBlockElement[]>;
-  private _connections: Ref<FlowConnection[]>;
-  private _zOrder: ZOrder;
-  private _blockPaletteWidth: number;
-  private _drawingConnection = ref<FlowConnecting | undefined>(undefined);
-  private _drawingConnectionEndBlock = ref<FlowBlockElement | undefined>(undefined);
-  private _drawingConnectionEndPin = ref<number | undefined>(undefined);
-  private _selectedConnection = ref<FlowConnection | undefined>(undefined);
-  private _selectedBlock = ref<FlowBlockElement | undefined>(undefined);
-  private _dragBlock = ref<FlowBlockElement | undefined>(undefined);
-  private _dragBlockOffset = ref<Offset>({ x: 0, y: 0 });
-  private _dragBlockOriginalPosition = ref<Offset>({ x: 0, y: 0 });
+  public _key: string;
+  public _flow: Flow;
+  public _zOrder: ZOrder;
+  public _blockPaletteWidth: number;
+  public _drawingConnection = ref<FlowConnecting | undefined>(undefined);
+  public _drawingConnectionEndBlock = ref<FlowBlockElement | undefined>(undefined);
+  public _drawingConnectionEndPin = ref<number | undefined>(undefined);
+  public _selectedConnection = ref<FlowConnection | undefined>(undefined);
+  public _selectedBlock = ref<FlowBlockElement | undefined>(undefined);
+  public _dragBlock = ref<FlowBlockElement | undefined>(undefined);
+  public _dragBlockOffset = ref<Offset>({ x: 0, y: 0 });
+  public _dragBlockOriginalPosition = ref<Offset>({ x: 0, y: 0 });
 
-  constructor(key: string) {
+  constructor(key: string, flow: Flow) {
     this._key = key;
-    this._blocks = ref([]);
-    this._connections = ref([]);
-    this._zOrder = new ZOrder(this._blocks);
-
+    this._flow = flow;
+    this._zOrder = new ZOrder(flow.blocks);
     this._blockPaletteWidth = useAppStore().blockPaletteWidth;
   }
 
@@ -40,12 +39,8 @@ export class FlowController {
     return this._key;
   }
 
-  public get blocks(): Ref<FlowBlockElement[]> {
-    return this._blocks;
-  }
-
-  public get connections(): Ref<FlowConnection[]> {
-    return this._connections;
+  public get flow(): Flow {
+    return this._flow;
   }
 
   public get dragBlock(): Ref<FlowBlockElement | undefined> {
@@ -116,28 +111,28 @@ export class FlowController {
     // Clear selected node
     this._selectedConnection.value = undefined;
 
-    if (!this._connections) {
+    if (!this._flow.connections) {
       return;
     }
 
     // Make sure all are deselected
-    this._connections.value.forEach((c) => (c.selected = false));
+    this._flow.connections.forEach((c) => (c.selected = false));
   };
 
   public clearSelectedBlock = (): void => {
     // Clear selected node
     this._selectedBlock.value = undefined;
 
-    if (!this._blocks) {
+    if (!this._flow.blocks) {
       return;
     }
 
     // Make sure all are deselected
-    this._blocks.value.forEach((b) => (b.selected = false));
+    this._flow.blocks.forEach((b) => (b.selected = false));
   };
 
   public moveBlockZOrder = (action: string): void => {
-    if (!this.selectedBlock || !this._blocks || !this._blocks.value) {
+    if (!this.selectedBlock || !this._flow || !this._flow.blocks) {
       return;
     }
 
@@ -171,7 +166,7 @@ export class FlowController {
 
       // Is this a new block?
       if (this.dragBlock.value.draggingAsNew && !this.blockLocationIsInvalid(this.dragBlock.value)) {
-        this.blocks.value.push(this.dragBlock.value);
+        this._flow.blocks.push(this.dragBlock.value);
         this.dragBlock.value.draggingAsNew = false;
       }
     }
@@ -278,7 +273,7 @@ export class FlowController {
       endPin: endBlockPin
     } as FlowConnection;
 
-    this._connections.value.push(connection);
+    this._flow.connections.push(connection);
   };
 
   public canConnect = (from: InputOutput, to: InputOutput): boolean => {
@@ -301,13 +296,28 @@ export class FlowController {
   };
 
   public getConnectionStartInputOutput(connection: FlowConnection): InputOutput {
-    const startBlock = this.blocks.value.find((b) => b.id === connection.startBlockId)!;
+    const startBlock = this._flow.blocks.find((b) => b.id === connection.startBlockId)!;
+
+    if (!startBlock) {
+      throw new Error(`Start block with ID '${connection.startBlockId}' not found.`);
+    }
+
     return startBlock.io.find((io) => io.pin === connection.startPin)!;
   }
 
   public getConnectionStartOffset(connection: FlowConnection): Offset {
-    const startBlock = this.blocks.value.find((b) => b.id === connection.startBlockId)!;
-    const startInputOutput = startBlock.io.find((io) => io.pin == connection.startPin)!;
+    const startBlock = this._flow.blocks.find((b) => b.id === connection.startBlockId);
+
+    if (!startBlock) {
+      throw new Error(`Start block with ID '${connection.startBlockId}' not found.`);
+    }
+
+    const startInputOutput = startBlock.io.find((io) => io.pin == connection.startPin);
+
+    if (!startInputOutput) {
+      throw new Error(`Start IO with pin '${connection.startPin}' not found on block with ID '${connection.startBlockId}'.`);
+    }
+
     return {
       x: startBlock.location.x + startInputOutput.location.x,
       y: startBlock.location.y + startInputOutput.location.y + startInputOutput.size.height / 2
@@ -315,13 +325,28 @@ export class FlowController {
   }
 
   public getConnectionEndInputOutput(connection: FlowConnection): InputOutput {
-    const endBlock = this.blocks.value.find((b) => b.id === connection.endBlockId)!;
+    const endBlock = this._flow.blocks.find((b) => b.id === connection.endBlockId);
+
+    if (!endBlock) {
+      throw new Error(`End block with ID '${connection.endBlockId}' not found.`);
+    }
+
     return endBlock.io.find((io) => io.pin === connection.endPin)!;
   }
 
   public getConnectionEndOffset(connection: FlowConnection): Offset {
-    const endBlock = this.blocks.value.find((b) => b.id === connection.endBlockId)!;
-    const endInputOutput = endBlock.io.find((io) => io.pin == connection.endPin)!;
+    const endBlock = this._flow.blocks.find((b) => b.id === connection.endBlockId);
+
+    if (!endBlock) {
+      throw new Error(`End block with ID '${connection.endBlockId}' not found.`);
+    }
+
+    const endInputOutput = endBlock.io.find((io) => io.pin == connection.endPin);
+
+    if (!endInputOutput) {
+      throw new Error(`End IO with pin '${connection.startPin}' not found on block with ID '${connection.endBlockId}'.`);
+    }
+
     return {
       x: endBlock.location.x + endInputOutput.location.x,
       y: endBlock.location.y + endInputOutput.location.y + endInputOutput.size.height / 2
@@ -330,7 +355,7 @@ export class FlowController {
 
   public isConnectorConnected = (inputOutput: InputOutput): boolean => {
     let isConnected = false;
-    this._connections.value.forEach((c) => {
+    this._flow.connections.forEach((c) => {
       if (this.getConnectionStartInputOutput(c) === inputOutput || this.getConnectionEndInputOutput(c) === inputOutput) {
         isConnected = true;
         return;
@@ -357,7 +382,7 @@ export class FlowController {
   public getHitInputOutputs = (e: PointerEvent): [FlowBlockElement, InputOutput][] => {
     const hitInputOutputs: [FlowBlockElement, InputOutput][] = [];
 
-    this._blocks.value.forEach((block) => {
+    this._flow.blocks.forEach((block) => {
       // Convert pointer location to offset relative to block location for block input/output hit testing
       const blockRelativeOffset: Offset = { x: e.offsetX - block.location.x - this._blockPaletteWidth, y: e.offsetY - block.location.y };
 
@@ -470,19 +495,19 @@ export class FlowController {
 
   public deleteBlock = (block: FlowBlockElement): void => {
     // We must also delete any connections that connect to the node
-    const connections = this._connections.value.filter((c) => c.startBlockId === block.id || c.endBlockId === block.id);
+    const connections = this._flow.connections.filter((c) => c.startBlockId === block.id || c.endBlockId === block.id);
     connections.forEach((c) => this.deleteConnection(c));
 
     // Filter nodes to the set without the node
-    this._blocks.value = this._blocks.value.filter((b) => b != block);
+    this._flow.blocks = this._flow.blocks.filter((b) => b != block);
   };
 
   public deleteConnection = (connection: FlowConnection): void => {
     // Filter connections to the set without the connection
-    this._connections.value = this._connections.value.filter((c) => c != connection);
+    this._flow.connections = this._flow.connections.filter((c) => c != connection);
   };
 
-  private getInputOutputOffsets(size: Size, offset: number): EnumDictionary<BlockSide, Offset> {
+  public getInputOutputOffsets(size: Size, offset: number): EnumDictionary<BlockSide, Offset> {
     const inputOutputOffsets: EnumDictionary<BlockSide, Offset> = {
       [BlockSide.Left]: { x: -(BLOCK_IO_SIZE - BLOCK_IO_OFFSET), y: offset },
       [BlockSide.Top]: { x: offset, y: -BLOCK_IO_OFFSET },
@@ -493,7 +518,7 @@ export class FlowController {
     return inputOutputOffsets;
   }
 
-  private layoutInputsOutputsSide(io: InputOutput[], side: BlockSide, inputOutputOffsets: EnumDictionary<BlockSide, Offset>): InputOutput[] {
+  public layoutInputsOutputsSide(io: InputOutput[], side: BlockSide, inputOutputOffsets: EnumDictionary<BlockSide, Offset>): InputOutput[] {
     const ioForSide = io.filter((io) => io.side === side);
 
     let shift = 0;
@@ -523,18 +548,21 @@ export class FlowController {
 const flowControllers: Record<string, FlowController> = {};
 
 // Initialise a new instance of a controller
-export const initFlowController = (key: string): FlowController => {
+export const initFlowController = (key: string, flow: Flow): FlowController => {
   // Does a controller with the specified key already exist?
   if (key in flowControllers) {
     throw new Error(`A controller with the key '${key}' has already been initialised. Did you mean to call useFlowController?`);
   }
 
   // Create instance and add to dictionary
-  const flowController = new FlowController(key);
+  const flowController = new FlowController(key, flow);
   flowControllers[key] = flowController;
 
   // Pointer events
   configureFlowPointerEvents(flowController);
+
+  // Layout block IO
+  flow.blocks.forEach((b) => flowController.layoutInputOutputs(b.size, b.io));
 
   // Return flow controller instance
   return flowController;
@@ -544,9 +572,20 @@ export const initFlowController = (key: string): FlowController => {
 export const useFlowController = (key: string): FlowController => {
   // Does a controller with the specified key already exist?
   if (!(key in flowControllers)) {
-    return initFlowController(key);
+    const { getFlow } = useFlowStore();
+
+    // Create a new empty flow
+    const flow = getFlow(key);
+
+    if (!flow || !flow.value) {
+      throw new Error();
+    }
+
+    // Create an return new instance
+    return initFlowController(key, flow.value);
   }
 
+  // Return existing instance
   return flowControllers[key];
 };
 
