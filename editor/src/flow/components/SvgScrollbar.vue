@@ -34,26 +34,36 @@ import type { Offset } from '../types/Offset';
 interface Props {
   x: number;
   y: number;
-  scroll: number;
   width: number;
   height: number;
-  count: number;
+  scroll: number;
+  min: number;
+  max: number;
   fill: string;
+  direction: 'horizontal' | 'vertical';
 }
 
 const props = defineProps<Props>();
 
-const emit = defineEmits(['scrollUp', 'scrollDown', 'scroll']);
+const emit = defineEmits(['scroll', 'mousewheel']);
 
 const scrollbar = ref();
 const sliderPointerEvent = ref<PointerEvent | undefined>(undefined);
 const sliderPointDownOffset = ref<Offset>({ x: 0, y: 0 });
 
-// How much of the height is the scroll height
-const scrollHeight = computed(() => props.height);
+// The range that the scroll value can be within
+const scrollRange = computed(() => props.max - props.min);
 
-// How large a step size if for (max - min) items
-const sliderHeight = computed(() => scrollHeight.value / props.count);
+// How large a step size if for scroll range (but at least 20 high)
+const sliderHeight = computed(() => Math.max(20, props.height / scrollRange.value));
+
+const scale = computed(() => {
+  // We need to scale the slider Y value such that the total scrollable height
+  // scales to the scrollbar height
+  const scale = (props.height - sliderHeight.value) / scrollRange.value;
+
+  return scale;
+});
 
 const sliderDragging = ref(false);
 
@@ -67,7 +77,7 @@ const dragSliderStart = (e: PointerEvent) => {
   sliderDragging.value = true;
 
   // We the mouse button is clicked then we need to calculate what the scroll value would be at that location
-  const offsetAdjust = Math.min(props.count - 1, Math.max(0, Math.floor(e.offsetY / sliderHeight.value)));
+  const offsetAdjust = Math.min(props.max - 1, Math.max(0, Math.floor(e.offsetY / sliderHeight.value)));
 
   // We need to track the offset of the mouse from the top of the slider at the calculated scroll position
   // so that the slider doesn't 'jump'
@@ -97,14 +107,12 @@ const dragSliderMove = (e: PointerEvent) => {
   // Only process event if currently dragging slider
   if (sliderDragging.value) {
     sliderPointerEvent.value = e;
-    const scrollValue = Math.min(props.count - 1, Math.max(0, Math.floor(e.offsetY / sliderHeight.value)));
-    emit('scroll', scrollValue);
+    emit('scroll', (props.direction === 'vertical' ? e.offsetY : e.offsetX) / scale.value);
   }
 };
 
 const mouseWheel = (e: WheelEvent) => {
-  const delta = e.deltaY / 100;
-  emit('scroll', Math.min(props.count - 1, Math.max(0, Math.floor(props.scroll + delta))));
+  emit('mousewheel', e);
 };
 
 const sliderY = computed(() => {
@@ -112,7 +120,7 @@ const sliderY = computed(() => {
     ? // relative to mouse position (to make slide smooth)
       Math.min(props.height - sliderHeight.value, Math.max(0, sliderPointerEvent.value.offsetY - sliderPointDownOffset.value.y))
     : // based on scroll value
-      props.scroll * sliderHeight.value;
+      props.scroll * scale.value;
 });
 </script>
 

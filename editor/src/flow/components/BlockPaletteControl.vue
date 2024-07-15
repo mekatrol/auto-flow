@@ -3,7 +3,7 @@
     class="block-template-palette"
     @pointermove="(e) => flowController.pointerMove(e)"
     @pointerup="(e) => flowController.pointerUp(e)"
-    @mousewheel="mouseWheel"
+    @mousewheel="wheel"
     @focusin="(e) => focus(e)"
   >
     <!-- We need a rect covering the full palette view so that mouse wheel events are captured when the mouse is over areas that are not a block -->
@@ -13,17 +13,17 @@
       :width="width"
       :height="height"
       fill="transparent"
-      @mousewheel="mouseWheel"
+      @mousewheel="wheel"
     ></rect>
 
     <!-- Block templates -->
     <BlockTemplateControl
-      v-for="(blockTemplate, i) in visibleBlockTemplates"
+      v-for="(blockTemplate, i) in blockTemplates"
       :key="i"
       :blockConfiguration="blockTemplate"
       :x="gap"
-      :y="gap + i * (BLOCK_HEIGHT + gap)"
-      @pointerdown="(e) => pointerDown(e, blockTemplate, gap, gap + i * (BLOCK_HEIGHT + gap))"
+      :y="blockRowYTop(i)"
+      @pointerdown="(e) => pointerDown(e, blockTemplate, gap, blockRowYTop(i))"
       @pointerup="pointerUp"
     />
 
@@ -31,14 +31,15 @@
     <SvgScrollbar
       :x="width - scrollbarWidth"
       :y="0"
-      :scroll="yScroll"
       :width="scrollbarWidth"
       :height="height"
-      :count="blockTemplates.length - visibleBlocks + 1"
+      :scroll="yScroll"
+      :min="0"
+      :max="maxScrollY()"
       fill="#333"
-      @scroll-down="scrollDown"
-      @scroll-up="scrollUp"
+      direction="vertical"
       @scroll="scroll"
+      @wheel="wheel"
     />
   </g>
 </template>
@@ -53,7 +54,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useFlowController } from '../types/FlowController';
 import type { FlowBlock } from '../types/FlowBlock';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
 interface Props {
   width: number;
@@ -71,52 +72,38 @@ const flowController = useFlowController(props.flowKey);
 // This is the number of blocks that have been scrolled up
 const yScroll = ref(0);
 
-const scrollUp = () => {
-  if (yScroll.value < 0) {
-    // This should never happen, but just in cas there is a bug in the scrolling logic
-    yScroll.value = 0;
-  }
-
-  if (yScroll.value === 0) {
-    return;
-  }
-
-  yScroll.value -= 1;
+const blockRowHeight = () => {
+  // The height of a block row is the height of a block + the gap (1/2 before and 1/2 after).
+  return BLOCK_HEIGHT + props.gap;
 };
 
-const visibleBlocks = computed(() => {
-  return Math.floor(props.height / (props.gap + BLOCK_HEIGHT));
-});
-
-const scrollDown = () => {
-  // Always display at least height number
-  const visibleBlocksHeight = Math.floor(props.height / (props.gap + BLOCK_HEIGHT));
-
-  if (yScroll.value >= blockTemplates.length - visibleBlocksHeight) {
-    return;
-  }
-
-  yScroll.value += 1;
+const blockRowYTop = (i: number) => {
+  // The y top position of a block is 1/2 the gap + the height of all of the rows that have come before this one
+  // and scrolled up (-ve) by the scroll amount
+  return props.gap / 2 + i * blockRowHeight() - yScroll.value;
 };
 
-const scroll = (scroll: number) => {
-  yScroll.value = scroll;
+const maxScrollY = (): number => {
+  const h = blockRowHeight();
+
+  // The maximum value we can scroll to is the total number of blocks - the number of block that fit within the palette height
+  // Also add 80% of a block row height so that scrolling to end always shows a gap after the last block
+  const max = (blockTemplates.length - 1) * h - Math.floor(props.height / h) * h + h * 0.8;
+  return max;
 };
 
-const mouseWheel = (e: WheelEvent) => {
-  const delta = e.deltaY / 100;
-  yScroll.value = Math.min(blockTemplates.length - visibleBlocks.value, Math.max(0, yScroll.value + delta));
+const updateYScroll = (delta: number): void => {
+  // Can scroll between 0 and maxScrollY() values
+  yScroll.value = Math.min(maxScrollY(), Math.max(0, yScroll.value + delta));
 };
 
-const visibleBlockTemplates = computed(() => {
-  const visible: BlockTemplate[] = [];
+const scroll = (value: number) => {
+  updateYScroll(value - yScroll.value);
+};
 
-  for (let i = yScroll.value; i < blockTemplates.length; i++) {
-    visible.push(blockTemplates[i]);
-  }
-
-  return visible;
-});
+const wheel = (e: WheelEvent) => {
+  updateYScroll((e.deltaY / 100) * blockRowHeight());
+};
 
 const pointerDown = (e: PointerEvent, blockTemplate: BlockTemplate, x: number, y: number): void => {
   const block: FlowBlock = {
