@@ -1,9 +1,9 @@
-import type { FlowBlockElement } from './FlowBlockElement';
+import type { FlowBlock } from './FlowBlock';
 
 export class ZOrder {
-  private _blocks: FlowBlockElement[];
+  private _blocks: FlowBlock[];
 
-  constructor(blocks: FlowBlockElement[]) {
+  constructor(blocks: FlowBlock[]) {
     this._blocks = blocks;
   }
 
@@ -16,11 +16,11 @@ export class ZOrder {
   };
 
   public sort = (): void => {
-    this._blocks.sort((a: FlowBlockElement, b: FlowBlockElement) => a.z + a.zBoost - (b.z + b.zBoost));
+    this._blocks.sort((a: FlowBlock, b: FlowBlock) => a.z + a.zBoost - (b.z + b.zBoost));
     this.sequenceZOrder();
   };
 
-  private moveToFront = (selected: FlowBlockElement): void => {
+  private moveToFront = (selected: FlowBlock): void => {
     if (!selected || !this._blocks) {
       return;
     }
@@ -37,7 +37,7 @@ export class ZOrder {
     this.sort();
   };
 
-  private moveForward = (selected: FlowBlockElement): void => {
+  private moveForward = (selected: FlowBlock): void => {
     if (!selected || !this._blocks || !this._blocks) {
       return;
     }
@@ -52,7 +52,7 @@ export class ZOrder {
     }
   };
 
-  private moveBackward = (selected: FlowBlockElement): void => {
+  private moveBackward = (selected: FlowBlock): void => {
     if (!selected || !this._blocks || !this._blocks) {
       return;
     }
@@ -67,7 +67,7 @@ export class ZOrder {
     }
   };
 
-  private moveToBack = (selected: FlowBlockElement): void => {
+  private moveToBack = (selected: FlowBlock): void => {
     if (!selected || !this._blocks || !this._blocks) {
       return;
     }
@@ -84,7 +84,7 @@ export class ZOrder {
     this.sort();
   };
 
-  public moveBlockZOrder = (action: string, selected: FlowBlockElement): void => {
+  public moveBlockZOrder = (action: string, selected: FlowBlock): void => {
     switch (action) {
       case 'moveToFront':
         this.moveToFront(selected);

@@ -51,7 +51,7 @@ import { BLOCK_HEIGHT, BLOCK_POINTER_DOWN, BLOCK_POINTER_UP } from '../constants
 import type { BlockTemplate } from '../types/BlockTemplate';
 import { v4 as uuidv4 } from 'uuid';
 import { useFlowController } from '../types/FlowController';
-import type { FlowBlockElement } from '../types/FlowBlockElement';
+import type { FlowBlock } from '../types/FlowBlock';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
 import { computed, ref } from 'vue';
 
@@ -119,7 +119,7 @@ const visibleBlockTemplates = computed(() => {
 });
 
 const pointerDown = (e: PointerEvent, blockTemplate: BlockTemplate, x: number, y: number): void => {
-  const block: FlowBlockElement = {
+  const block: FlowBlock = {
     location: { x: x - props.width, y: y },
     functionType: blockTemplate.type,
     size: { ...blockTemplate.size },
@@ -149,7 +149,7 @@ const focus = (_e: FocusEvent): void => {
 
 const emitter = useEmitter();
 
-const emit = (event: keyof FlowEvents, e: PointerEvent, block: FlowBlockElement): boolean => {
+const emit = (event: keyof FlowEvents, e: PointerEvent, block: FlowBlock): boolean => {
   emitter.emit(event, {
     data: block,
     pointerEvent: e

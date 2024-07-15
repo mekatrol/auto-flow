@@ -2,7 +2,7 @@ import type { InputOutput } from './InputOutput';
 import type { Offset } from './Offset';
 import type { Size } from './Size';
 
-export interface FlowBlockElement {
+export interface FlowBlock {
   // Unique ID for this block instance (used for reference from other elements such as connections)
   id: string;
 

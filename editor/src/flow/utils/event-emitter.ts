@@ -28,7 +28,7 @@ import {
 } from '../constants';
 import type { FlowConnection } from '../types/FlowConnection';
 import type { InputOutput } from '../types/InputOutput';
-import type { FlowBlockElement } from '../types/FlowBlockElement';
+import type { FlowBlock } from '../types/FlowBlock';
 import type { FlowConnecting } from '../types/FlowConnecting';
 
 export interface FlowPointerEvent<T> {
@@ -37,7 +37,7 @@ export interface FlowPointerEvent<T> {
 }
 
 // An event from a flow block
-export interface FlowBlockPointerEvent extends FlowPointerEvent<FlowBlockElement> {}
+export interface FlowBlockPointerEvent extends FlowPointerEvent<FlowBlock> {}
 
 // A pointer event from a flow block io (includes the block that the io is attached to)
 export interface FlowBlockIOPointerEvent extends FlowBlockPointerEvent {

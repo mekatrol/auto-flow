@@ -80,10 +80,10 @@
 
     <!-- Block io -->
     <InputOutputControl
-      v-for="ioElement in io"
-      :key="ioElement.pin"
+      v-for="inputOutput in io"
+      :key="inputOutput.pin"
       :block="block"
-      :inputOutput="ioElement"
+      :inputOutput="inputOutput"
       :fill-color="theme.blockIOStyles.fill"
       :stroke-color="theme.blockIOStyles.stroke"
       :stroke-width="theme.blockIOStyles.strokeWidth"
@@ -111,14 +111,14 @@ import {
   BLOCK_POINTER_UP
 } from '../constants';
 import { useThemeStore } from '../stores/theme-store';
-import type { FlowBlockElement } from '../types/FlowBlockElement';
+import type { FlowBlock } from '../types/FlowBlock';
 
 const textGapX = 7;
 const textGapY = 5;
 
 interface Props {
   flowKey: string;
-  block: FlowBlockElement;
+  block: FlowBlock;
 }
 
 const props = defineProps<Props>();

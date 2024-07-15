@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import type { Flow } from '../types/Flow';
 import { loadFlowFromJson } from '../utils/flow-persistor';
 import { useFlowStore } from './flow-store';
-import type { FlowBlockElement } from '../types/FlowBlockElement';
+import type { FlowBlock } from '../types/FlowBlock';
 import type { FlowConnection } from '../types/FlowConnection';
 
 export const useMockStore = defineStore('mock', () => {
@@ -14,7 +14,7 @@ export const useMockStore = defineStore('mock', () => {
     const orConfiguration = blockTemplates.find((f) => f.type === 'OR')!;
     const notConfiguration = blockTemplates.find((f) => f.type === 'NOT')!;
 
-    const blocks: FlowBlockElement[] = [
+    const blocks: FlowBlock[] = [
       {
         id: uuidv4(),
         label: undefined,

@@ -4,7 +4,7 @@ import { ZOrder } from './ZOrder';
 import { configureFlowPointerEvents, type FlowBlockIOPointerEvent, type FlowBlockPointerEvent } from '../utils/event-emitter';
 import type { FlowConnection } from './FlowConnection';
 import type { Size } from './Size';
-import type { FlowBlockElement } from './FlowBlockElement';
+import type { FlowBlock } from './FlowBlock';
 import type { FlowConnecting } from './FlowConnecting';
 import { BlockSide } from './BlockSide';
 import type { EnumDictionary } from './EnumDictionary';
@@ -20,11 +20,11 @@ export class FlowController {
   public _zOrder: ZOrder;
   public _blockPaletteWidth: number;
   public _drawingConnection = ref<FlowConnecting | undefined>(undefined);
-  public _drawingConnectionEndBlock = ref<FlowBlockElement | undefined>(undefined);
+  public _drawingConnectionEndBlock = ref<FlowBlock | undefined>(undefined);
   public _drawingConnectionEndPin = ref<number | undefined>(undefined);
   public _selectedConnection = ref<FlowConnection | undefined>(undefined);
-  public _selectedBlock = ref<FlowBlockElement | undefined>(undefined);
-  public _dragBlock = ref<FlowBlockElement | undefined>(undefined);
+  public _selectedBlock = ref<FlowBlock | undefined>(undefined);
+  public _dragBlock = ref<FlowBlock | undefined>(undefined);
   public _dragBlockOffset = ref<Offset>({ x: 0, y: 0 });
   public _dragBlockOriginalPosition = ref<Offset>({ x: 0, y: 0 });
 
@@ -43,7 +43,7 @@ export class FlowController {
     return this._flow;
   }
 
-  public get dragBlock(): Ref<FlowBlockElement | undefined> {
+  public get dragBlock(): Ref<FlowBlock | undefined> {
     return this._dragBlock;
   }
 
@@ -59,11 +59,11 @@ export class FlowController {
     return this._drawingConnection;
   }
 
-  public get selectedBlock(): FlowBlockElement | undefined {
+  public get selectedBlock(): FlowBlock | undefined {
     return this._selectedBlock.value;
   }
 
-  public set selectedBlock(block: FlowBlockElement | undefined) {
+  public set selectedBlock(block: FlowBlock | undefined) {
     // Clear any existing selections
     this.clearSelectedBlock();
 
@@ -139,7 +139,7 @@ export class FlowController {
     this._zOrder.moveBlockZOrder(action, this.selectedBlock);
   };
 
-  public blockLocationIsInvalid(block: FlowBlockElement): boolean {
+  public blockLocationIsInvalid(block: FlowBlock): boolean {
     // Must be at least MARKER_SIZE from left and top
     return block.location.x < MARKER_SIZE || block.location.y < MARKER_SIZE;
   }
@@ -182,7 +182,7 @@ export class FlowController {
     this.clearSelectedItems();
 
     const connecting = {
-      startBlock: e.data as FlowBlockElement,
+      startBlock: e.data as FlowBlock,
       startPin: e.inputOutput.pin,
       endLocation: { x: e.pointerEvent.offsetX - this._blockPaletteWidth, y: e.pointerEvent.offsetY },
       cssClasses: ''
@@ -379,15 +379,15 @@ export class FlowController {
     return offset.x >= boundingBox.left && offset.x <= boundingBox.right && offset.y >= boundingBox.top && offset.y <= boundingBox.bottom;
   }
 
-  public getHitInputOutputs = (e: PointerEvent): [FlowBlockElement, InputOutput][] => {
-    const hitInputOutputs: [FlowBlockElement, InputOutput][] = [];
+  public getHitInputOutputs = (e: PointerEvent): [FlowBlock, InputOutput][] => {
+    const hitInputOutputs: [FlowBlock, InputOutput][] = [];
 
     this._flow.blocks.forEach((block) => {
       // Convert pointer location to offset relative to block location for block input/output hit testing
       const blockRelativeOffset: Offset = { x: e.offsetX - block.location.x - this._blockPaletteWidth, y: e.offsetY - block.location.y };
 
       // Are any input/output hit?
-      (block as FlowBlockElement).io.forEach((io) => {
+      (block as FlowBlock).io.forEach((io) => {
         const boundingBox = this.getBoundingBox(io.location, io.size);
         if (this.boundingBoxContainsOffset(boundingBox, blockRelativeOffset)) {
           hitInputOutputs.push([block, io]);
@@ -493,7 +493,7 @@ export class FlowController {
     this.clearSelectedItems();
   };
 
-  public deleteBlock = (block: FlowBlockElement): void => {
+  public deleteBlock = (block: FlowBlock): void => {
     // We must also delete any connections that connect to the node
     const connections = this._flow.connections.filter((c) => c.startBlockId === block.id || c.endBlockId === block.id);
     connections.forEach((c) => this.deleteConnection(c));

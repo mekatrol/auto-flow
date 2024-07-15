@@ -32,10 +32,10 @@ import {
   BLOCK_IO_POINTER_DOWN,
   BLOCK_IO_POINTER_UP
 } from '../constants';
-import type { FlowBlockElement } from '../types/FlowBlockElement';
+import type { FlowBlock } from '../types/FlowBlock';
 
 interface Props {
-  block: FlowBlockElement;
+  block: FlowBlock;
   inputOutput: InputOutput;
   fillColor?: string;
   strokeColor?: string;
