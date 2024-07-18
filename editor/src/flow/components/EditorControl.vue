@@ -4,6 +4,7 @@
     class="flow-editor"
     :viewBox="`0 0 ${svgWidth} ${svgHeight}`"
     ref="svg"
+    focusable="true"
     @pointermove="(e) => flowController.pointerMove(e)"
     @pointerleave="(e) => flowController.pointerLeave(e)"
     @pointerdown="(e) => flowController.pointerDown(e)"
@@ -64,13 +65,13 @@ const props = defineProps<Props>();
 const gridSize = ref(20);
 const screenSize = useScreenSize();
 const { blockPaletteWidth } = useAppStore();
-const svg = ref();
+const svg = ref<SVGAElement>();
 const svgWidth = ref(0);
 const svgHeight = ref(0);
 
 const calculateSvgHeight = () => {
   // Cast to SVG element
-  const svgElement = svg.value as SVGSVGElement;
+  const svgElement = svg.value!;
 
   // Get the parent container
   const parentDiv = svgElement.parentElement as HTMLElement;
@@ -91,6 +92,17 @@ const focus = (_e: FocusEvent): void => {
   // Do nothing, and SVG element won't raise keyboard events unless it has
   // a focus event handler
 };
+
+onMounted(() => {
+  // Send all svg element focus events to the SVG
+  svg.value!.querySelectorAll('[focusable=true]').forEach((el) => {
+    el.addEventListener('focus', (_e) => {
+      svg.value!.focus({
+        preventScroll: true
+      });
+    });
+  });
+});
 
 watch(
   () => screenSize.value,

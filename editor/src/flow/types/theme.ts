@@ -4,6 +4,7 @@ export interface ElementStyles {
   fillOpacity: string;
   stroke: string;
   strokeWidth: string;
+  strokeWidthSelected: string;
   radius: number;
 }
 
@@ -40,6 +41,7 @@ export const defaultTheme: ThemeDefinition = {
     fillOpacity: '100%',
     stroke: '#a0a0a0',
     strokeWidth: '2px',
+    strokeWidthSelected: '4px',
     radius: 3
   },
   blockIconStyles: {
@@ -61,6 +63,7 @@ export const defaultTheme: ThemeDefinition = {
     fillOpacity: '100%',
     stroke: '#aa1010',
     strokeWidth: '3px',
+    strokeWidthSelected: '4px',
     radius: 3
   },
   blockLabelStyles: {
@@ -69,6 +72,7 @@ export const defaultTheme: ThemeDefinition = {
     fillOpacity: '100%',
     stroke: '#aa1010',
     strokeWidth: '3px',
+    strokeWidthSelected: '4px',
     radius: 3
   },
   blockIOStyles: {
@@ -77,6 +81,7 @@ export const defaultTheme: ThemeDefinition = {
     fillOpacity: '100%',
     stroke: '#fff',
     strokeWidth: '1px',
+    strokeWidthSelected: '4px',
     radius: 3
   },
   connectionStyles: {
@@ -85,6 +90,7 @@ export const defaultTheme: ThemeDefinition = {
     fillOpacity: '100%',
     stroke: '#eeeeee',
     strokeWidth: '3px',
+    strokeWidthSelected: '4px',
     radius: 1
   }
 };

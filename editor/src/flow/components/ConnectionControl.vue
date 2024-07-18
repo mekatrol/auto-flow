@@ -2,11 +2,13 @@
   <!-- Spline path -->
   <g v-if="show">
     <path
+      :class="`flow-connection ${connection.selected ? 'selected' : ''}`"
+      focusable="true"
       :d="svg"
       :fill="theme.connectionStyles.fill"
       :fill-opacity="theme.connectionStyles.fillOpacity"
       :stroke="theme.connectionStyles.stroke"
-      :stroke-width="theme.connectionStyles.strokeWidth"
+      :stroke-width="`${connection.selected ? theme.connectionStyles.strokeWidthSelected : theme.connectionStyles.strokeWidth}`"
       @pointermove="(e) => emit(CONNECTION_POINTER_MOVE, e)"
       @pointerover="(e) => emit(CONNECTION_POINTER_OVER, e)"
       @pointerenter="(e) => emit(CONNECTION_POINTER_ENTER, e)"
@@ -108,3 +110,9 @@ const emit = (event: keyof FlowEvents, e: PointerEvent): boolean => {
 
 const { theme } = useThemeStore();
 </script>
+
+<style scoped lang="css">
+.flow-connection {
+  cursor: pointer;
+}
+</style>

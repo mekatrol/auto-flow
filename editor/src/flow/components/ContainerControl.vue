@@ -1,29 +1,52 @@
 <template>
-  <path
-    class="border"
-    :stroke="borderStroke"
-    :stroke-width="borderWidth"
-    :d="`M ${borderOffset} ${borderOffset} l ${width - borderWidth} 0 l 0 ${height} l ${-width} 0 l 0 ${-height} z`"
-  />
   <slot> </slot>
+  <!-- Right scrollbar -->
+  <SvgScrollbar
+    :x="width - SCROLLBAR_SIZE"
+    :y="0"
+    :width="SCROLLBAR_SIZE"
+    :height="height"
+    :scroll="yScroll"
+    :min="0"
+    :max="maxScrollY()"
+    fill="#333"
+    direction="vertical"
+    @scroll="scroll"
+    @wheel="wheel"
+  />
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref } from 'vue';
+import { SCROLLBAR_SIZE } from '../constants';
+import SvgScrollbar from './SvgScrollbar.vue';
 
 interface Props {
   width: number;
   height: number;
-  borderStroke?: string;
-  borderWidth?: number;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  borderStroke: '',
-  borderWidth: 0
-});
+withDefaults(defineProps<Props>(), {});
 
-const borderOffset = computed(() => props.borderWidth / 2);
+// This is the number of blocks that have been scrolled up
+const yScroll = ref(0);
+
+const maxScrollY = (): number => {
+  return 1000;
+};
+
+const updateYScroll = (delta: number): void => {
+  // Can scroll between 0 and maxScrollY() values
+  yScroll.value = Math.min(maxScrollY(), Math.max(0, yScroll.value + delta));
+};
+
+const scroll = (value: number) => {
+  updateYScroll(value - yScroll.value);
+};
+
+const wheel = (e: WheelEvent) => {
+  updateYScroll((e.deltaY / 100) * 10);
+};
 </script>
 
 <style scoped lang="scss">

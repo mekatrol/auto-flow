@@ -473,7 +473,16 @@ export class FlowController {
       return;
     }
 
-    // Delete selected node
+    // Delete any connections to this block
+    const connections = this._flow.connections.filter(
+      (c) => c.startBlockId === this._selectedBlock.value!.id || c.endBlockId === this._selectedBlock.value!.id
+    );
+
+    connections.forEach((c) => {
+      this.deleteConnection(c);
+    });
+
+    // Delete selected block
     this.deleteBlock(this._selectedBlock.value);
 
     // Clear any selections

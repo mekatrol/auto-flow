@@ -5,7 +5,8 @@
     :class="block.draggingAsNew ? 'dragging-new' : ''"
   >
     <rect
-      :class="`flow-block ${block.draggingAsNew ? 'dragging-new' : ''}`"
+      :class="`flow-block ${block.draggingAsNew ? 'dragging-new' : ''}${block.selected ? 'selected' : ''}`"
+      focusable="true"
       :x="0"
       :y="0"
       :width="block.size.width"
@@ -15,7 +16,7 @@
       :fill="blockStyles.fill"
       :fill-opacity="blockStyles.opacity"
       :stroke="blockStyles.stroke"
-      :stroke-width="theme.blockStyles.strokeWidth"
+      :stroke-width="`${block.selected ? theme.blockStyles.strokeWidthSelected : theme.blockStyles.strokeWidth}`"
       @pointermove="(e) => emit(BLOCK_POINTER_MOVE, e)"
       @pointerover="(e) => emit(BLOCK_POINTER_OVER, e)"
       @pointerenter="(e) => emit(BLOCK_POINTER_ENTER, e)"
@@ -207,6 +208,10 @@ const { theme } = useThemeStore();
 </script>
 
 <style scoped lang="css">
+.flow-block {
+  cursor: pointer;
+}
+
 .dragging-new {
   filter: grayscale(20%);
 }

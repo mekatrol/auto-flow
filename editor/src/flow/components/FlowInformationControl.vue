@@ -4,6 +4,8 @@
     width="200"
     height="1000"
     class="flow-controller"
+    focusable="true"
+    ref="svg"
     @focusin="(e) => focus(e)"
   >
     <LabelControl
@@ -16,10 +18,24 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
 import LabelControl from './LabelControl.vue';
+
+const svg = ref<SVGAElement>();
 
 const focus = (_e: FocusEvent): void => {
   // Do nothing, and SVG element won't raise keyboard events unless it has
   // a focus event handler
 };
+
+onMounted(() => {
+  // Send all svg element focus events to the SVG
+  svg.value!.querySelectorAll('[focusable=true]').forEach((el) => {
+    el.addEventListener('focus', (_e) => {
+      svg.value!.focus({
+        preventScroll: true
+      });
+    });
+  });
+});
 </script>
