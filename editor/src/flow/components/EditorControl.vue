@@ -19,7 +19,7 @@
         :width="blockPaletteWidth"
         :height="svgHeight"
       >
-        <BlockPaletteControl
+        <PaletteControl
           :x="0"
           :y="0"
           :width="blockPaletteWidth"
@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import BlockPaletteControl from './BlockPaletteControl.vue';
+import PaletteControl from './PaletteControl.vue';
 import FlowControl from './FlowControl.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useScreenSize } from 'vue-boosted';
