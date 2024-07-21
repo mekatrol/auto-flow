@@ -69,7 +69,7 @@ export const useMockStore = defineStore('mock', () => {
         id: uuidv4(),
         label: undefined,
         functionType: 'BI',
-        location: { x: 580, y: 400 },
+        location: { x: 100, y: 200 },
         size: { width: biConfiguration.size.width, height: biConfiguration.size.height },
         selected: false,
         zOrder: 1,
@@ -109,6 +109,13 @@ export const useMockStore = defineStore('mock', () => {
       {
         startBlockId: blocks[4].id,
         startPin: 1,
+        endBlockId: blocks[3].id,
+        endPin: 1,
+        selected: false
+      },
+      {
+        startBlockId: blocks[2].id,
+        startPin: 2,
         endBlockId: blocks[5].id,
         endPin: 1,
         selected: false
