@@ -1,4 +1,5 @@
 import type { Offset } from '../types/Offset';
+import type { Size } from '../types/Size';
 
 export const cubicBezierToSvg = (points: Offset[]): string => {
   // 4 points for single bezier and 10 points for chained bezier (4 chained)
@@ -31,4 +32,14 @@ const cubicBezierChainToSvg = (points: Offset[]): string => {
     `S ${points[8].x} ${points[8].y} ${points[9].x} ${points[9].y}`;
 
   return svg;
+};
+
+export const rightPointedRect = (size: Size): string => {
+  const w = size.width * 0.98;
+  return `M 0 0 l ${w} 0 a ${size.height} ${size.height} 0 0 1 0 ${size.height} l ${-w} 0 z`;
+};
+
+export const leftPointedRect = (size: Size) => {
+  const w = size.width * 0.98;
+  return `M 0 0 l ${w} 0 l 0 ${size.height} l ${-w} 0 a ${size.height} ${size.height} 0 0 1 0 -${size.height} z`;
 };

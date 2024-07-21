@@ -120,8 +120,6 @@ const pointerDown = (e: PointerEvent, blockTemplate: BlockTemplate, x: number, y
     draggingAsNew: true
   };
 
-  flowController.layoutInputOutputs(blockTemplate.size, block.io);
-
   emit(BLOCK_POINTER_DOWN, e, block);
 };
 

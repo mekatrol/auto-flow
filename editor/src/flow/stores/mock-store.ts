@@ -13,6 +13,8 @@ export const useMockStore = defineStore('mock', () => {
     const andConfiguration = blockTemplates.find((f) => f.type === 'AND')!;
     const orConfiguration = blockTemplates.find((f) => f.type === 'OR')!;
     const notConfiguration = blockTemplates.find((f) => f.type === 'NOT')!;
+    const biConfiguration = blockTemplates.find((f) => f.type === 'BI')!;
+    const boConfiguration = blockTemplates.find((f) => f.type === 'BO')!;
 
     const blocks: FlowBlock[] = [
       {
@@ -55,13 +57,37 @@ export const useMockStore = defineStore('mock', () => {
         id: uuidv4(),
         label: undefined,
         functionType: 'TRANSITION',
-        location: { x: 380, y: 400 },
+        location: { x: 280, y: 350 },
         size: { width: notConfiguration.size.width, height: notConfiguration.size.height },
         selected: false,
         zOrder: 1,
         zBoost: 0,
         z: 1,
         io: notConfiguration.io.map((io) => ({ ...io }))
+      },
+      {
+        id: uuidv4(),
+        label: undefined,
+        functionType: 'BI',
+        location: { x: 580, y: 400 },
+        size: { width: biConfiguration.size.width, height: biConfiguration.size.height },
+        selected: false,
+        zOrder: 1,
+        zBoost: 0,
+        z: 1,
+        io: biConfiguration.io.map((io) => ({ ...io }))
+      },
+      {
+        id: uuidv4(),
+        label: undefined,
+        functionType: 'BO',
+        location: { x: 980, y: 350 },
+        size: { width: boConfiguration.size.width, height: boConfiguration.size.height },
+        selected: false,
+        zOrder: 1,
+        zBoost: 0,
+        z: 1,
+        io: boConfiguration.io.map((io) => ({ ...io }))
       }
     ];
 
@@ -77,6 +103,13 @@ export const useMockStore = defineStore('mock', () => {
         startBlockId: blocks[3].id,
         startPin: 2,
         endBlockId: blocks[2].id,
+        endPin: 1,
+        selected: false
+      },
+      {
+        startBlockId: blocks[4].id,
+        startPin: 1,
+        endBlockId: blocks[5].id,
         endPin: 1,
         selected: false
       }

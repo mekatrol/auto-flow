@@ -34,6 +34,7 @@ const { createMockFlow } = useMockStore();
 const flow = createMockFlow();
 
 // Add to flow store
+flowStore.deleteFlow(appStore.activeFlowKey);
 flowStore.addFlow(appStore.activeFlowKey, flow);
 
 appStore.incrementBusy();

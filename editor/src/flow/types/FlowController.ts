@@ -7,8 +7,7 @@ import type { Size } from './Size';
 import type { FlowBlock } from './FlowBlock';
 import type { FlowConnecting } from './FlowConnecting';
 import { BlockSide } from './BlockSide';
-import type { EnumDictionary } from './EnumDictionary';
-import { BLOCK_IO_OFFSET, BLOCK_IO_SIZE, MARKER_SIZE } from '../constants';
+import { MARKER_SIZE } from '../constants';
 import type { InputOutput } from '../types/InputOutput';
 import { useAppStore } from '../stores/app-store';
 import type { Flow } from './Flow';
@@ -515,42 +514,6 @@ export class FlowController {
     // Filter connections to the set without the connection
     this._flow.connections = this._flow.connections.filter((c) => c != connection);
   };
-
-  public getInputOutputOffsets(size: Size, offset: number): EnumDictionary<BlockSide, Offset> {
-    const inputOutputOffsets: EnumDictionary<BlockSide, Offset> = {
-      [BlockSide.Left]: { x: -(BLOCK_IO_SIZE - BLOCK_IO_OFFSET), y: offset },
-      [BlockSide.Top]: { x: offset, y: -BLOCK_IO_OFFSET },
-      [BlockSide.Right]: { x: size.width - BLOCK_IO_OFFSET, y: offset },
-      [BlockSide.Bottom]: { x: offset, y: size.height - BLOCK_IO_OFFSET }
-    };
-
-    return inputOutputOffsets;
-  }
-
-  public layoutInputsOutputsSide(io: InputOutput[], side: BlockSide, inputOutputOffsets: EnumDictionary<BlockSide, Offset>): InputOutput[] {
-    const ioForSide = io.filter((io) => io.side === side);
-
-    let shift = 0;
-    ioForSide.forEach((io) => {
-      const shiftHorizontal = side === BlockSide.Top || side === BlockSide.Bottom;
-      const offset = inputOutputOffsets[side];
-      io.location = { x: offset.x + (shiftHorizontal ? shift : 0), y: offset.y + (!shiftHorizontal ? shift : 0) };
-      shift += BLOCK_IO_SIZE + (BLOCK_IO_SIZE >> 1);
-    });
-
-    return ioForSide;
-  }
-
-  public layoutInputOutputs = (size: Size, io: InputOutput[]): void => {
-    // Get the layout offsets for each side
-    const inputOutputOffsets = this.getInputOutputOffsets(size, 5);
-
-    // Layout inputs/outputs on each side
-    this.layoutInputsOutputsSide(io, BlockSide.Left, inputOutputOffsets);
-    this.layoutInputsOutputsSide(io, BlockSide.Right, inputOutputOffsets);
-    this.layoutInputsOutputsSide(io, BlockSide.Top, inputOutputOffsets);
-    this.layoutInputsOutputsSide(io, BlockSide.Bottom, inputOutputOffsets);
-  };
 }
 
 // The instantiated flow controllers
@@ -569,9 +532,6 @@ export const initFlowController = (key: string, flow: Flow): FlowController => {
 
   // Pointer events
   configureFlowPointerEvents(flowController);
-
-  // Layout block IO
-  flow.blocks.forEach((b) => flowController.layoutInputOutputs(b.size, b.io));
 
   // Return flow controller instance
   return flowController;

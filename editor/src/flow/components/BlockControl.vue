@@ -5,6 +5,7 @@
     :class="block.draggingAsNew ? 'dragging-new' : ''"
   >
     <rect
+      v-if="!isIOBlock"
       :class="`flow-block ${block.draggingAsNew ? 'dragging-new' : ''}${block.selected ? 'selected' : ''}`"
       focusable="true"
       :x="0"
@@ -24,11 +25,26 @@
       @pointerdown="(e) => emit(BLOCK_POINTER_DOWN, e)"
       @pointerup="(e) => emit(BLOCK_POINTER_UP, e)"
     ></rect>
+    <path
+      v-else
+      :d="generatePath(block)"
+      :fill="blockStyles.fill"
+      :fill-opacity="blockStyles.opacity"
+      :stroke="blockStyles.stroke"
+      :stroke-width="`${block.selected ? theme.blockStyles.strokeWidthSelected : theme.blockStyles.strokeWidth}`"
+      style="stroke-linejoin: round; stroke-linecap: round"
+      @pointermove="(e) => emit(BLOCK_POINTER_MOVE, e)"
+      @pointerover="(e) => emit(BLOCK_POINTER_OVER, e)"
+      @pointerenter="(e) => emit(BLOCK_POINTER_ENTER, e)"
+      @pointerleave="(e) => emit(BLOCK_POINTER_LEAVE, e)"
+      @pointerdown="(e) => emit(BLOCK_POINTER_DOWN, e)"
+      @pointerup="(e) => emit(BLOCK_POINTER_UP, e)"
+    />
 
     <!-- Block icon -->
     <SvgIcon
       :icon="props.block.functionType.toLowerCase()"
-      :x="0"
+      :x="isRightIcon ? block.size.width - (iconSize + 4) : 0"
       :y="0"
       :backgroundCornerRadius="theme.blockStyles.radius"
       :size="iconSize"
@@ -40,9 +56,9 @@
       :background-opacity="iconStyles.opacity"
     />
 
-    <!-- Icon right border -->
+    <!-- Icon border -->
     <path
-      :d="`M ${iconSize - 0.5} ${0.5} l 0 ${iconSize - 1}`"
+      :d="iconBorderPath"
       class="separator"
       :stroke="theme.blockStyles.stroke"
       :stroke-width="theme.blockStyles.strokeWidth"
@@ -69,6 +85,7 @@
 
     <!-- Block markers -->
     <MarkerControl
+      v-if="!isIOBlock"
       v-for="(marker, i) in markers"
       :key="i"
       :x="marker.location.x"
@@ -113,6 +130,7 @@ import {
 } from '../constants';
 import { useThemeStore } from '../stores/theme-store';
 import type { FlowBlock } from '../types/FlowBlock';
+import { leftPointedRect, rightPointedRect } from '../utils/svg-generator';
 
 const textGapX = 7;
 const textGapY = 5;
@@ -131,6 +149,30 @@ interface Styles {
   fill: string;
   stroke: string;
 }
+
+const isIOBlock = computed(() => {
+  switch (props.block.functionType) {
+    case 'BI':
+    case 'BO':
+    case 'AI':
+    case 'AO':
+      return true;
+
+    default:
+      return false;
+  }
+});
+
+const isRightIcon = computed(() => {
+  switch (props.block.functionType) {
+    case 'BI':
+    case 'AI':
+      return true;
+
+    default:
+      return false;
+  }
+});
 
 const blockStyles = computed((): Styles => {
   return {
@@ -159,6 +201,22 @@ const labelStyles = computed((): Styles => {
 // Make the icon size same as block height (less border size) so that it is displayed as a square.
 // Using height works because the aspect ratio of the block is always width > height
 const iconSize = computed(() => props.block.size.height);
+
+const generatePath = (block: FlowBlock) => {
+  if (block.functionType === 'BO' || block.functionType === 'AO') {
+    return rightPointedRect(block.size);
+  }
+
+  return leftPointedRect(block.size);
+};
+
+const iconBorderPath = computed(() => {
+  if (isRightIcon.value) {
+    return `M ${props.block.size.width - (iconSize.value + 5)} ${0.5} l 0 ${iconSize.value - 1}`;
+  }
+
+  return `M ${iconSize.value + 1.5} ${0.5} l 0 ${iconSize.value - 1}`;
+});
 
 const emitter = useEmitter();
 
