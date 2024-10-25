@@ -200,15 +200,15 @@ export class FlowController {
     const x = e.offsetX - this._dragBlockOffset.value.x;
     const y = e.offsetY - this._dragBlockOffset.value.y;
 
-    // // Don't allow X update unless it is at a valid location or a new block being dragged to the editor area
-    // if ((block.draggingAsNew && !block.dragLocationHasBeenValid) || x >= 0) {
-    block.location.x = x;
-    // }
-
-    // Don't allow Y update unless it is at a valid location or a new block being dragged to the editor area
-    if ((block.draggingAsNew && !block.dragLocationHasBeenValid) || y >= MARKER_SIZE) {
-      block.location.y = y;
+    // X can be less than MARKER_SIZE unless it is a new block that has not yet been at a valid location
+    if (block.draggingAsNew && !block.dragLocationHasBeenValid) {
+      block.location.x = x;
+    } else {
+      block.location.x = x < MARKER_SIZE ? MARKER_SIZE : x;
     }
+
+    // Y can be less than MARKER_SIZE
+    block.location.y = y < MARKER_SIZE ? MARKER_SIZE : y;
 
     // Update the drag location invalid flag. Used to style block when at an invalid location
     block.dragLocationInvalid = this.blockLocationIsInvalid(block);
