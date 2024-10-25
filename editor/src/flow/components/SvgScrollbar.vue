@@ -45,7 +45,10 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const emit = defineEmits(['scroll', 'mousewheel']);
+const emit = defineEmits<{
+  (e: 'scroll', value: number): void;
+  (e: 'mousewheel', value: WheelEvent): void;
+}>();
 
 const scrollbar = ref();
 const sliderPointerEvent = ref<PointerEvent | undefined>(undefined);

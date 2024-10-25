@@ -1,6 +1,9 @@
 <template>
   <div class="menu">
     <div class="menu-item">
+      <button><span class="material-symbols-outlined">folder</span>Open</button>
+    </div>
+    <div class="menu-item">
       <button><span class="material-symbols-outlined">add</span>New</button>
     </div>
     <div class="menu-item">
