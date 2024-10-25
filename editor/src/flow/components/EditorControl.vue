@@ -15,20 +15,15 @@
     @focusin="(e) => focus(e)"
   >
     <g :transform="`translate(0, 0)`">
-      <ContainerControl
+      <PaletteControl
+        :x="0"
+        :y="0"
         :width="blockPaletteWidth"
         :height="svgHeight"
-      >
-        <PaletteControl
-          :x="0"
-          :y="0"
-          :width="blockPaletteWidth"
-          :height="svgHeight"
-          :gap="PALETTE_GAP"
-          :scrollbarWidth="SCROLLBAR_SIZE"
-          :flow-key="flowKey"
-        />
-      </ContainerControl>
+        :gap="PALETTE_GAP"
+        :scrollbarWidth="SCROLLBAR_SIZE"
+        :flow-key="flowKey"
+      />
     </g>
     <g :transform="`translate(${blockPaletteWidth}, 0)`">
       <ContainerControl

@@ -88,7 +88,7 @@ const maxScrollY = (): number => {
 
   // The maximum value we can scroll to is the total number of blocks - the number of block that fit within the palette height
   // Also add 80% of a block row height so that scrolling to end always shows a gap after the last block
-  const max = (blockTemplates.length - 1) * h - Math.floor(props.height / h) * h + h * 0.8;
+  const max = (blockTemplates.length - 1) * h - Math.floor(props.height / h) * h + h;
   return max;
 };
 
