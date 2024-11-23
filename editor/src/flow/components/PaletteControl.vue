@@ -107,7 +107,7 @@ const wheel = (e: WheelEvent) => {
 
 const pointerDown = (e: PointerEvent, blockTemplate: BlockTemplate, x: number, y: number): void => {
   const block: FlowBlock = {
-    location: { x: x - props.width, y: y },
+    offset: { x: x - props.width, y: y },
     functionType: blockTemplate.type,
     size: { ...blockTemplate.size },
     id: uuidv4(),

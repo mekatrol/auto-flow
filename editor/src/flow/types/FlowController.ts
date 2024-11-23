@@ -140,7 +140,7 @@ export class FlowController {
 
   public blockLocationIsInvalid(block: FlowBlock): boolean {
     // Must be at least MARKER_SIZE from left and top
-    return block.location.x < MARKER_SIZE || block.location.y < MARKER_SIZE;
+    return block.offset.x < MARKER_SIZE || block.offset.y < MARKER_SIZE;
   }
 
   public blockPointerDown(e: FlowBlockPointerEvent) {
@@ -151,8 +151,8 @@ export class FlowController {
     this.dragBlock.value = e.data;
     this.dragBlock.value.zBoost = 0;
     this.dragBlock.value.z = this.dragBlock.value.zOrder;
-    this.dragBlockOffset.value = { x: e.pointerEvent.offsetX - e.data.location.x, y: e.pointerEvent.offsetY - e.data.location.y };
-    this.dragBlockOriginalPosition.value = { x: e.data.location.x, y: e.data.location.y };
+    this.dragBlockOffset.value = { x: e.pointerEvent.offsetX - e.data.offset.x, y: e.pointerEvent.offsetY - e.data.offset.y };
+    this.dragBlockOriginalPosition.value = { x: e.data.offset.x, y: e.data.offset.y };
   }
 
   public blockPointerUp(e: FlowBlockPointerEvent) {
@@ -196,24 +196,24 @@ export class FlowController {
     // Just for code readability
     const block = this._dragBlock.value;
 
-    // Calculate new location
+    // Calculate new offset
     const x = e.offsetX - this._dragBlockOffset.value.x;
     const y = e.offsetY - this._dragBlockOffset.value.y;
 
-    // X can be less than MARKER_SIZE unless it is a new block that has not yet been at a valid location
+    // X can be less than MARKER_SIZE unless it is a new block that has not yet been at a valid offset
     if (block.draggingAsNew && !block.dragLocationHasBeenValid) {
-      block.location.x = x;
+      block.offset.x = x;
     } else {
-      block.location.x = x < MARKER_SIZE ? MARKER_SIZE : x;
+      block.offset.x = x < MARKER_SIZE ? MARKER_SIZE : x;
     }
 
     // Y can be less than MARKER_SIZE
-    block.location.y = y < MARKER_SIZE ? MARKER_SIZE : y;
+    block.offset.y = y < MARKER_SIZE ? MARKER_SIZE : y;
 
-    // Update the drag location invalid flag. Used to style block when at an invalid location
+    // Update the drag offset invalid flag. Used to style block when at an invalid offset
     block.dragLocationInvalid = this.blockLocationIsInvalid(block);
 
-    // Once a block has a valid location then we can't go back to an invalid location
+    // Once a block has a valid offset then we can't go back to an invalid offset
     // this is only relevant to new blocks being dragged onto the editor area
     if (!block.dragLocationInvalid) {
       block.dragLocationHasBeenValid = true;
@@ -318,8 +318,8 @@ export class FlowController {
     }
 
     return {
-      x: startBlock.location.x + startInputOutput.location.x,
-      y: startBlock.location.y + startInputOutput.location.y + startInputOutput.size.height / 2
+      x: startBlock.offset.x + startInputOutput.offset.x,
+      y: startBlock.offset.y + startInputOutput.offset.y + startInputOutput.size.height / 2
     };
   }
 
@@ -347,8 +347,8 @@ export class FlowController {
     }
 
     return {
-      x: endBlock.location.x + endInputOutput.location.x,
-      y: endBlock.location.y + endInputOutput.location.y + endInputOutput.size.height / 2
+      x: endBlock.offset.x + endInputOutput.offset.x,
+      y: endBlock.offset.y + endInputOutput.offset.y + endInputOutput.size.height / 2
     };
   }
 
@@ -364,12 +364,12 @@ export class FlowController {
     return isConnected;
   };
 
-  public getBoundingBox(location: Offset, size: Size): { left: number; top: number; right: number; bottom: number } {
+  public getBoundingBox(offset: Offset, size: Size): { left: number; top: number; right: number; bottom: number } {
     return {
-      left: location.x, // left
-      top: location.y, // top
-      right: location.x + size.width, // right
-      bottom: location.y + size.height // bottom
+      left: offset.x, // left
+      top: offset.y, // top
+      right: offset.x + size.width, // right
+      bottom: offset.y + size.height // bottom
     };
   }
 
@@ -382,12 +382,12 @@ export class FlowController {
     const hitInputOutputs: [FlowBlock, InputOutput][] = [];
 
     this._flow.blocks.forEach((block) => {
-      // Convert pointer location to offset relative to block location for block input/output hit testing
-      const blockRelativeOffset: Offset = { x: e.offsetX - block.location.x - this._blockPaletteWidth, y: e.offsetY - block.location.y };
+      // Convert pointer offset to offset relative to block offset for block input/output hit testing
+      const blockRelativeOffset: Offset = { x: e.offsetX - block.offset.x - this._blockPaletteWidth, y: e.offsetY - block.offset.y };
 
       // Are any input/output hit?
       (block as FlowBlock).io.forEach((io) => {
-        const boundingBox = this.getBoundingBox(io.location, io.size);
+        const boundingBox = this.getBoundingBox(io.offset, io.size);
         if (this.boundingBoxContainsOffset(boundingBox, blockRelativeOffset)) {
           hitInputOutputs.push([block, io]);
         }

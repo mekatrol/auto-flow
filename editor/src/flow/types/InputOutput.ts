@@ -20,8 +20,8 @@ export interface InputOutput {
   // The direction for this input/output relative to the block it belongs to
   direction: InputOutputDirection;
 
-  // The location of this input/output (relative to any parent component)
-  location: Offset;
+  // The offset of this input/output (relative to any parent component)
+  offset: Offset;
 
   // The visual size of the input/output
   size: Size;

@@ -1,7 +1,7 @@
 <template>
   <g
     v-if="block"
-    :transform="`translate(${block.location.x},${block.location.y})`"
+    :transform="`translate(${block.offset.x},${block.offset.y})`"
     :class="block.draggingAsNew ? 'dragging-new' : ''"
   >
     <rect
@@ -88,8 +88,8 @@
       v-if="!isIOBlock"
       v-for="(marker, i) in markers"
       :key="i"
-      :x="marker.location.x"
-      :y="marker.location.y"
+      :x="marker.offset.x"
+      :y="marker.offset.y"
       :shape="marker.shape"
       :size="MARKER_SIZE"
       :fill-color="marker.fillColor"
@@ -240,21 +240,21 @@ const markers = computed((): MarkerShape[] => {
   return [
     {
       shape: 'circle',
-      location: { x: props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 1, y: MARKER_OFFSET_Y },
+      offset: { x: props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 1, y: MARKER_OFFSET_Y },
       size: { width: MARKER_SIZE, height: MARKER_SIZE },
       strokeColor: 'black',
       fillColor: 'yellow'
     },
     {
       shape: 'triangle',
-      location: { x: props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 2, y: MARKER_OFFSET_Y },
+      offset: { x: props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 2, y: MARKER_OFFSET_Y },
       size: { width: MARKER_SIZE, height: MARKER_SIZE },
       strokeColor: 'darkred',
       fillColor: 'coral'
     },
     {
       shape: 'square',
-      location: { x: props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 3, y: MARKER_OFFSET_Y },
+      offset: { x: props.block.size.width - (MARKER_SIZE + MARKER_OFFSET_X) * 3, y: MARKER_OFFSET_Y },
       size: { width: MARKER_SIZE, height: MARKER_SIZE },
       strokeColor: 'green',
       fillColor: 'white'

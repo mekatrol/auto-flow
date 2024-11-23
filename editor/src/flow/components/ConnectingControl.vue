@@ -91,8 +91,8 @@ const startInputOutput = computed(() => props.connecting.startBlock.io.find((io)
 
 const startOffset = computed(() => {
   return {
-    x: props.connecting.startBlock.location.x + startInputOutput.value.location.x + BLOCK_IO_SIZE,
-    y: props.connecting.startBlock.location.y + startInputOutput.value.location.y + BLOCK_IO_SIZE / 2
+    x: props.connecting.startBlock.offset.x + startInputOutput.value.offset.x + BLOCK_IO_SIZE,
+    y: props.connecting.startBlock.offset.y + startInputOutput.value.offset.y + BLOCK_IO_SIZE / 2
   };
 });
 

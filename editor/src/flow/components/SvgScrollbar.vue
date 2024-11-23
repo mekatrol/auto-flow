@@ -79,7 +79,7 @@ const dragSliderStart = (e: PointerEvent) => {
   // We are now dragging the slider
   sliderDragging.value = true;
 
-  // We the mouse button is clicked then we need to calculate what the scroll value would be at that location
+  // We the mouse button is clicked then we need to calculate what the scroll value would be at that offset
   const offsetAdjust = Math.min(props.max - 1, Math.max(0, Math.floor(e.offsetY / sliderHeight.value)));
 
   // We need to track the offset of the mouse from the top of the slider at the calculated scroll position

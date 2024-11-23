@@ -8,7 +8,7 @@ export interface FlowConnecting {
   // The pin number of the input/output that this connection starts from
   startPin: number;
 
-  // The current pointer location which is the end of the connector
+  // The current pointer offset which is the end of the connector
   endLocation: Offset;
 
   // Used to style connection while in 'connecting' mode

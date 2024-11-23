@@ -12,8 +12,8 @@ export interface FlowBlock {
   // The function type for this flow block
   functionType: string;
 
-  // The location of the block in SVG view units
-  location: Offset;
+  // The offset of the block in SVG view units
+  offset: Offset;
 
   // The size of the block
   size: Size;
@@ -22,7 +22,7 @@ export interface FlowBlock {
   // Elements with a higher zOrder are considered on top of elements with a lower zOrder.
   // That is:
   //  * higher zOrder items will be rendered over the top of lower zOrder items
-  //  * clicking on a location will select the element with the highest zOrder at that location
+  //  * clicking on a offset will select the element with the highest zOrder at that offset
   zOrder: number;
 
   // The amount to boost the zOrder by. Use to bring element to front for operations such as dragging.
@@ -40,10 +40,10 @@ export interface FlowBlock {
   // Flag to indicate if this block is a new block being dragged onto editor area
   draggingAsNew?: boolean;
 
-  // Will be set to true if the blocks drag location is valid
+  // Will be set to true if the blocks drag offset is valid
   dragLocationInvalid?: boolean;
 
-  // For a new block this will be set to try once the block has been dragged to a valid location
-  // it allows stopping the block from being dragged back out of a valid location
+  // For a new block this will be set to try once the block has been dragged to a valid offset
+  // it allows stopping the block from being dragged back out of a valid offset
   dragLocationHasBeenValid?: boolean;
 }

@@ -1,8 +1,8 @@
 <template>
   <rect
     :class="`input-output`"
-    :x="inputOutput.location.x"
-    :y="inputOutput.location.y"
+    :x="inputOutput.offset.x"
+    :y="inputOutput.offset.y"
     :rx="`${cornerRadius}px`"
     :ry="`${cornerRadius}px`"
     :width="inputOutput.size.width"

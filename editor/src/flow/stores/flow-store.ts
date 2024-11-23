@@ -21,7 +21,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Right,
-        location: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
+        offset: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -39,7 +39,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: -BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
+        offset: { x: -BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -57,7 +57,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Analogue,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
+        offset: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -75,7 +75,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Analogue,
         direction: InputOutputDirection.Output,
         side: BlockSide.Left,
-        location: { x: -BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
+        offset: { x: -BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -93,7 +93,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: -BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 3 - BLOCK_IO_SIZE / 2 },
+        offset: { x: -BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 3 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -103,7 +103,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: -BLOCK_IO_SIZE / 2, y: (BLOCK_HEIGHT / 3) * 2 - BLOCK_IO_SIZE / 2 },
+        offset: { x: -BLOCK_IO_SIZE / 2, y: (BLOCK_HEIGHT / 3) * 2 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -113,7 +113,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 3 - BLOCK_IO_SIZE / 2 },
+        offset: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 3 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -123,7 +123,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: (BLOCK_HEIGHT / 3) * 2 - BLOCK_IO_SIZE / 2 },
+        offset: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: (BLOCK_HEIGHT / 3) * 2 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -141,7 +141,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -151,7 +151,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -161,7 +161,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -171,7 +171,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -189,7 +189,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -199,7 +199,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -209,7 +209,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -219,7 +219,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -237,7 +237,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -247,7 +247,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -257,7 +257,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -267,7 +267,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -285,7 +285,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -295,7 +295,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -305,7 +305,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -315,7 +315,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -333,7 +333,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -343,7 +343,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -353,7 +353,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -363,7 +363,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -381,7 +381,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -391,7 +391,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -401,7 +401,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -411,7 +411,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -429,7 +429,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -439,7 +439,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -449,7 +449,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -459,7 +459,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -477,7 +477,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -487,7 +487,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -497,7 +497,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -507,7 +507,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -525,7 +525,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -535,7 +535,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -545,7 +545,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -555,7 +555,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -573,7 +573,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -583,7 +583,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -593,7 +593,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -603,7 +603,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -621,7 +621,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: -BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
+        offset: { x: -BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -631,7 +631,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
+        offset: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -649,7 +649,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: -BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 3 - BLOCK_IO_SIZE / 2 },
+        offset: { x: -BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 3 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -659,7 +659,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: -BLOCK_IO_SIZE / 2, y: (BLOCK_HEIGHT / 3) * 2 - BLOCK_IO_SIZE / 2 },
+        offset: { x: -BLOCK_IO_SIZE / 2, y: (BLOCK_HEIGHT / 3) * 2 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -669,7 +669,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 3 - BLOCK_IO_SIZE / 2 },
+        offset: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 3 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -679,7 +679,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: (BLOCK_HEIGHT / 3) * 2 - BLOCK_IO_SIZE / 2 },
+        offset: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: (BLOCK_HEIGHT / 3) * 2 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -697,7 +697,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -707,7 +707,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -717,7 +717,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -727,7 +727,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -745,7 +745,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -755,7 +755,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -765,7 +765,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -775,7 +775,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -793,7 +793,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -803,7 +803,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -813,7 +813,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -823,7 +823,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -841,7 +841,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -851,7 +851,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -861,7 +861,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -871,7 +871,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -889,7 +889,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -899,7 +899,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -909,7 +909,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -919,7 +919,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -937,7 +937,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -947,7 +947,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -957,7 +957,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -967,7 +967,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -985,7 +985,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -995,7 +995,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1005,7 +1005,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1015,7 +1015,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -1033,7 +1033,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1043,7 +1043,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1053,7 +1053,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1063,7 +1063,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -1081,7 +1081,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1091,7 +1091,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1101,7 +1101,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1111,7 +1111,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -1129,7 +1129,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: -BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
+        offset: { x: -BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1139,7 +1139,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
+        offset: { x: BLOCK_WIDTH - BLOCK_IO_SIZE / 2, y: BLOCK_HEIGHT / 2 - BLOCK_IO_SIZE / 2 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1149,7 +1149,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1159,7 +1159,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -1177,7 +1177,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1187,7 +1187,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1197,7 +1197,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1207,7 +1207,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]
@@ -1225,7 +1225,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1235,7 +1235,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Input,
         side: BlockSide.Left,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1245,7 +1245,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       },
       {
@@ -1255,7 +1255,7 @@ const blockTemplates: BlockTemplate[] = [
         type: InputOutputSignalType.Digital,
         direction: InputOutputDirection.Output,
         side: BlockSide.Right,
-        location: { x: 0, y: 0 },
+        offset: { x: 0, y: 0 },
         size: { width: BLOCK_IO_SIZE, height: BLOCK_IO_SIZE }
       }
     ]

@@ -21,7 +21,7 @@ export const useMockStore = defineStore('mock', () => {
         id: uuidv4(),
         label: undefined,
         functionType: 'AND',
-        location: { x: 100, y: 100 },
+        offset: { x: 100, y: 100 },
         size: { width: andConfiguration.size.width, height: andConfiguration.size.height },
         selected: false,
         zOrder: 1,
@@ -33,7 +33,7 @@ export const useMockStore = defineStore('mock', () => {
         id: uuidv4(),
         label: undefined,
         functionType: 'OR',
-        location: { x: 500, y: 200 },
+        offset: { x: 500, y: 200 },
         size: { width: orConfiguration.size.width, height: orConfiguration.size.height },
         selected: false,
         zOrder: 1,
@@ -45,7 +45,7 @@ export const useMockStore = defineStore('mock', () => {
         id: uuidv4(),
         label: undefined,
         functionType: 'NOT',
-        location: { x: 1000, y: 50 },
+        offset: { x: 1000, y: 50 },
         size: { width: notConfiguration.size.width, height: notConfiguration.size.height },
         selected: false,
         zOrder: 1,
@@ -57,7 +57,7 @@ export const useMockStore = defineStore('mock', () => {
         id: uuidv4(),
         label: undefined,
         functionType: 'TRANSITION',
-        location: { x: 280, y: 350 },
+        offset: { x: 280, y: 350 },
         size: { width: notConfiguration.size.width, height: notConfiguration.size.height },
         selected: false,
         zOrder: 1,
@@ -69,7 +69,7 @@ export const useMockStore = defineStore('mock', () => {
         id: uuidv4(),
         label: undefined,
         functionType: 'BI',
-        location: { x: 100, y: 200 },
+        offset: { x: 100, y: 200 },
         size: { width: biConfiguration.size.width, height: biConfiguration.size.height },
         selected: false,
         zOrder: 1,
@@ -81,7 +81,7 @@ export const useMockStore = defineStore('mock', () => {
         id: uuidv4(),
         label: undefined,
         functionType: 'BO',
-        location: { x: 980, y: 350 },
+        offset: { x: 980, y: 350 },
         size: { width: boConfiguration.size.width, height: boConfiguration.size.height },
         selected: false,
         zOrder: 1,
@@ -129,6 +129,9 @@ export const useMockStore = defineStore('mock', () => {
 
     // Load elements from JSON
     const flow = loadFlowFromJson(JSON.stringify(mockFlow));
+
+    const json = JSON.stringify(flow);
+    // console.log(json);
 
     return flow;
   };
