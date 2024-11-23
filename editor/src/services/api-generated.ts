@@ -18,7 +18,7 @@ export enum BlockSide {
 
 export interface Flow {
   /** @format uuid */
-  id?: string;
+  id: string;
   label?: string | null;
   description?: string | null;
   blocks?: FlowBlock[] | null;
@@ -27,44 +27,44 @@ export interface Flow {
 
 export interface FlowBlock {
   /** @format uuid */
-  id?: string;
+  id: string;
   label?: string | null;
   functionType?: string | null;
-  offset?: Offset;
-  size?: Size;
+  offset: Offset;
+  size: Size;
   /** @format int32 */
-  zOrder?: number;
+  zOrder: number;
   io?: InputOutput[] | null;
 }
 
 export interface FlowConnection {
   /** @format uuid */
-  startBlockId?: string;
+  startBlockId: string;
   /** @format int32 */
-  startPin?: number;
+  startPin: number;
   /** @format uuid */
-  endBlockId?: string;
+  endBlockId: string;
   /** @format int32 */
-  endPin?: number;
+  endPin: number;
 }
 
 export interface FlowSummary {
   /** @format uuid */
-  id?: string;
+  id: string;
   label?: string | null;
   description?: string | null;
 }
 
 export interface InputOutput {
   /** @format int32 */
-  pin?: number;
+  pin: number;
   label?: string | null;
   description?: string | null;
-  type?: InputOutputSignalType;
-  direction?: InputOutputDirection;
-  offset?: Offset;
-  size?: Size;
-  side?: BlockSide;
+  type: InputOutputSignalType;
+  direction: InputOutputDirection;
+  offset: Offset;
+  size: Size;
+  side: BlockSide;
 }
 
 export enum InputOutputDirection {
@@ -80,16 +80,16 @@ export enum InputOutputSignalType {
 
 export interface Offset {
   /** @format double */
-  x?: number;
+  x: number;
   /** @format double */
-  y?: number;
+  y: number;
 }
 
 export interface Size {
   /** @format double */
-  width?: number;
+  width: number;
   /** @format double */
-  height?: number;
+  height: number;
 }
 
 import type { AxiosInstance, AxiosRequestConfig, HeadersDefaults, ResponseType } from 'axios';
