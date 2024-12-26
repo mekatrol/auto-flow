@@ -1,9 +1,9 @@
 <template>
   <g
     class="block-template-palette"
-    @pointermove="(e) => flowController.pointerMove(e)"
-    @pointerup="(e) => flowController.pointerUp(e)"
-    @mousewheel="wheel"
+    @pointermove="(e) => palettePointerMove(e)"
+    @pointerup="(e) => palettePointerUp(e)"
+    @mousewheel.passive="(e: WheelEvent) => wheel(e)"
     @focusin="(e) => focus(e)"
   >
     <!-- We need a rect covering the full palette view so that mouse wheel events are captured when the mouse is over areas that are not a block -->
@@ -13,7 +13,7 @@
       :width="width"
       :height="height"
       fill="transparent"
-      @mousewheel="wheel"
+      @mousewheel.passive="(e: WheelEvent) => wheel(e)"
     ></rect>
 
     <!-- Block templates -->
@@ -39,7 +39,7 @@
       fill="#333"
       direction="vertical"
       @scroll="scroll"
-      @wheel="wheel"
+      @wheel.passive="wheel"
     />
   </g>
 </template>
@@ -51,10 +51,10 @@ import { useFlowStore } from '../stores/flow-store';
 import { BLOCK_HEIGHT, BLOCK_POINTER_DOWN, BLOCK_POINTER_UP } from '../constants';
 import type { BlockTemplate } from '../types/BlockTemplate';
 import { v4 as uuidv4 } from 'uuid';
-import { useFlowController } from '../types/FlowController';
-import type { FlowBlock } from '../types/FlowBlock';
+import { FlowController, useFlowController } from '../types/FlowController';
+import type { FlowBlock } from '@/services/api-generated';
 import { useEmitter, type FlowEvents } from '../utils/event-emitter';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 interface Props {
   width: number;
@@ -67,7 +67,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const { blockTemplates } = useFlowStore();
-const flowController = useFlowController(props.flowKey);
+const flowController = ref<FlowController | undefined>(undefined);
 
 // This is the number of blocks that have been scrolled up
 const yScroll = ref(0);
@@ -105,6 +105,20 @@ const wheel = (e: WheelEvent) => {
   updateYScroll((e.deltaY / 100) * blockRowHeight());
 };
 
+const palettePointerMove = (e: PointerEvent) => {
+  if (!flowController.value) {
+    return;
+  }
+  flowController.value.pointerMove(e);
+};
+
+const palettePointerUp = (e: PointerEvent) => {
+  if (!flowController.value) {
+    return;
+  }
+  flowController.value.pointerUp(e);
+};
+
 const pointerDown = (e: PointerEvent, blockTemplate: BlockTemplate, x: number, y: number): void => {
   const block: FlowBlock = {
     offset: { x: x - props.width, y: y },
@@ -124,7 +138,11 @@ const pointerDown = (e: PointerEvent, blockTemplate: BlockTemplate, x: number, y
 };
 
 const pointerUp = (e: PointerEvent) => {
-  emit(BLOCK_POINTER_UP, e, flowController.dragBlock.value!);
+  if (!flowController.value || !flowController.value.dragBlock) {
+    return;
+  }
+
+  emit(BLOCK_POINTER_UP, e, flowController.value.dragBlock);
 };
 
 const focus = (_e: FocusEvent): void => {
@@ -143,4 +161,10 @@ const emit = (event: keyof FlowEvents, e: PointerEvent, block: FlowBlock): boole
   e.preventDefault();
   return false;
 };
+
+onMounted(() => {
+  if (props.flowKey) {
+    flowController.value = useFlowController(props.flowKey);
+  }
+});
 </script>

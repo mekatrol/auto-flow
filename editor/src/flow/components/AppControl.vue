@@ -1,8 +1,11 @@
 <template>
   <nav><MenuControl /></nav>
   <main>
-    <div v-if="appStore.activeFlowKey.length > 0">
-      <EditorControl :flow-key="appStore.activeFlowKey" />
+    <div>
+      <EditorControl
+        v-if="activeFlow"
+        :flow-key="activeFlow.id"
+      />
     </div>
     <div>
       <FlowInformationControl />
@@ -21,21 +24,11 @@ import FlowInformationControl from './FlowInformationControl.vue';
 import { BusyOverlay } from 'vue-boosted';
 import { useAppStore } from '../stores/app-store';
 import { useIntervalTimer } from 'vue-boosted';
-import { useMockStore } from '../stores/mock-store';
-import { useFlowStore } from '../stores/flow-store';
+import { storeToRefs } from 'pinia';
 
 const appStore = useAppStore();
-const flowStore = useFlowStore();
 
-appStore.activeFlowKey = 'flow-1';
-
-// Use mock store for now
-const { createMockFlow } = useMockStore();
-const flow = createMockFlow();
-
-// Add to flow store
-flowStore.deleteFlow(appStore.activeFlowKey);
-flowStore.addFlow(appStore.activeFlowKey, flow);
+const { activeFlow } = storeToRefs(appStore);
 
 appStore.incrementBusy();
 
@@ -51,6 +44,7 @@ useIntervalTimer(async () => {
 <style scoped lang="scss">
 main {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: row;
   overflow: hidden;

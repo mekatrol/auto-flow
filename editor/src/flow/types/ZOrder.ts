@@ -1,4 +1,4 @@
-import type { FlowBlock } from './FlowBlock';
+import type { FlowBlock } from '@/services/api-generated';
 
 export class ZOrder {
   private _blocks: FlowBlock[];

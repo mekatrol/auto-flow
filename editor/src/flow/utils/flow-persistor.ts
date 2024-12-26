@@ -1,4 +1,4 @@
-import type { Flow } from '../types/Flow';
+import type { Flow } from '@/services/api-generated';
 
 export const loadFlowFromJson = (json: string): Flow => {
   const flow = JSON.parse(json) as Flow;

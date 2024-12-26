@@ -12,7 +12,7 @@
     fill="#333"
     direction="vertical"
     @scroll="scroll"
-    @wheel="wheel"
+    @wheel.passive="wheel"
   />
 </template>
 

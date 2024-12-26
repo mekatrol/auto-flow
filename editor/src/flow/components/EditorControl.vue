@@ -5,13 +5,13 @@
     :viewBox="`0 0 ${svgWidth} ${svgHeight}`"
     ref="svg"
     focusable="true"
-    @pointermove="(e) => flowController.pointerMove(e)"
-    @pointerleave="(e) => flowController.pointerLeave(e)"
-    @pointerdown="(e) => flowController.pointerDown(e)"
-    @pointerup="(e) => flowController.pointerUp(e)"
-    @keypress="(e) => flowController.keyPress(e)"
-    @keydown="(e) => flowController.keyDown(e)"
-    @keyup="(e) => flowController.keyUp(e)"
+    @pointermove="(e) => pointerMove(e)"
+    @pointerleave="(e) => pointerLeave(e)"
+    @pointerdown="(e) => pointerDown(e)"
+    @pointerup="(e) => pointerUp(e)"
+    @keypress="(e) => keyPress(e)"
+    @keydown="(e) => keyDown(e)"
+    @keyup="(e) => keyUp(e)"
     @focusin="(e) => focus(e)"
   >
     <g :transform="`translate(0, 0)`">
@@ -46,7 +46,7 @@ import PaletteControl from './PaletteControl.vue';
 import FlowControl from './FlowControl.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useScreenSize } from 'vue-boosted';
-import { useFlowController } from '../types/FlowController';
+import { FlowController, useFlowController } from '../types/FlowController';
 import ContainerControl from './ContainerControl.vue';
 import { useAppStore } from '../stores/app-store';
 import { PALETTE_GAP, SCROLLBAR_SIZE } from '../constants';
@@ -76,19 +76,70 @@ const calculateSvgHeight = () => {
   svgHeight.value = parentDiv.clientHeight;
 };
 
-// Must be done before constructing any blocks or connections
-const flowController = useFlowController(props.flowKey);
+const flowController = ref<FlowController | undefined>(undefined);
 
 onMounted(() => {
+  if (props.flowKey) {
+    flowController.value = useFlowController(props.flowKey);
+  }
   calculateSvgHeight();
 });
+
+const pointerMove = (e: PointerEvent) => {
+  if (!flowController.value) {
+    return;
+  }
+  flowController.value.pointerMove(e);
+};
+
+const pointerLeave = (e: PointerEvent) => {
+  if (!flowController.value) {
+    return;
+  }
+  flowController.value.pointerLeave(e);
+};
+
+const pointerDown = (e: PointerEvent) => {
+  if (!flowController.value) {
+    return;
+  }
+  flowController.value.pointerDown(e);
+};
+
+const pointerUp = (e: PointerEvent) => {
+  if (!flowController.value) {
+    return;
+  }
+  flowController.value.pointerUp(e);
+};
+
+const keyPress = (e: KeyboardEvent) => {
+  if (!flowController.value) {
+    return;
+  }
+  flowController.value.keyPress(e);
+};
+
+const keyDown = (e: KeyboardEvent) => {
+  if (!flowController.value) {
+    return;
+  }
+  flowController.value.keyDown(e);
+};
+
+const keyUp = (e: KeyboardEvent) => {
+  if (!flowController.value) {
+    return;
+  }
+  flowController.value.keyUp(e);
+};
 
 const focus = (_e: FocusEvent): void => {
   // Do nothing, and SVG element won't raise keyboard events unless it has
   // a focus event handler
 };
 
-onMounted(() => {
+const wireSvgEvents = () => {
   // Send all svg element focus events to the SVG
   svg.value!.querySelectorAll('[focusable=true]').forEach((el) => {
     el.addEventListener('focus', (_e) => {
@@ -97,11 +148,40 @@ onMounted(() => {
       });
     });
   });
+};
+
+onMounted(() => {
+  if (props.flowKey) {
+    flowController.value = useFlowController(props.flowKey);
+    calculateSvgHeight();
+  }
+
+  // Wire all events
+  wireSvgEvents();
+
+  calculateSvgHeight();
 });
 
 watch(
   () => screenSize.value,
-  (c) => {
+  () => {
+    calculateSvgHeight();
+  }
+);
+
+watch(
+  () => props.flowKey,
+  (_oldValue: string, newValue: string) => {
+    if (!newValue) {
+      flowController.value = undefined;
+      return;
+    }
+
+    flowController.value = useFlowController(newValue);
+
+    // Wire all events
+    wireSvgEvents();
+
     calculateSvgHeight();
   }
 );

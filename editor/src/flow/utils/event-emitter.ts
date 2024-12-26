@@ -27,8 +27,7 @@ import {
   CONNECTION_POINTER_UP
 } from '../constants';
 import type { FlowConnection } from '../types/FlowConnection';
-import type { InputOutput } from '../types/InputOutput';
-import type { FlowBlock } from '../types/FlowBlock';
+import type { FlowBlock, InputOutput } from '@/services/api-generated';
 import type { FlowConnecting } from '../types/FlowConnecting';
 
 export interface FlowPointerEvent<T> {

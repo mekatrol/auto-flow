@@ -1,4 +1,4 @@
-import type { FlowBlock } from './FlowBlock';
+import type { FlowBlock } from '@/services/api-generated';
 import type { Offset } from './Offset';
 
 export interface FlowConnecting {

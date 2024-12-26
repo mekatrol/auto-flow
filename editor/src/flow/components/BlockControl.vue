@@ -129,8 +129,8 @@ import {
   BLOCK_POINTER_UP
 } from '../constants';
 import { useThemeStore } from '../stores/theme-store';
-import type { FlowBlock } from '../types/FlowBlock';
 import { leftPointedRect, rightPointedRect } from '../utils/svg-generator';
+import type { FlowBlock } from '@/services/api-generated';
 
 const textGapX = 7;
 const textGapY = 5;

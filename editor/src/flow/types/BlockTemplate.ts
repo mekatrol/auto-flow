@@ -1,4 +1,4 @@
-import type { InputOutput } from './InputOutput';
+import type { InputOutput } from '@/services/api-generated';
 import type { Size } from './Size';
 
 export interface BlockTemplate {

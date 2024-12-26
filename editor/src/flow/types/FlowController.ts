@@ -4,14 +4,13 @@ import { ZOrder } from './ZOrder';
 import { configureFlowPointerEvents, type FlowBlockIOPointerEvent, type FlowBlockPointerEvent } from '../utils/event-emitter';
 import type { FlowConnection } from './FlowConnection';
 import type { Size } from './Size';
-import type { FlowBlock } from './FlowBlock';
+import type { FlowBlock, InputOutput } from '@/services/api-generated';
 import type { FlowConnecting } from './FlowConnecting';
 import { BlockSide } from './BlockSide';
 import { MARKER_SIZE } from '../constants';
-import type { InputOutput } from '../types/InputOutput';
 import { useAppStore } from '../stores/app-store';
-import type { Flow } from './Flow';
 import { useFlowStore } from '../stores/flow-store';
+import type { Flow } from '@/services/api-generated';
 
 export class FlowController {
   public _key: string;
@@ -539,6 +538,10 @@ export const initFlowController = (key: string, flow: Flow): FlowController => {
 
 // Get an instance of a flow controller by key
 export const useFlowController = (key: string): FlowController => {
+  if (!key) {
+    throw new Error(`Cannot use flow controller for invalid key '${key}'`);
+  }
+
   // Does a controller with the specified key already exist?
   if (!(key in flowControllers)) {
     const { getFlow } = useFlowStore();
@@ -546,12 +549,12 @@ export const useFlowController = (key: string): FlowController => {
     // Create a new empty flow
     const flow = getFlow(key);
 
-    if (!flow || !flow.value) {
-      throw new Error();
+    if (!flow) {
+      throw new Error(`No flow found with key '${key}'`);
     }
 
     // Create an return new instance
-    return initFlowController(key, flow.value);
+    return initFlowController(key, flow);
   }
 
   // Return existing instance

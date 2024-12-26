@@ -1,11 +1,9 @@
 import { defineStore } from 'pinia';
 import type { BlockTemplate } from '../types/BlockTemplate';
-import { InputOutputSignalType } from '../types/InputOutputSignalType';
-import { InputOutputDirection } from '../types/InputOutputDirection';
 import { BlockSide } from '../types/BlockSide';
 import { BLOCK_HEIGHT, BLOCK_IO_SIZE, BLOCK_WIDTH } from '../constants';
-import type { Flow } from '../types/Flow';
 import { toRef, type Ref } from 'vue';
+import { InputOutputDirection, InputOutputSignalType, type Flow } from '@/services/api-generated';
 
 const blockTemplates: BlockTemplate[] = [
   {
@@ -1280,12 +1278,12 @@ export const useFlowStore = defineStore('flow', () => {
     delete flows[key];
   };
 
-  const getFlow = (key: string): Ref<Flow> | undefined => {
+  const getFlow = (key: string): Flow | undefined => {
     if (!(key in flows)) {
       return undefined;
     }
 
-    return flows[key];
+    return flows[key].value;
   };
 
   return { blockTemplates, flows, addFlow, deleteFlow, getFlow };

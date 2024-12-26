@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
-import type { Flow } from '../types/Flow';
 import { loadFlowFromJson } from '../utils/flow-persistor';
 import { useFlowStore } from './flow-store';
-import type { FlowBlock } from '../types/FlowBlock';
+import type { FlowBlock } from '@/services/api-generated';
 import type { FlowConnection } from '../types/FlowConnection';
+import type { Flow } from '@/services/api-generated';
+import { EMPTY_GUID } from '../constants';
 
 export const useMockStore = defineStore('mock', () => {
   const createMockFlow = (): Flow => {
@@ -19,7 +20,7 @@ export const useMockStore = defineStore('mock', () => {
     const blocks: FlowBlock[] = [
       {
         id: uuidv4(),
-        label: undefined,
+        label: null,
         functionType: 'AND',
         offset: { x: 100, y: 100 },
         size: { width: andConfiguration.size.width, height: andConfiguration.size.height },
@@ -31,7 +32,7 @@ export const useMockStore = defineStore('mock', () => {
       },
       {
         id: uuidv4(),
-        label: undefined,
+        label: null,
         functionType: 'OR',
         offset: { x: 500, y: 200 },
         size: { width: orConfiguration.size.width, height: orConfiguration.size.height },
@@ -43,7 +44,7 @@ export const useMockStore = defineStore('mock', () => {
       },
       {
         id: uuidv4(),
-        label: undefined,
+        label: null,
         functionType: 'NOT',
         offset: { x: 1000, y: 50 },
         size: { width: notConfiguration.size.width, height: notConfiguration.size.height },
@@ -55,7 +56,7 @@ export const useMockStore = defineStore('mock', () => {
       },
       {
         id: uuidv4(),
-        label: undefined,
+        label: null,
         functionType: 'TRANSITION',
         offset: { x: 280, y: 350 },
         size: { width: notConfiguration.size.width, height: notConfiguration.size.height },
@@ -67,7 +68,7 @@ export const useMockStore = defineStore('mock', () => {
       },
       {
         id: uuidv4(),
-        label: undefined,
+        label: null,
         functionType: 'BI',
         offset: { x: 100, y: 200 },
         size: { width: biConfiguration.size.width, height: biConfiguration.size.height },
@@ -79,7 +80,7 @@ export const useMockStore = defineStore('mock', () => {
       },
       {
         id: uuidv4(),
-        label: undefined,
+        label: null,
         functionType: 'BO',
         offset: { x: 980, y: 350 },
         size: { width: boConfiguration.size.width, height: boConfiguration.size.height },
@@ -123,9 +124,13 @@ export const useMockStore = defineStore('mock', () => {
     ];
 
     const mockFlow = {
+      // Empty GUID means new flow
+      id: EMPTY_GUID,
+      label: 'test-flow',
+      description: 'The flow description',
       blocks: blocks,
       connections: connections
-    } as Flow;
+    } as unknown as Flow;
 
     // Load elements from JSON
     const flow = loadFlowFromJson(JSON.stringify(mockFlow));

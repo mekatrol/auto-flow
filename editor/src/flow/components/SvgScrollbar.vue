@@ -11,7 +11,7 @@
       @pointerdown="dragSliderStart"
       @pointerup="dragSliderEnd"
       @pointermove="dragSliderMove"
-      @mousewheel="mouseWheel"
+      @mousewheel.passive="(e: WheelEvent) => wheel(e)"
     ></rect>
     <!-- The slider -->
     <rect
@@ -114,7 +114,7 @@ const dragSliderMove = (e: PointerEvent) => {
   }
 };
 
-const mouseWheel = (e: WheelEvent) => {
+const wheel = (e: WheelEvent) => {
   emit('mousewheel', e);
 };
 

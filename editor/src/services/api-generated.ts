@@ -19,22 +19,36 @@ export enum BlockSide {
 export interface Flow {
   /** @format uuid */
   id: string;
-  label?: string | null;
-  description?: string | null;
-  blocks?: FlowBlock[] | null;
-  connections?: FlowConnection[] | null;
+  label: string;
+  description: string;
+  enabled: boolean;
+  blocks: FlowBlock[];
+  connections: FlowConnection[];
+  persistState: PersistState;
+  /** @format date-time */
+  created?: string | null;
+  /** @format date-time */
+  updated?: string | null;
 }
 
 export interface FlowBlock {
   /** @format uuid */
   id: string;
   label?: string | null;
-  functionType?: string | null;
+  functionType: string;
+  io: InputOutput[];
   offset: Offset;
   size: Size;
   /** @format int32 */
   zOrder: number;
-  io?: InputOutput[] | null;
+  /** @format int32 */
+  zBoost: number;
+  /** @format int32 */
+  z: number;
+  selected: boolean;
+  draggingAsNew?: boolean | null;
+  dragLocationInvalid?: boolean | null;
+  dragLocationHasBeenValid?: boolean | null;
 }
 
 export interface FlowConnection {
@@ -46,13 +60,14 @@ export interface FlowConnection {
   endBlockId: string;
   /** @format int32 */
   endPin: number;
+  selected: boolean;
 }
 
 export interface FlowSummary {
   /** @format uuid */
   id: string;
-  label?: string | null;
-  description?: string | null;
+  label: string;
+  description: string;
 }
 
 export interface InputOutput {
@@ -83,6 +98,12 @@ export interface Offset {
   x: number;
   /** @format double */
   y: number;
+}
+
+export enum PersistState {
+  New = 'New',
+  Unmodified = 'Unmodified',
+  Modified = 'Modified'
 }
 
 export interface Size {
@@ -235,17 +256,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params
       })
   };
-  flows = {
+  flow = {
     /**
      * No description
      *
-     * @tags Flows
-     * @name FlowsList
-     * @request GET:/flows
+     * @tags Flow
+     * @name List
+     * @request GET:/flow
      */
-    flowsList: (params: RequestParams = {}) =>
+    list: (params: RequestParams = {}) =>
       this.request<FlowSummary[], any>({
-        path: `/flows`,
+        path: `/flow`,
         method: 'GET',
         format: 'json',
         ...params
@@ -254,13 +275,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Flows
-     * @name FlowsCreate
-     * @request POST:/flows
+     * @tags Flow
+     * @name Post
+     * @request POST:/flow
      */
-    flowsCreate: (data: Flow, params: RequestParams = {}) =>
+    post: (data: Flow, params: RequestParams = {}) =>
       this.request<Flow, any>({
-        path: `/flows`,
+        path: `/flow`,
         method: 'POST',
         body: data,
         type: ContentType.Json,
@@ -271,13 +292,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Flows
-     * @name FlowsUpdate
-     * @request PUT:/flows
+     * @tags Flow
+     * @name Put
+     * @request PUT:/flow
      */
-    flowsUpdate: (data: Flow, params: RequestParams = {}) =>
+    put: (data: Flow, params: RequestParams = {}) =>
       this.request<Flow, any>({
-        path: `/flows`,
+        path: `/flow`,
         method: 'PUT',
         body: data,
         type: ContentType.Json,
@@ -288,13 +309,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Flows
-     * @name FlowsDetail
-     * @request GET:/flows/{id}
+     * @tags Flow
+     * @name Get
+     * @request GET:/flow/{id}
      */
-    flowsDetail: (id: string, params: RequestParams = {}) =>
+    get: (id: string, params: RequestParams = {}) =>
       this.request<Flow, any>({
-        path: `/flows/${id}`,
+        path: `/flow/${id}`,
         method: 'GET',
         format: 'json',
         ...params
@@ -303,13 +324,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Flows
-     * @name FlowsDelete
-     * @request DELETE:/flows/{id}
+     * @tags Flow
+     * @name Delete
+     * @request DELETE:/flow/{id}
      */
-    flowsDelete: (id: string, params: RequestParams = {}) =>
+    delete: (id: string, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/flows/${id}`,
+        path: `/flow/${id}`,
         method: 'DELETE',
         ...params
       })

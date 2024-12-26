@@ -1,3 +1,5 @@
+export const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
+
 export const BLOCK_HEIGHT = 40;
 export const BLOCK_WIDTH = 150;
 export const BLOCK_IO_OFFSET = 2;
@@ -10,7 +12,7 @@ export const PALETTE_GAP = 8;
 export const SCROLLBAR_SIZE = 25;
 
 /*
- * This file defines the various events that a flow and its elements will generate
+ * The various events that a flow and its elements will generate
  */
 
 export const ELEMENT_CHANGED = 'elementChanged';
@@ -42,3 +44,10 @@ export const CONNECTION_POINTER_ENTER = 'connectionPointerEnter';
 export const CONNECTION_POINTER_LEAVE = 'connectionPointerLeave';
 export const CONNECTION_POINTER_DOWN = 'connectionPointerDown';
 export const CONNECTION_POINTER_UP = 'connectionPointerUp';
+
+/* Field sizing */
+export const FIELD_FLOW_LABEL_MIN_LENGTH = 5;
+export const FIELD_FLOW_LABEL_MAX_LENGTH = 100;
+
+export const FIELD_FLOW_DESCRIPTION_MIN_LENGTH = 0;
+export const FIELD_FLOW_DESCRIPTION_MAX_LENGTH = 500;
